@@ -40,18 +40,17 @@ $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
 $hide_filder = 'hide';
 $lock = null;
 /////////size config////////////////
-if(is_smart_phone()){
-	$maxdist=64; 	//thumbnail size
-	$default_size = 20;
-	$default_width = 10;
-}else if(is_feature_phone()){
+$maxdist=32; 	//thumbnail size
+$default_size = 10;
+$default_width = 10;
+if(is_feature_phone()){
 	$maxdist=32; 	//thumbnail size
 	$default_size = 10;
 	$default_width = 10;
 }else{
 	$maxdist=64; 	//thumbnail size
 	$default_size = 30;
-	$default_width = 10;
+	$default_width = 4;
 }
 /////////request////////////////
 $dir = http_get("dir");
@@ -169,6 +168,9 @@ function showmenu(){
 		$_out = str_replace('</span>', '', $_out);
 	}else{
 		$_out = str_replace('|','',$_out);
+		$_out = str_replace('[*]','',$_out);
+		$_out = str_replace('[#]','',$_out);
+		$_out = str_replace('[0]','',$_out);
 	}
 	return $_out;
 }
@@ -195,7 +197,7 @@ function showpaging(){
 
 	$maxsize = count($file_list);
 
-	$_out .= "<span data-role=\"button\">count:$maxsize</span> | ";
+	//	$_out .= "<span data-role=\"button\">count:$maxsize</span> | ";
 
 	//width
 	$maxpage = ceil($maxsize / $size);
@@ -225,13 +227,13 @@ function showpaging(){
 		$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=1&dir=$dir\">&lt;&lt;</a>|";
 		$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$_prev_page&dir=$dir\">&lt;</a>|";
 	}else{
-		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
+//		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
 	}
 	for($count = $from ; $count <= $to ; $count++){
 		$_out .= "";
 		if($count !=$from){
 			$_out .= "|";
-				
+
 		}
 		if($count == $page){
 			$_out .= "<span data-role=\"button\">$count / $maxpage</span>";
@@ -248,7 +250,7 @@ function showpaging(){
 		$_out .= "|<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$_next_page&dir=$dir\">&gt;</a>";
 		$_out .="|<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$maxpage&dir=$dir\">&gt;&gt;</a>";
 	}else{
-		$_out .= "|<span data-role=\"button\">&gt;</span>|<span data-role=\"button\">&gt;&gt;</span>";
+//		$_out .= "|<span data-role=\"button\">&gt;</span>|<span data-role=\"button\">&gt;&gt;</span>";
 	}
 	if(is_feature_phone()){
 		$_out = str_replace(" data-role=\"button\"", '', $_out);

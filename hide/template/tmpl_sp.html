@@ -6,6 +6,9 @@
 <meta name="viewport" content="width = device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
+<style type="text/css">
+*{ margin:0 ; padding:0 ;}
+</style>
 <link href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" rel="stylesheet" type="text/css" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -32,7 +35,9 @@ body { width:100%; overflow:hidden; }
 body { 	font-size: 13; background-color: white; }
 a { color: royalblue; font-size: 13;}
 a:hover { color: lightcoral; text-decoration: underline; }
-.td { font-size: 13; 	background-color: #ffffff; text-align: left;}
+.table { border-spacing:0;margin:0;padding:0;}
+.tr { border-spacing:0;margin:0;padding:0;}
+.td { border-spacing:0;margin:0;padding:0;font-size: 13; 	background-color: #ffffff; text-align: left;}
 -->
 </style>
 <script type="text/javascript">
@@ -51,8 +56,8 @@ window.open("%SELF%?mode=popup&dir="+d+"&filename="+f,"popup","width="+w+",heigh
 <div data-role="controlgroup" data-type="horizontal">%SHOWMENU%</div>
 <div data-role="controlgroup" data-type="horizontal">%SHOWPAGING%</div>
 </div>
-<div data-role="content">
-	<table border="0" cellpadding="3" cellspacing="1" bgcolor="gray">
+<div data-role="content" style="margin:0;padding:0;">
+	<table border="1" cellpadding="0" cellspacing="0" bgcolor="gray">
 		<tr>
 			<td class="td"><b>icon</b></td>
 			<td class="td"><b>filename</b></td>
@@ -69,5 +74,4 @@ window.open("%SELF%?mode=popup&dir="+d+"&filename="+f,"popup","width="+w+",heigh
 </div>
 </div>
 </body>
-</html>
 </html>
