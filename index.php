@@ -37,8 +37,7 @@ $home='../'; 	//Home URL
 $charset='UTF-8'; //Shift_JIS
 $date_format="Y/m/d H:i:s"; // Y/m/d H:i:s
 $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
-$icon_folder = 'hide';
-$tmpl_dir = str_replace($self[0], $icon_folder, $_SERVER["SCRIPT_FILENAME"]);
+$hide_filder = 'hide';
 $lock = null;
 /////////size config////////////////
 if(is_smart_phone()){
@@ -57,6 +56,7 @@ if(is_smart_phone()){
 /////////request////////////////
 $dir = http_get("dir");
 $self = array_reverse( explode("/",$_SERVER["SCRIPT_NAME"]) );
+$hide_dir = str_replace($self[0], $hide_filder, $_SERVER["SCRIPT_FILENAME"]);
 $page = floor(http_get("page",1));
 $size = floor(http_get("size",$default_size));
 $width = floor(http_get("width",$default_width));
@@ -74,7 +74,7 @@ function get_list($dir_cnt) {
 	global $page;
 	global $width;
 	global $date_format;
-	global $icon_folder;
+	global $hide_filder;
 
 	$dir_handle=opendir($dir_cnt);
 	$file_list = null;
@@ -97,7 +97,7 @@ function get_list($dir_cnt) {
 		if(strpos($_value, '.', 0) === 0){
 			unset($file_list[$_index]);
 		}
-		if(strcmp($icon_folder, $_value) == 0){
+		if(strcmp($hide_filder, $_value) == 0){
 			unset($file_list[$_index]);
 		}
 	}
@@ -273,7 +273,7 @@ function an_file($file_path){
 	global $page;
 	global $width;
 	global $date_format;
-	global $icon_folder;
+	global $hide_filder;
 	global $file_name;
 
 	$img= @getimagesize($file_path);
@@ -380,9 +380,9 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 					$get_ext = strtoupper($get_ext_array[0]);
 					if(in_array($get_ext,$dl_media)){
 						$encoded_url = rawurlencode($file);
-						$_out .= "<a href=\"?mode=dl&f=$file\" target=\"_blank\"><img src=\"$icon_folder/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
+						$_out .= "<a href=\"?mode=dl&f=$file\" target=\"_blank\"><img src=\"$hide_filder/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
 					}else{
-						$_out .= "<a href=\"$file\" target=\"_blank\"><img src=\"$icon_folder/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
+						$_out .= "<a href=\"$file\" target=\"_blank\"><img src=\"$hide_filder/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
 					}
 					break;
 				}
@@ -424,7 +424,7 @@ function show_body(){
 	global $page;
 	global $width;
 	global $date_format;
-	global $icon_folder;
+	global $hide_filder;
 
 
 	$_out = '';
@@ -470,7 +470,7 @@ function show_body(){
 			$mdate=date($date_format,$file_mtime);
 			$_out .= "<tr><td class=\"td\">";
 			$_out .= "<a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">";
-			$_out .= "<img src=\"$icon_folder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
+			$_out .= "<img src=\"$hide_filder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
 			$_out .= "<td class=\"td\"><a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
 
 		}
@@ -480,77 +480,16 @@ function show_body(){
 /////////main////////////////
 switch($mode){
 	case 'popup':{
-		$filename = http_get("filename");
-		global $dir;
-		if (!$dir){
-			$d='.';
-		}
-		$_out = '';
-		$_out .= "<html>\n<head>\n<title>$filename</title>\n</head>\n";
-		$_out .= "<body style=\"margin:0px;\">\n";
-		$_out .= "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#ffffff\">\n";
-		$_out .= "<tr><td><a href=\"javascript:void(0)\" onclick=\"window.close()\"><img src=\"$d$dir/$filename\" border=\"0\"></a></td></tr>\n</table>\n</body>\n</html>\n";
-		echo $_out;
+		require_once $hide_dir . '/plugin/popup.inc';
 		return;
-		break;
 	}
 	case 'thumb':{
-		$ext = http_get("ext");
-		$f = http_get("f");
-		$ow = http_get("ow");
-		$oh = http_get("oh");
-		$tw = http_get("tw");
-		$th = http_get("th");
-		if($ext == "2"){
-			$o = imagecreatefromjpeg($f);
-		} else {
-			$o = imagecreatefrompng($f);
-		}
-		if ($gdv){
-			$t = imagecreate($tw, $th);
-		} else {
-			$t = imagecreatetruecolor($tw, $th);
-		}
-		ImageCopyResized( $t,$o,0,0,0,0,$tw,$th,$ow,$oh);
-		if($ext == "2"){
-			header("content-type: image/jpeg");
-			imagejpeg($t);
-		} else {
-			header("content-type: image/png");
-			imagepng($t);
-		}
-		ImageDestroy($o);
-		ImageDestroy($t);
+		require_once $hide_dir . '/plugin/thumb.inc';
 		return;
-		break;
 	}
 	case 'dl':{
-		mb_http_output("pass");
-		$f = http_get('f');
-		$ff = split('/',$f);
-		$ff = array_reverse($ff);
-		$filename= $ff[0];
-		$filename_array = split('.',$filename);
-		$filename_array = array_reverse($filename_array);
-		$ext = strtoupper($filename_array[0]);
-
-		if($ext == "3GP"){
-			header("Content-type: video/3gpp"); //3gp
-		}else if ($ext == "3G2"){
-			header("Content-type: video/3gpp2"); //3g2
-		}else if ($ext == "MP3"){
-			header("Content-type: audio/mpeg3"); //mp3
-		}else if ($ext == "MP4"){
-			header("Content-type: video/mpeg4"); //mp4
-		}else{
-			header("Content-type: application/octet-stream"); //other
-		}
-		$inline_filename=str_replace(" ","_",$filename);
-		header("Content-Disposition: inline; filename=".$inline_filename);
-		header("Content-length: " . filesize($f));
-		readfile($f);
+		require_once $hide_dir . '/plugin/dl.inc';
 		return;
-		break;
 	}
 	default:{
 		break;
@@ -558,9 +497,9 @@ switch($mode){
 }
 $tmpl = '';
 if(is_feature_phone()){
-	$tmpl = file_get_contents($tmpl_dir.'/tmpl_fp.html');
+	$tmpl = file_get_contents($hide_dir.'/template/tmpl_fp.html');
 }else{
-	$tmpl = file_get_contents($tmpl_dir.'/tmpl_sp.html');
+	$tmpl = file_get_contents($hide_dir.'/template/tmpl_sp.html');
 }
 $tmpl = str_replace('%CHARSET%', $charset, $tmpl);
 $tmpl = str_replace('UTF-8', $charset, $tmpl);
