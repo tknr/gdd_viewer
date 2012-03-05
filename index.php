@@ -74,7 +74,7 @@ function get_list($dir_cnt) {
 	global $width;
 	global $date_format;
 	global $icon_folder;
-	
+
 	$dir_handle=opendir($dir_cnt);
 	$file_list = null;
 	while ($file = readdir($dir_handle)){
@@ -82,7 +82,7 @@ function get_list($dir_cnt) {
 	}
 	closedir($dir_handle);
 	$file_list = explode("\t",$file_list);
-	
+
 	foreach($file_list as $_index=>$_value){
 		if(strlen($_value)==0){
 			unset($file_list[$_index]);
@@ -100,7 +100,7 @@ function get_list($dir_cnt) {
 			unset($file_list[$_index]);
 		}
 	}
-	
+
 	sort($file_list);
 	return $file_list;
 }
@@ -140,7 +140,7 @@ function showmenu(){
 	global $lock;
 
 	$_out = '';
-	
+
 	if (preg_match("/\.\./","$dir")){
 		$lock ='1';
 	}
@@ -184,7 +184,7 @@ function showpaging(){
 	global $width;
 
 	$_out = '';
-	
+
 	if ($dir){
 		$dir_name = "./$dir";
 	} else {
@@ -230,7 +230,7 @@ function showpaging(){
 		$_out .= "";
 		if($count !=$from){
 			$_out .= "|";
-			
+				
 		}
 		if($count == $page){
 			$_out .= "<span data-role=\"button\">$count / $maxpage</span>";
@@ -274,7 +274,7 @@ function an_file($file_path){
 	global $date_format;
 	global $icon_folder;
 	global $file_name;
-	
+
 	$img= @getimagesize($file_path);
 	if (($img[0] < $maxdist) and ($img[1] < $maxdist)){
 		$tw=$img[0]; $th=$img[1];
@@ -305,7 +305,7 @@ function an_file($file_path){
 function show_dir($file_path, $file_name, $filesize, $file_mtime){
 	global $dir;
 	$_out = '';
-	
+
 	$img_prop = an_file($file_path);
 	$img_prop = explode(",",$img_prop);
 	$ext = "$img_prop[0]";
@@ -425,7 +425,7 @@ function show_body(){
 	global $date_format;
 	global $icon_folder;
 
-	
+
 	$_out = '';
 	$lock = null;
 	if (preg_match("/\.\./","$dir")){
@@ -438,32 +438,32 @@ function show_body(){
 			$dir_name = ".";
 		}
 		$file_list = get_list($dir_name);
-	
+
 		$maxsize = count($file_list);
-	
+
 		$from = (($page - 1) * $size)+1;
 		$to = (($page * $size)+1);
 		if($to > $maxsize){
 			$to = $maxsize;
 		}
-	
+
 		$dir_list = null;
 		for ($count=$from ;$count<$to;$count++) {
 			$file_name=$file_list[$count];
 			$file_path = "$dir_name/$file_name";
 			$file_size = filesize($file_path);
 			$file_mtime = filemtime($file_path);
-	
+
 			if (is_file($file_path)){
 				$_out .= show_dir($file_path, $file_name, $file_size, $file_mtime);
 			} else {
 				$dir_list = "$dir_list,$file_name";
 			}
 		}
-	
+
 		$dir_list = explode(",",$dir_list);
 		sort($dir_list);
-	
+
 		for ($count=1;$count<count($dir_list);$count++) {
 			global $date_format;
 			$mdate=date($date_format,$file_mtime);
@@ -471,7 +471,7 @@ function show_body(){
 			$_out .= "<a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">";
 			$_out .= "<img src=\"$icon_folder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
 			$_out .= "<td class=\"td\"><a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
-	
+
 		}
 	}
 	return $_out;
