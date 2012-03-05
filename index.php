@@ -38,6 +38,7 @@ $charset='UTF-8'; //Shift_JIS
 $date_format="Y/m/d H:i:s"; // Y/m/d H:i:s
 $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
 $icon_folder = 'hide';
+$tmpl_dir = str_replace($self[0], $icon_folder, $_SERVER["SCRIPT_FILENAME"]);
 $lock = null;
 /////////size config////////////////
 if(is_smart_phone()){
@@ -556,7 +557,6 @@ switch($mode){
 	}
 }
 $tmpl = '';
-$tmpl_dir = str_replace($self[0], $icon_folder, $_SERVER["SCRIPT_FILENAME"]);
 if(is_feature_phone()){
 	$tmpl = file_get_contents($tmpl_dir.'/tmpl_fp.html');
 }else{
