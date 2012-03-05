@@ -158,16 +158,16 @@ function showmenu(){
 		$_out .= "<b>! Parent Dir</b>";
 	} else {
 		$dd = explode("/",$dir);
-		$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width\" directkey=\"*\" accesskey=\"*\" nonumber>[*]Parent Dir</a>";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width\" directkey=\"*\" accesskey=\"*\" nonumber>[*]Parent Dir</a>";
 		if ($dd[2]){
 			$tdir=array_pop($dd);
 			$back_dir = explode("/$tdir",$dir);
-			$_out .= " | <a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&dir=$back_dir[0]\" directkey=\"#\" accesskey=\"#\" nonumber>[#]Upper Dir</a>";
+			$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&dir=$back_dir[0]\" directkey=\"#\" accesskey=\"#\" nonumber>[#]Upper Dir</a>";
 		}
 	}
-	$_out .= " | <a data-role=\"button\" href=\"$home?size=$size&width=$width\" accesskey=\"0\">[0]Home</a>\n";
+	$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$home?size=$size&width=$width\" accesskey=\"0\">[0]Home</a>\n";
 	if(is_feature_phone()){
-		$_out = str_replace(" data-role=\"button\"", '', $_out);
+		$_out = str_replace(" data-role=\"button\" data-inline=\"true\"", '', $_out);
 		$_out = str_replace('<span>', '', $_out);
 		$_out = str_replace('</span>', '', $_out);
 	}else{
@@ -228,8 +228,8 @@ function showpaging(){
 
 	if($page > $from){
 		$_prev_page = $page -1;
-		$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=1&dir=$dir\">&lt;&lt;</a>|";
-		$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$_prev_page&dir=$dir\">&lt;</a>|";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=1&dir=$dir\">&lt;&lt;</a>|";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$_prev_page&dir=$dir\">&lt;</a>|";
 	}else{
 		//		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
 	}
@@ -240,24 +240,24 @@ function showpaging(){
 
 		}
 		if($count == $page){
-			$_out .= "<span data-role=\"button\">$count/$maxpage</span>";
+			$_out .= "<span data-role=\"button\" data-inline=\"true\">$count/$maxpage</span>";
 		}else{
 			$accesskey = "";
 			if(is_feature_phone() && $count > 0 && $count < 10){
 				$accesskey = " directkey=\"$count\" accesskey=\"$count\" nonumber";
 			}
-			$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$count&dir=$dir\"$accesskey>$count</a>";
+			$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$count&dir=$dir\"$accesskey>$count</a>";
 		}
 	}
 	if($page < $to){
 		$_next_page = $page + 1;
-		$_out .= "|<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$_next_page&dir=$dir\">&gt;</a>";
-		$_out .="|<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$maxpage&dir=$dir\">&gt;&gt;</a>";
+		$_out .= "|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$_next_page&dir=$dir\">&gt;</a>";
+		$_out .="|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$maxpage&dir=$dir\">&gt;&gt;</a>";
 	}else{
 		//		$_out .= "|<span data-role=\"button\">&gt;</span>|<span data-role=\"button\">&gt;&gt;</span>";
 	}
 	if(is_feature_phone()){
-		$_out = str_replace(" data-role=\"button\"", '', $_out);
+		$_out = str_replace(" data-role=\"button\" data-inline=\"true\"", '', $_out);
 		$_out = str_replace('<span>', '', $_out);
 		$_out = str_replace('</span>', '', $_out);
 	}else{
