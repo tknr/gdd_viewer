@@ -47,10 +47,14 @@ if(is_feature_phone()){
 	$maxdist=32; 	//thumbnail size
 	$default_size = 10;
 	$default_width = 10;
-}else{
-	$maxdist=64; 	//thumbnail size
+}else if(is_smart_phone()){
+	$maxdist=80; 	//thumbnail size
 	$default_size = 30;
-	$default_width = 4;
+	$default_width = 5;
+}else{
+	$maxdist=32; 	//thumbnail size
+	$default_size = 10;
+	$default_width = 10;
 }
 /////////request////////////////
 $dir = http_get("dir");
@@ -227,7 +231,7 @@ function showpaging(){
 		$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=1&dir=$dir\">&lt;&lt;</a>|";
 		$_out .= "<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$_prev_page&dir=$dir\">&lt;</a>|";
 	}else{
-//		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
+		//		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
 	}
 	for($count = $from ; $count <= $to ; $count++){
 		$_out .= "";
@@ -236,7 +240,7 @@ function showpaging(){
 
 		}
 		if($count == $page){
-			$_out .= "<span data-role=\"button\">$count / $maxpage</span>";
+			$_out .= "<span data-role=\"button\">$count/$maxpage</span>";
 		}else{
 			$accesskey = "";
 			if(is_feature_phone() && $count > 0 && $count < 10){
@@ -250,7 +254,7 @@ function showpaging(){
 		$_out .= "|<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$_next_page&dir=$dir\">&gt;</a>";
 		$_out .="|<a data-role=\"button\" href=\"$self[0]?size=$size&width=$width&page=$maxpage&dir=$dir\">&gt;&gt;</a>";
 	}else{
-//		$_out .= "|<span data-role=\"button\">&gt;</span>|<span data-role=\"button\">&gt;&gt;</span>";
+		//		$_out .= "|<span data-role=\"button\">&gt;</span>|<span data-role=\"button\">&gt;&gt;</span>";
 	}
 	if(is_feature_phone()){
 		$_out = str_replace(" data-role=\"button\"", '', $_out);
@@ -393,17 +397,31 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 		$get_ext_array = explode("." ,$file_name);
 		$get_ext_array = array_reverse($get_ext_array);
 		$get_ext = strtoupper($get_ext_array[0]);
-		if(in_array($get_ext,$dl_media)){
-			$_out .= "</td><td class=\"td\"><a href=\"?mode=dl&f=$file\" target=\"_blank\">$file_name</a></td>";
+		if(is_feature_phone()){
+			if(in_array($get_ext,$dl_media)){
+				$_out .= "</td><td class=\"td\"><a href=\"?mode=dl&f=$file\" target=\"_blank\">$file_name</a></td>";
+			}else{
+				$_out .= "</td><td class=\"td\"><a href=\"$file\" target=\"_blank\">$file_name</a></td>";
+			}
+			if (($ow) AND ($oh)){
+				$_out .= "<td class=\"td\">$ow x $oh</td>";
+			} else {
+				$_out .= "<td class=\"td\">-</td>";
+			}
+			$_out .= "<td class=\"td\">$show_size</td><td class=\"td\">$mdate</td></tr>\n";
 		}else{
-			$_out .= "</td><td class=\"td\"><a href=\"$file\" target=\"_blank\">$file_name</a></td>";
+			if(in_array($get_ext,$dl_media)){
+				$_out .= "</td><td class=\"td\"><a href=\"?mode=dl&f=$file\" target=\"_blank\">$file_name</a>";
+			}else{
+				$_out .= "</td><td class=\"td\"><a href=\"$file\" target=\"_blank\">$file_name</a>";
+			}
+			if (($ow) AND ($oh)){
+				$_out .= "<br />$ow x $oh<br />";
+			} else {
+				$_out .= "<br />-<br />";
+			}
+			$_out .= "$show_size</td><td class=\"td\">$mdate</td></tr>\n";
 		}
-		if (($ow) AND ($oh)){
-			$_out .= "<td class=\"td\">$ow x $oh</td>";
-		} else {
-			$_out .= "<td class=\"td\">-</td>";
-		}
-		$_out .= "<td class=\"td\">$show_size</td><td class=\"td\">$mdate</td></tr>\n";
 	}
 	return $_out;
 }
@@ -470,11 +488,17 @@ function show_body(){
 		for ($count=1;$count<count($dir_list);$count++) {
 			global $date_format;
 			$mdate=date($date_format,$file_mtime);
-			$_out .= "<tr><td class=\"td\">";
-			$_out .= "<a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">";
-			$_out .= "<img src=\"$hide_filder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
-			$_out .= "<td class=\"td\"><a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
-
+			if(is_feature_phone()){
+				$_out .= "<tr><td class=\"td\">";
+				$_out .= "<a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">";
+				$_out .= "<img src=\"$hide_filder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
+				$_out .= "<td class=\"td\"><a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
+			}else{
+				$_out .= "<tr><td class=\"td\">";
+				$_out .= "<a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">";
+				$_out .= "<img src=\"$hide_filder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
+				$_out .= "<td class=\"td\"><a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">$mdate</td></tr>\n";
+			}
 		}
 	}
 	return $_out;
