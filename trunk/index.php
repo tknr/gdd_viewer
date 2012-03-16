@@ -65,9 +65,7 @@ $mode = http_get("mode");
  * @param unknown_type $dir_cnt
  * @return multitype:
  */
-function get_list($dir_cnt) {
-	global $dir;
-	global $page;
+function get_list($dir_cnt,$dir,$page) {
 
 	$dir_handle=opendir($dir_cnt);
 	$file_list = null;
@@ -125,10 +123,7 @@ function getFileSizeString($filesize){
  * show menu
  * @return string
  */
-function showmenu(){
-	global $dir;
-	global $home;
-	global $lock;
+function showmenu($dir,$home,$lock){
 
 	$_out = '';
 
@@ -170,9 +165,7 @@ function showmenu(){
  * show paging
  * @return string
  */
-function showpaging(){
-	global $dir;
-	global $page;
+function showpaging($dir,$page){
 
 	$_out = '';
 
@@ -181,7 +174,7 @@ function showpaging(){
 	} else {
 		$dir_name = ".";
 	}
-	$file_list = get_list($dir_name);
+	$file_list = get_list($dir_name,$dir,$page);
 
 	$maxsize = count($file_list);
 
@@ -255,10 +248,7 @@ function showpaging(){
  * @param string $file_path
  * @return string
  */
-function an_file($file_path){
-	global $dir;
-	global $page;
-	global $file_name;
+function an_file($file_path,$dir,$page,$file_name){
 
 	$img= @getimagesize($file_path);
 	if (($img[0] < MAX_DIST) and ($img[1] < MAX_DIST)){
@@ -287,12 +277,11 @@ function an_file($file_path){
  * @param number $file_mtime
  * @return string
  */
-function show_dir($file_path, $file_name, $filesize, $file_mtime){
-	global $dir;
+function show_dir($file_path, $file_name, $filesize, $file_mtime,$dir){
 	
 	$_out = '';
 
-	$img_prop = an_file($file_path);
+	$img_prop = an_file($file_path,$dir,$page,$file_name);
 	$img_prop = explode(",",$img_prop);
 	$ext = "$img_prop[0]";
 	$ow = "$img_prop[1]";
@@ -414,10 +403,7 @@ function show_indx($dir_cnt){
 	$td_name = ereg_replace( "$temp[1]$","", $dir_cnt);
 }
 
-function show_body(){
-	global $dir;
-	global $self;
-	global $page;
+function show_body($dir,$page){
 
 	$_out = '';
 	$lock = null;
@@ -430,7 +416,7 @@ function show_body(){
 		} else {
 			$dir_name = ".";
 		}
-		$file_list = get_list($dir_name);
+		$file_list = get_list($dir_name,$dir,$page);
 
 		$maxsize = count($file_list);
 
@@ -448,7 +434,7 @@ function show_body(){
 			$file_mtime = filemtime($file_path);
 
 			if (is_file($file_path)){
-				$_out .= show_dir($file_path, $file_name, $file_size, $file_mtime);
+				$_out .= show_dir($file_path, $file_name, $file_size, $file_mtime,$dir);
 			} else {
 				$dir_list = "$dir_list,$file_name";
 			}
@@ -501,9 +487,9 @@ if(is_feature_phone()){
 $tmpl = str_replace('%CHARSET%', CHARSET, $tmpl);
 $tmpl = str_replace('UTF-8', CHARSET, $tmpl);
 $tmpl = str_replace('%TITLE%', $title, $tmpl);
-$tmpl = str_replace('%SELF%', $self[0], $tmpl);
-$tmpl = str_replace('%SHOWMENU%', showmenu(), $tmpl);
-$tmpl = str_replace('%SHOWPAGING%', showpaging(), $tmpl);
-$tmpl = str_replace('%SHOWBODY%', show_body(), $tmpl);
+$tmpl = str_replace('%SELF%', SELF_PHP, $tmpl);
+$tmpl = str_replace('%SHOWMENU%', showmenu($dir,$home,$lock), $tmpl);
+$tmpl = str_replace('%SHOWPAGING%', showpaging($dir,$page), $tmpl);
+$tmpl = str_replace('%SHOWBODY%', show_body($dir,$page), $tmpl);
 echo $tmpl;
 ?>
