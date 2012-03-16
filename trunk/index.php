@@ -277,7 +277,7 @@ function an_file($file_path,$dir,$page,$file_name){
  * @param number $file_mtime
  * @return string
  */
-function show_dir($file_path, $file_name, $filesize, $file_mtime,$dir){
+function show_dir($file_path, $file_name, $filesize, $file_mtime,$dir,$page){
 	
 	$_out = '';
 
@@ -434,7 +434,7 @@ function show_body($dir,$page){
 			$file_mtime = filemtime($file_path);
 
 			if (is_file($file_path)){
-				$_out .= show_dir($file_path, $file_name, $file_size, $file_mtime,$dir);
+				$_out .= show_dir($file_path, $file_name, $file_size, $file_mtime,$dir,$page);
 			} else {
 				$dir_list = "$dir_list,$file_name";
 			}
