@@ -34,35 +34,29 @@ function is_feature_phone(){
 $gdv=0; 	//GD Ver. 1.x--'1' 2.x--'0'
 $title=$_SERVER['SCRIPT_NAME'];	//Page title
 $home='../'; 	//Home URL
-$charset='UTF-8'; //Shift_JIS
-$date_format="Y/m/d H:i:s"; // Y/m/d H:i:s
+define('CHARSET','UTF-8'); //Shift_JIS
+define('DATE_FORMAT','Y/m/d H:i:s'); // Y/m/d H:i:s
 $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
-$hide_filder = 'hide';
+define('HIDE_FOLDER','hide');
 $lock = null;
 /////////size config////////////////
-$maxdist=32; 	//thumbnail size
-$default_size = 10;
-$default_width = 10;
 if(is_feature_phone()){
-	$maxdist=32; 	//thumbnail size
-	$default_size = 10;
-	$default_width = 10;
+	define('MAX_DIST',32); 	//thumbnail size
+	define('DATA_PER_PAGE',10);
+	define('PAGING_WIDTH',10);
 }else if(is_smart_phone()){
-	$maxdist=80; 	//thumbnail size
-	$default_size = 30;
-	$default_width = 5;
+	define('MAX_DIST',80); 	//thumbnail size
+	define('DATA_PER_PAGE',30);
+	define('PAGING_WIDTH',5);
 }else{
-	$maxdist=32; 	//thumbnail size
-	$default_size = 10;
-	$default_width = 10;
+	define('MAX_DIST',32); 	//thumbnail size
+	define('DATA_PER_PAGE',30);
+	define('PAGING_WIDTH',10);
 }
 /////////request////////////////
 $dir = http_get("dir");
 $self = array_reverse( explode("/",$_SERVER["SCRIPT_NAME"]) );
-$hide_dir = str_replace($self[0], $hide_filder, $_SERVER["SCRIPT_FILENAME"]);
 $page = floor(http_get("page",1));
-$size = floor(http_get("size",$default_size));
-$width = floor(http_get("width",$default_width));
 $mode = http_get("mode");
 /////////function////////////////
 /**
@@ -73,11 +67,7 @@ $mode = http_get("mode");
 function get_list($dir_cnt) {
 	global $dir;
 	global $self;
-	global $size;
 	global $page;
-	global $width;
-	global $date_format;
-	global $hide_filder;
 
 	$dir_handle=opendir($dir_cnt);
 	$file_list = null;
@@ -100,7 +90,7 @@ function get_list($dir_cnt) {
 		if(strpos($_value, '.', 0) === 0){
 			unset($file_list[$_index]);
 		}
-		if(strcmp($hide_filder, $_value) == 0){
+		if(strcmp(HIDE_FOLDER, $_value) == 0){
 			unset($file_list[$_index]);
 		}
 	}
@@ -139,8 +129,6 @@ function showmenu(){
 	global $dir;
 	global $self;
 	global $home;
-	global $size;
-	global $width;
 	global $lock;
 
 	$_out = '';
@@ -158,14 +146,14 @@ function showmenu(){
 		$_out .= "<b>! Parent Dir</b>";
 	} else {
 		$dd = explode("/",$dir);
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width\" directkey=\"*\" accesskey=\"*\" nonumber>[*]Parent Dir</a>";
-		if ($dd[2]){
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]\" directkey=\"*\" accesskey=\"*\" nonumber>[*]Parent Dir</a>";
+		if (array_key_exists(2,$dd)){
 			$tdir=array_pop($dd);
 			$back_dir = explode("/$tdir",$dir);
-			$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&dir=$back_dir[0]\" directkey=\"#\" accesskey=\"#\" nonumber>[#]Upper Dir</a>";
+			$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?dir=$back_dir[0]\" directkey=\"#\" accesskey=\"#\" nonumber>[#]Upper Dir</a>";
 		}
 	}
-	$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$home?size=$size&width=$width\" accesskey=\"0\">[0]Home</a>\n";
+	$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$home\" accesskey=\"0\">[0]Home</a>\n";
 	if(is_feature_phone()){
 		$_out = str_replace(" data-role=\"button\" data-inline=\"true\"", '', $_out);
 		$_out = str_replace('<span>', '', $_out);
@@ -186,9 +174,7 @@ function showmenu(){
 function showpaging(){
 	global $dir;
 	global $self;
-	global $size;
 	global $page;
-	global $width;
 
 	$_out = '';
 
@@ -204,32 +190,32 @@ function showpaging(){
 	//	$_out .= "<span data-role=\"button\">count:$maxsize</span> | ";
 
 	//width
-	$maxpage = ceil($maxsize / $size);
+	$maxpage = ceil($maxsize / DATA_PER_PAGE);
 
-	$halfwidth = floor($width /2);
+	$halfwidth = floor(PAGING_WIDTH /2);
 	$from = $page - $halfwidth;
 	$to = $page + $halfwidth;
 	if($to > $maxpage){
 		$to = $maxpage;
 	}
-	if($maxpage <= $width){
+	if($maxpage <= PAGING_WIDTH){
 		$from = 1;
 		$to = $maxpage;
 	}else if($page <= $halfwidth){
 		$from = 1;
-		$to = $width;
+		$to = PAGING_WIDTH;
 		if($to > $maxpage){
 			$to = $maxpage;
 		}
-	}else if(($page > ($maxpage - $halfwidth)) && ($maxpage - $width > 0)){
-		$from = $maxpage - $width +1;
+	}else if(($page > ($maxpage - $halfwidth)) && ($maxpage - PAGING_WIDTH > 0)){
+		$from = $maxpage - PAGING_WIDTH +1;
 		$to = $maxpage;
 	}
 
 	if($page > $from){
 		$_prev_page = $page -1;
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=1&dir=$dir\">&lt;&lt;</a>|";
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$_prev_page&dir=$dir\">&lt;</a>|";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=1&dir=$dir\">&lt;&lt;</a>|";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$_prev_page&dir=$dir\">&lt;</a>|";
 	}else{
 		//		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
 	}
@@ -246,13 +232,13 @@ function showpaging(){
 			if(is_feature_phone() && $count > 0 && $count < 10){
 				$accesskey = " directkey=\"$count\" accesskey=\"$count\" nonumber";
 			}
-			$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$count&dir=$dir\"$accesskey>$count</a>";
+			$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$count&dir=$dir\"$accesskey>$count</a>";
 		}
 	}
 	if($page < $to){
 		$_next_page = $page + 1;
-		$_out .= "|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$_next_page&dir=$dir\">&gt;</a>";
-		$_out .="|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?size=$size&width=$width&page=$maxpage&dir=$dir\">&gt;&gt;</a>";
+		$_out .= "|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$_next_page&dir=$dir\">&gt;</a>";
+		$_out .="|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$maxpage&dir=$dir\">&gt;&gt;</a>";
 	}else{
 		//		$_out .= "|<span data-role=\"button\">&gt;</span>|<span data-role=\"button\">&gt;&gt;</span>";
 	}
@@ -272,28 +258,23 @@ function showpaging(){
  * @return string
  */
 function an_file($file_path){
-	global $maxdist;
 	global $dir;
 	global $self;
-	global $size;
 	global $page;
-	global $width;
-	global $date_format;
-	global $hide_filder;
 	global $file_name;
 
 	$img= @getimagesize($file_path);
-	if (($img[0] < $maxdist) and ($img[1] < $maxdist)){
+	if (($img[0] < MAX_DIST) and ($img[1] < MAX_DIST)){
 		$tw=$img[0]; $th=$img[1];
 	} else {
 		if ($img[0] < $img[1]){
-			$th=$maxdist; $tw=$img[0]*$th/$img[1];
+			$th=MAX_DIST; $tw=$img[0]*$th/$img[1];
 		}
 		if ($img[0] > $img[1]){
-			$tw=$maxdist; $th=$img[1]*$tw/$img[0];
+			$tw=MAX_DIST; $th=$img[1]*$tw/$img[0];
 		}
 		if ($img[0] == $img[1]){
-			$tw=$maxdist; $th=$maxdist;
+			$tw=MAX_DIST; $th=MAX_DIST;
 		}
 	}
 	$img_type = null;
@@ -311,6 +292,7 @@ function an_file($file_path){
  */
 function show_dir($file_path, $file_name, $filesize, $file_mtime){
 	global $dir;
+	
 	$_out = '';
 
 	$img_prop = an_file($file_path);
@@ -329,8 +311,7 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 	$pdf = ("pdf");
 
 	$type_list =  explode(",","$web,$zip,$media,$swf,$txt,$pdf");
-	global $date_format;
-	$mdate=date($date_format,$file_mtime);
+	$mdate=date(DATE_FORMAT,$file_mtime);
 	$show_size = getFileSizeString($filesize);
 
 	global $self;
@@ -386,9 +367,9 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 					$get_ext = strtoupper($get_ext_array[0]);
 					if(in_array($get_ext,$dl_media)){
 						$encoded_url = rawurlencode($file);
-						$_out .= "<a href=\"?mode=dl&f=$file\" target=\"_blank\"><img src=\"$hide_filder/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
+						$_out .= "<a href=\"?mode=dl&f=$file\" target=\"_blank\"><img src=\"".HIDE_FOLDER."/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
 					}else{
-						$_out .= "<a href=\"$file\" target=\"_blank\"><img src=\"$hide_filder/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
+						$_out .= "<a href=\"$file\" target=\"_blank\"><img src=\"".HIDE_FOLDER."/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
 					}
 					break;
 				}
@@ -440,12 +421,7 @@ function show_indx($dir_cnt){
 function show_body(){
 	global $dir;
 	global $self;
-	global $size;
 	global $page;
-	global $width;
-	global $date_format;
-	global $hide_filder;
-
 
 	$_out = '';
 	$lock = null;
@@ -462,8 +438,8 @@ function show_body(){
 
 		$maxsize = count($file_list);
 
-		$from = (($page - 1) * $size)+1;
-		$to = (($page * $size)+1);
+		$from = (($page - 1) * DATA_PER_PAGE)+1;
+		$to = (($page * DATA_PER_PAGE)+1);
 		if($to > $maxsize){
 			$to = $maxsize;
 		}
@@ -486,18 +462,17 @@ function show_body(){
 		sort($dir_list);
 
 		for ($count=1;$count<count($dir_list);$count++) {
-			global $date_format;
-			$mdate=date($date_format,$file_mtime);
+			$mdate=date(DATE_FORMAT,$file_mtime);
 			if(is_feature_phone()){
 				$_out .= "<tr><td class=\"td\">";
-				$_out .= "<a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">";
-				$_out .= "<img src=\"$hide_filder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
-				$_out .= "<td class=\"td\"><a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
+				$_out .= "<a href=\"$self[0]?dir=$dir/$dir_list[$count]\">";
+				$_out .= "<img src=\"".HIDE_FOLDER."/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
+				$_out .= "<td class=\"td\"><a href=\"$self[0]?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
 			}else{
 				$_out .= "<tr><td class=\"td\">";
-				$_out .= "<a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">";
-				$_out .= "<img src=\"$hide_filder/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
-				$_out .= "<td class=\"td\"><a href=\"$self[0]?size=$size&width=$width&dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">$mdate</td></tr>\n";
+				$_out .= "<a href=\"$self[0]?dir=$dir/$dir_list[$count]\">";
+				$_out .= "<img src=\"".HIDE_FOLDER."/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
+				$_out .= "<td class=\"td\"><a href=\"$self[0]?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">$mdate</td></tr>\n";
 			}
 		}
 	}
@@ -506,15 +481,15 @@ function show_body(){
 /////////main////////////////
 switch($mode){
 	case 'popup':{
-		require_once $hide_dir . '/plugin/popup.inc';
+		require_once HIDE_FOLDER . '/plugin/popup.inc';
 		return;
 	}
 	case 'thumb':{
-		require_once $hide_dir . '/plugin/thumb.inc';
+		require_once HIDE_FOLDER . '/plugin/thumb.inc';
 		return;
 	}
 	case 'dl':{
-		require_once $hide_dir . '/plugin/dl.inc';
+		require_once HIDE_FOLDER . '/plugin/dl.inc';
 		return;
 	}
 	default:{
@@ -523,12 +498,12 @@ switch($mode){
 }
 $tmpl = '';
 if(is_feature_phone()){
-	$tmpl = file_get_contents($hide_dir.'/template/tmpl_fp.html');
+	$tmpl = file_get_contents(HIDE_FOLDER.'/template/tmpl_fp.html');
 }else{
-	$tmpl = file_get_contents($hide_dir.'/template/tmpl_sp.html');
+	$tmpl = file_get_contents(HIDE_FOLDER.'/template/tmpl_sp.html');
 }
-$tmpl = str_replace('%CHARSET%', $charset, $tmpl);
-$tmpl = str_replace('UTF-8', $charset, $tmpl);
+$tmpl = str_replace('%CHARSET%', CHARSET, $tmpl);
+$tmpl = str_replace('UTF-8', CHARSET, $tmpl);
 $tmpl = str_replace('%TITLE%', $title, $tmpl);
 $tmpl = str_replace('%SELF%', $self[0], $tmpl);
 $tmpl = str_replace('%SHOWMENU%', showmenu(), $tmpl);
