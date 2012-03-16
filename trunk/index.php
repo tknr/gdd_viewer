@@ -38,6 +38,8 @@ define('CHARSET','UTF-8'); //Shift_JIS
 define('DATE_FORMAT','Y/m/d H:i:s'); // Y/m/d H:i:s
 $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
 define('HIDE_FOLDER','hide');
+$self = array_reverse( explode("/",$_SERVER["SCRIPT_NAME"]) );
+define('SELF_PHP',$self[0]);
 $lock = null;
 /////////size config////////////////
 if(is_feature_phone()){
@@ -55,7 +57,6 @@ if(is_feature_phone()){
 }
 /////////request////////////////
 $dir = http_get("dir");
-$self = array_reverse( explode("/",$_SERVER["SCRIPT_NAME"]) );
 $page = floor(http_get("page",1));
 $mode = http_get("mode");
 /////////function////////////////
@@ -66,7 +67,6 @@ $mode = http_get("mode");
  */
 function get_list($dir_cnt) {
 	global $dir;
-	global $self;
 	global $page;
 
 	$dir_handle=opendir($dir_cnt);
@@ -127,7 +127,6 @@ function getFileSizeString($filesize){
  */
 function showmenu(){
 	global $dir;
-	global $self;
 	global $home;
 	global $lock;
 
@@ -146,11 +145,11 @@ function showmenu(){
 		$_out .= "<b>! Parent Dir</b>";
 	} else {
 		$dd = explode("/",$dir);
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]\" directkey=\"*\" accesskey=\"*\" nonumber>[*]Parent Dir</a>";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."\" directkey=\"*\" accesskey=\"*\" nonumber>[*]Parent Dir</a>";
 		if (array_key_exists(2,$dd)){
 			$tdir=array_pop($dd);
 			$back_dir = explode("/$tdir",$dir);
-			$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?dir=$back_dir[0]\" directkey=\"#\" accesskey=\"#\" nonumber>[#]Upper Dir</a>";
+			$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."?dir=$back_dir[0]\" directkey=\"#\" accesskey=\"#\" nonumber>[#]Upper Dir</a>";
 		}
 	}
 	$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$home\" accesskey=\"0\">[0]Home</a>\n";
@@ -173,7 +172,6 @@ function showmenu(){
  */
 function showpaging(){
 	global $dir;
-	global $self;
 	global $page;
 
 	$_out = '';
@@ -214,8 +212,8 @@ function showpaging(){
 
 	if($page > $from){
 		$_prev_page = $page -1;
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=1&dir=$dir\">&lt;&lt;</a>|";
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$_prev_page&dir=$dir\">&lt;</a>|";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."?page=1&dir=$dir\">&lt;&lt;</a>|";
+		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."?page=$_prev_page&dir=$dir\">&lt;</a>|";
 	}else{
 		//		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
 	}
@@ -259,7 +257,6 @@ function showpaging(){
  */
 function an_file($file_path){
 	global $dir;
-	global $self;
 	global $page;
 	global $file_name;
 
@@ -314,8 +311,7 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 	$mdate=date(DATE_FORMAT,$file_mtime);
 	$show_size = getFileSizeString($filesize);
 
-	global $self;
-	if ($file_name != $self[0]){
+	if ($file_name != SELF_PHP){
 		$file=".$dir/$file_name";
 		$_out .= "<tr><td class=\"td\">";
 		switch($ext){
@@ -329,7 +325,7 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 			case 3:
 				{
 					$_out .= "<a href=\"javascript:void(0)\" onclick=\"picspop('.$dir','$file_name','$ow','$oh');\">";
-					$_out .= "<img src=\"$self[0]?mode=thumb&ext=$ext&f=$file&ow=$ow&oh=$oh&tw=$tw&th=$th\" width=\"$tw\" height=\"$th\" border=\"0\"></a>";
+					$_out .= "<img src=\"".SELF_PHP."?mode=thumb&ext=$ext&f=$file&ow=$ow&oh=$oh&tw=$tw&th=$th\" width=\"$tw\" height=\"$th\" border=\"0\"></a>";
 					break;
 				}
 			default:
@@ -380,7 +376,7 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 		$get_ext = strtoupper($get_ext_array[0]);
 		if(is_feature_phone()){
 			if(in_array($get_ext,$dl_media)){
-				$_out .= "</td><td class=\"td\"><a href=\"?mode=dl&f=$file\" target=\"_blank\">$file_name</a></td>";
+				$_out .= "</td><td class=\"td\"><a href=\"".SELF_PHP."?mode=dl&f=$file\" target=\"_blank\">$file_name</a></td>";
 			}else{
 				$_out .= "</td><td class=\"td\"><a href=\"$file\" target=\"_blank\">$file_name</a></td>";
 			}
@@ -392,7 +388,7 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime){
 			$_out .= "<td class=\"td\">$show_size</td><td class=\"td\">$mdate</td></tr>\n";
 		}else{
 			if(in_array($get_ext,$dl_media)){
-				$_out .= "</td><td class=\"td\"><a href=\"?mode=dl&f=$file\" target=\"_blank\">$file_name</a>";
+				$_out .= "</td><td class=\"td\"><a href=\"".SELF_PHP."?mode=dl&f=$file\" target=\"_blank\">$file_name</a>";
 			}else{
 				$_out .= "</td><td class=\"td\"><a href=\"$file\" target=\"_blank\">$file_name</a>";
 			}
@@ -465,14 +461,14 @@ function show_body(){
 			$mdate=date(DATE_FORMAT,$file_mtime);
 			if(is_feature_phone()){
 				$_out .= "<tr><td class=\"td\">";
-				$_out .= "<a href=\"$self[0]?dir=$dir/$dir_list[$count]\">";
+				$_out .= "<a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">";
 				$_out .= "<img src=\"".HIDE_FOLDER."/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
-				$_out .= "<td class=\"td\"><a href=\"$self[0]?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
+				$_out .= "<td class=\"td\"><a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
 			}else{
 				$_out .= "<tr><td class=\"td\">";
-				$_out .= "<a href=\"$self[0]?dir=$dir/$dir_list[$count]\">";
+				$_out .= "<a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">";
 				$_out .= "<img src=\"".HIDE_FOLDER."/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
-				$_out .= "<td class=\"td\"><a href=\"$self[0]?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">$mdate</td></tr>\n";
+				$_out .= "<td class=\"td\"><a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">$mdate</td></tr>\n";
 			}
 		}
 	}
