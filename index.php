@@ -1,36 +1,6 @@
 <?php
-date_default_timezone_set('Asia/Tokyo');
-
-/**
- * @param string $key
- * @param string $default
- * @return unknown
- */
-function http_get($key,$default = ''){
-	if(!array_key_exists($key, $_GET)){
-		return $default;
-	}
-	return $_GET[$key];
-}
-/**
- * get if smart phone nor not
- * @return boolean
- */
-function is_smart_phone(){
-	$ua=$_SERVER['HTTP_USER_AGENT'];
-	return ((strpos($ua,'iPhone')!==false)||(strpos($ua,'iPod')!==false)||(strpos($ua,'Android')!==false));
-}
-/**
- * get if feature phone nor not
- * @return boolean
- */
-function is_feature_phone(){
-	$ua=$_SERVER['HTTP_USER_AGENT'];
-	return ((strpos($ua,'DoCoMo')!==false)||(strpos($ua,'UP.Browser')!==false)||(strpos($ua,'J-PHONE')!==false)||(strpos($ua,'J-Vodafone')!==false)||(strpos($ua,'SoftBank')!==false)||(strpos($ua,'WILLCOM')!==false));
-}
-
-
 /////////config//////////
+date_default_timezone_set('Asia/Tokyo');
 $gdv=0; 	//GD Ver. 1.x--'1' 2.x--'0'
 $title=$_SERVER['SCRIPT_NAME'];	//Page title
 $home='../'; 	//Home URL
@@ -42,6 +12,7 @@ $self = array_reverse( explode("/",$_SERVER["SCRIPT_NAME"]) );
 define('SELF_PHP',$self[0]);
 $lock = null;
 /////////size config////////////////
+require_once HIDE_FOLDER . '/lib/function.inc';
 if(is_feature_phone()){
 	define('MAX_DIST',32); 	//thumbnail size
 	define('DATA_PER_PAGE',10);
@@ -95,28 +66,6 @@ function get_list($dir_cnt,$dir,$page) {
 
 	sort($file_list);
 	return $file_list;
-}
-
-/**
- * get file size
- * @param number $filesize
- * @return string
- */
-function getFileSizeString($filesize){
-	if($filesize < 1000){
-		return $filesize . " b";
-	}
-	$file_kb = round(($filesize / 1024), 2); // bytes to KB
-	$file_mb = round(($filesize / 1048576), 2); // bytes to MB
-	$file_gb = round(($filesize / 1073741824), 2); // bytes to GB
-	// PHP does funny thing for files larger than 2GB
-	if($file_gb > 1){
-		return $file_gb . " Gb";
-	}
-	if($file_mb > 1){
-		return $file_mb . " Mb";
-	}
-	return $file_kb." Kb";
 }
 
 /**
@@ -391,17 +340,6 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime,$dir,$page){
 	}
 	return $_out;
 }
-/**
- * show index
- * @param unknown_type $dir_cnt
- */
-function show_indx($dir_cnt){
-	global $dir;
-	global $self;
-	show_indx($_SERVER["SCRIPT_NAME"]);
-	ereg ( "([^/]*)$",$dir_cnt,$temp);
-	$td_name = ereg_replace( "$temp[1]$","", $dir_cnt);
-}
 
 function show_body($dir,$page){
 
@@ -478,18 +416,23 @@ switch($mode){
 		break;
 	}
 }
-$tmpl = '';
+// doc output
+{
+ob_start('mb_output_handler');
 if(is_feature_phone()){
-	$tmpl = file_get_contents(HIDE_FOLDER.'/template/tmpl_fp.html');
+	require (HIDE_FOLDER.'/template/tmpl_fp.inc');
 }else{
-	$tmpl = file_get_contents(HIDE_FOLDER.'/template/tmpl_sp.html');
+	require (HIDE_FOLDER.'/template/tmpl_sp.inc');
 }
-$tmpl = str_replace('%CHARSET%', CHARSET, $tmpl);
-$tmpl = str_replace('UTF-8', CHARSET, $tmpl);
-$tmpl = str_replace('%TITLE%', $title, $tmpl);
-$tmpl = str_replace('%SELF%', SELF_PHP, $tmpl);
-$tmpl = str_replace('%SHOWMENU%', showmenu($dir,$home,$lock), $tmpl);
-$tmpl = str_replace('%SHOWPAGING%', showpaging($dir,$page), $tmpl);
-$tmpl = str_replace('%SHOWBODY%', show_body($dir,$page), $tmpl);
-echo $tmpl;
+$output = ob_get_contents();
+$output = str_replace('%CHARSET%', CHARSET, $output);
+$output = str_replace('UTF-8', CHARSET, $output);
+$output = str_replace('%TITLE%', $title, $output);
+$output = str_replace('%SELF%', SELF_PHP, $output);
+$output = str_replace('%SHOWMENU%', showmenu($dir,$home,$lock), $output);
+$output = str_replace('%SHOWPAGING%', showpaging($dir,$page), $output);
+$output = str_replace('%SHOWBODY%', show_body($dir,$page), $output);
+ob_end_clean();
+echo $output;
+}
 ?>
