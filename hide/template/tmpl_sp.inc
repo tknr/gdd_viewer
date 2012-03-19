@@ -26,12 +26,12 @@ Index of <b><?=$menu['dir_name']?></b><br />
 <?php if($menu['parent_dir'] == 0){?>
 <b>! Parent Dir</b>
 <?php }else{?>
-<a data-role="button" data-inline="true" href="%SELF%">Parent Dir</a>
+<a data-role="button" data-inline="true" href="%SELF%" data-icon=“arrow-u”>Parent Dir</a>
 <?php if(array_key_exists('upper_dir',$menu)){?>
-<a data-role="button" data-inline="true" href="%SELF%?dir=<?=$menu['upper_dir']?>">Upper Dir</a>
+<a data-role="button" data-inline="true" href="%SELF%?dir=<?=$menu['upper_dir']?>" data-icon=“arrow-u”>Upper Dir</a>
 <?php }?>
 <?php }?>
-<a data-role="button" data-inline="true" href="<?=$menu['home']?>">Home</a>
+<a data-role="button" data-inline="true" href="<?=$menu['home']?>" data-icon=“home”>Home</a>
 <!-- menu -->
 </div>
 
@@ -137,12 +137,12 @@ Index of <b><?=$menu['dir_name']?></b><br />
 <?php if($menu['parent_dir'] == 0){?>
 <b>! Parent Dir</b>
 <?php }else{?>
-<a data-role="button" data-inline="true" href="%SELF%">Parent Dir</a>
+<a data-role="button" data-inline="true" href="%SELF%" data-icon=“arrow-u”>Parent Dir</a>
 <?php if(array_key_exists('upper_dir',$menu)){?>
-<a data-role="button" data-inline="true" href="%SELF%?dir=<?=$menu['upper_dir']?>">Upper Dir</a>
+<a data-role="button" data-inline="true" href="%SELF%?dir=<?=$menu['upper_dir']?>" data-icon=“arrow-u”>Upper Dir</a>
 <?php }?>
 <?php }?>
-<a data-role="button" data-inline="true" href="<?=$menu['home']?>">Home</a>
+<a data-role="button" data-inline="true" href="<?=$menu['home']?>" data-icon=“home”>Home</a>
 <!-- menu -->
 </div>
 
