@@ -1,74 +1,126 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="%CHARSET%">
 <title>%TITLE%</title>
 <meta name="viewport" content="width = device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
-<style type="text/css">
-*{ margin:0 ; padding:0 ;}
-</style>
 <link href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" rel="stylesheet" type="text/css" />
+<link href="%HIDE_FOLDER%/template/reset.css" rel="stylesheet" type="text/css" />
+<link href="%HIDE_FOLDER%/template/base.css" rel="stylesheet" type="text/css" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<style type="text/css">
-<!-- reset.css -->
-body { 	line-height:1; margin:0; }
-h1, h2, h3, h4, h5, h6, p { 	margin: 0; }
-article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section {
-	display:block;
-}
-hr { display:block; height:1px; border:0; border-top:1px solid #cccccc; 	margin:1em 0; padding:0; }
-ul { list-style:none; padding:0; }
-li { padding:0; }
-input, select { vertical-align:middle; }
-a { display: block; }
-a { -webkit-tap-highlight-color:transparent;}
-<!-- base.css -->
-*:after { display:block; clear:both; }
-body { width:100%; overflow:hidden; }
-</style>
-<style type="text/css">
-<!--
-body { 	font-size: 13; background-color: white; }
-a { color: royalblue; font-size: 13;}
-a:hover { color: lightcoral; text-decoration: underline; }
-.table { border-spacing:0;margin:0;padding:0;}
-.tr { border-spacing:0;margin:0;padding:0;}
-.td { border-spacing:0;margin:0;padding:0;font-size: 13; 	background-color: #ffffff; text-align: left;}
--->
-</style>
-<script type="text/javascript">
-<!--
-function picspop(d,f,w,h){
-var l=(screen.width-w)/2;
-var t=(screen.height-h)/2;
-window.open("%SELF%?mode=popup&dir="+d+"&filename="+f,"popup","width="+w+",height="+h+",left="+l+",top="+t);
-}
-//-->
-</script>
 </head>
 <body onload="setTimeout('scrollTo(0,1)',100)">
 <div data-role="page" id="home">
 <div data-role="header">
-<div data-role="controlgroup" data-type="horizontal">%SHOWMENU%</div>
-<div data-role="controlgroup" data-type="horizontal">%SHOWPAGING%</div>
+<div data-role="controlgroup" data-type="horizontal">
+<!-- menu -->
+<?php if(array_key_exists('dir_name',$menu)){?>
+Index of <b><?=$menu['dir_name']?></b><br />
+<?php }?>
+<?php if(array_key_exists('error',$menu)){?>
+<b style=\"color:crimson;\"><?=$menu['error']?></b>
+<?php }?>
+<?php if($menu['parent_dir'] == 0){?>
+<b>! Parent Dir</b>
+<?php }else{?>
+<a data-role="button" data-inline="true" href="%SELF%">Parent Dir</a>
+<?php if(array_key_exists('upper_dir',$menu)){?>
+<a data-role="button" data-inline="true" href="%SELF%?dir=<?=$menu['upper_dir']?>">Upper Dir</a>
+<?php }?>
+<?php }?>
+<a data-role="button" data-inline="true" href="<?=$menu['home']?>">Home</a>
+<!-- menu -->
 </div>
-<div data-role="content" style="margin:0;padding:0;">
-	<table border="1" cellpadding="0" cellspacing="0" bgcolor="gray">
-		<tr>
-			<td class="td"><b>icon</b></td>
-			<td class="td"><b>information</b></td>
-			<td class="td"><b>date</b></td>
-		</tr>
-%SHOWBODY%
-	</table>
+<div data-role="controlgroup" data-type="horizontal">
+<!-- paging -->
+<?php if($paging['page'] > $paging['from']){?>
+<a data-role="button" data-inline="true" href="%SELF%?page=1&dir=<?=$paging['dir']?>">&lt;&lt;</a><a data-role="button" data-inline="true" href="%SELF%?page=<?=$paging['prev']?>&dir=<?=$paging['dir']?>">&lt;</a>
+<?php }else{?>
+<span data-role="button">&lt;&lt;</span><span data-role="button">&lt;</span>
+<?php }?>
+<?php for($count = $paging['from'] ; $count <= $paging['to'] ; $count++){
+	if($count == $paging['page']){?><span data-role="button" data-inline="true"><?=$count?>/<?=$paging['maxpage']?></span><?php ;
+	}else{
+		?><a data-role="button" data-inline="true" href="%SELF%?page=<?=$count?>&dir=<?=$paging['dir']?>"><?=$count?></a><?php 
+	}
+ }?>
+<?php if($paging['page'] < $paging['to']){?>
+<a data-role="button" data-inline="true" href="%SELF%?page=<?=$paging['next']?>&dir=<?=$paging['dir']?>">&gt;</a><a data-role="button" data-inline="true" href="%SELF%?page=<?=$paging['maxpage']?>&dir=<?=$paging['dir']?>">&gt;&gt;</a>
+<?php }else{?>
+<span data-role="button">&gt;</span><span data-role="button">&gt;&gt;</span>
+<?php }?>
+<!-- paging -->
+</div>
+</div>
+<div data-role="content">
+
+<div class="content-primary main-content">
+<ul data-role="listview"> 
+<?php foreach($data as $index=>$datum){?>
+	<?php if(strcmp('img',$datum['type'])==0){?>
+	<li>
+		<a href="<?=$datum['href']?>" target="_blank"><img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" /></a>
+		<p><a href="<?=$datum['href']?>"><?=$datum['file']?></a></p>
+		<p><?=$datum['original_width']?>x<?=$datum['original_height']?></p>
+		<p><?=$datum['size']?></p>
+		<p><?=$datum['mdate']?></p>
+	</li>
+	<?php }else{?>
+	<li>
+		<a href="<?=$datum['href']?>" target="_blank"><img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  /></a>
+		<p><a href="<?=$datum['href']?>"><?=$datum['file']?></a></p>
+		<p><?=$datum['size']?></p>
+		<p><?=$datum['mdate']?></p>
+	</li>
+	<?php }?>
+<?php }?>
+</ul>
+</div>
+
 </div>
 <div data-role="footer">
-<div data-role="controlgroup" data-type="horizontal">%SHOWMENU%</div>
-<div data-role="controlgroup" data-type="horizontal">%SHOWPAGING%</div>
+<div data-role="controlgroup" data-type="horizontal">
+<!-- paging -->
+<?php if($paging['page'] > $paging['from']){?>
+<a data-role="button" data-inline="true" href="%SELF%?page=1&dir=<?=$paging['dir']?>">&lt;&lt;</a><a data-role="button" data-inline="true" href="%SELF%?page=<?=$paging['prev']?>&dir=<?=$paging['dir']?>">&lt;</a>
+<?php }else{?>
+<span data-role="button">&lt;&lt;</span><span data-role="button">&lt;</span>
+<?php }?>
+<?php for($count = $paging['from'] ; $count <= $paging['to'] ; $count++){
+	if($count == $paging['page']){?><span data-role="button" data-inline="true"><?=$count?>/<?=$paging['maxpage']?></span><?php ;
+	}else{
+		?><a data-role="button" data-inline="true" href="%SELF%?page=<?=$count?>&dir=<?=$paging['dir']?>"><?=$count?></a><?php 
+	}
+ }?>
+<?php if($paging['page'] < $paging['to']){?>
+<a data-role="button" data-inline="true" href="%SELF%?page=<?=$paging['next']?>&dir=<?=$paging['dir']?>">&gt;</a><a data-role="button" data-inline="true" href="%SELF%?page=<?=$paging['maxpage']?>&dir=<?=$paging['dir']?>">&gt;&gt;</a>
+<?php }else{?>
+<span data-role="button">&gt;</span><span data-role="button">&gt;&gt;</span>
+<?php }?>
+<!-- paging -->
+</div>
+<div data-role="controlgroup" data-type="horizontal">
+<!-- menu -->
+<?php if(array_key_exists('dir_name',$menu)){?>
+Index of <b><?=$menu['dir_name']?></b><br />
+<?php }?>
+<?php if(array_key_exists('error',$menu)){?>
+<b style=\"color:crimson;\"><?=$menu['error']?></b>
+<?php }?>
+<?php if($menu['parent_dir'] == 0){?>
+<b>! Parent Dir</b>
+<?php }else{?>
+<a data-role="button" data-inline="true" href="%SELF%">Parent Dir</a>
+<?php if(array_key_exists('upper_dir',$menu)){?>
+<a data-role="button" data-inline="true" href="%SELF%?dir=<?=$menu['upper_dir']?>">Upper Dir</a>
+<?php }?>
+<?php }?>
+<a data-role="button" data-inline="true" href="<?=$menu['home']?>">Home</a>
+<!-- menu -->
+</div>
 </div>
 </div>
 </body>
