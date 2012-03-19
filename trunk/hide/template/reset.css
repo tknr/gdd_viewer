@@ -1,0 +1,43 @@
+@CHARSET "utf-8";
+body {
+	line-height: 1;
+	margin: 0;
+}
+
+h1,h2,h3,h4,h5,h6,p {
+	margin: 0;
+}
+
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section
+	{
+	display: block;
+}
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #cccccc;
+	margin: 1em 0;
+	padding: 0;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+li {
+	padding: 0;
+}
+
+input,select {
+	vertical-align: middle;
+}
+
+a {
+	display: block;
+}
+
+a {
+	-webkit-tap-highlight-color: transparent;
+}

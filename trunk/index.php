@@ -1,15 +1,14 @@
 <?php
 /////////config//////////
 date_default_timezone_set('Asia/Tokyo');
-$gdv=0; 	//GD Ver. 1.x--'1' 2.x--'0'
 $title=$_SERVER['SCRIPT_NAME'];	//Page title
 $home='../'; 	//Home URL
-define('CHARSET','UTF-8'); //Shift_JIS
-define('DATE_FORMAT','Y/m/d H:i:s'); // Y/m/d H:i:s
-$c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
-define('HIDE_FOLDER','hide');
 $self = array_reverse( explode("/",$_SERVER["SCRIPT_NAME"]) );
 define('SELF_PHP',$self[0]);
+define('CHARSET','UTF-8'); //Shift_JIS
+define('DATE_FORMAT','Y/m/d H:i:s'); // Y/m/d H:i:s
+define('HIDE_FOLDER','hide');
+$c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
 $lock = null;
 /////////size config////////////////
 require_once HIDE_FOLDER . '/lib/function.inc';
@@ -22,7 +21,7 @@ if(is_feature_phone()){
 	define('DATA_PER_PAGE',30);
 	define('PAGING_WIDTH',5);
 }else{
-	define('MAX_DIST',32); 	//thumbnail size
+	define('MAX_DIST',80); 	//thumbnail size
 	define('DATA_PER_PAGE',30);
 	define('PAGING_WIDTH',10);
 }
@@ -31,12 +30,13 @@ $dir = http_get("dir");
 $page = floor(http_get("page",1));
 $mode = http_get("mode");
 /////////function////////////////
+
 /**
- * get list
+ * get_list
  * @param unknown_type $dir_cnt
  * @return multitype:
  */
-function get_list($dir_cnt,$dir,$page) {
+function get_list($dir_cnt) {
 
 	$dir_handle=opendir($dir_cnt);
 	$file_list = null;
@@ -56,7 +56,7 @@ function get_list($dir_cnt,$dir,$page) {
 		if(strcmp('..', $_value) == 0){
 			unset($file_list[$_index]);
 		}
-		if(strpos($_value, '.', 0) === 0){
+		if(strpos($_value, '.') === 0){
 			unset($file_list[$_index]);
 		}
 		if(strcmp(HIDE_FOLDER, $_value) == 0){
@@ -68,68 +68,64 @@ function get_list($dir_cnt,$dir,$page) {
 	return $file_list;
 }
 
-/**
- * show menu
- * @return string
- */
-function showmenu($dir,$home,$lock){
 
-	$_out = '';
+/**
+ * get_menu_array
+ * @param string $dir
+ * @param string $home
+ * @param string $lock
+ * @return array <string,multitype:>
+ */
+function get_menu_array($dir,$home,$lock){
+
+	$array = array();
 
 	if (preg_match("/\.\./","$dir")){
 		$lock ='1';
 	}
 	if((!$lock)&&($dir)){
-		$_out .= "Index of <b>$dir</b><br />";
+		$array['dir_name'] = $dir;
 	}
 	if(($lock)&&($dir)){
-		$_out .= "<b style=\"color:crimson;\">Wrong Action !</b>";
+		$array['error'] = 'Wrong Action !';
 	}
 	if (!$dir) {
-		$_out .= "<b>! Parent Dir</b>";
+		$array['parent_dir'] = 0;
 	} else {
 		$dd = explode("/",$dir);
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."\" directkey=\"*\" accesskey=\"*\" nonumber>[*]Parent Dir</a>";
+		$array['parent_dir'] = 1;
 		if (array_key_exists(2,$dd)){
 			$tdir=array_pop($dd);
 			$back_dir = explode("/$tdir",$dir);
-			$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."?dir=$back_dir[0]\" directkey=\"#\" accesskey=\"#\" nonumber>[#]Upper Dir</a>";
+			$array['upper_dir'] = $back_dir[0];
 		}
 	}
-	$_out .= " | <a data-role=\"button\" data-inline=\"true\" href=\"$home\" accesskey=\"0\">[0]Home</a>\n";
-	if(is_feature_phone()){
-		$_out = str_replace(" data-role=\"button\" data-inline=\"true\"", '', $_out);
-		$_out = str_replace('<span>', '', $_out);
-		$_out = str_replace('</span>', '', $_out);
-	}else{
-		$_out = str_replace('|','',$_out);
-		$_out = str_replace('[*]','',$_out);
-		$_out = str_replace('[#]','',$_out);
-		$_out = str_replace('[0]','',$_out);
-	}
-	return $_out;
+	$array['home'] = $home;
+	return $array;
 }
 
-/**
- * show paging
- * @return string
- */
-function showpaging($dir,$page){
 
-	$_out = '';
+/**
+ * get_paging_array
+ * @param string $dir
+ * @param number $page
+ * @return array <string,multitype:>
+ */
+function get_paging_array($dir,$page){
+
+	$array = array();
 
 	if ($dir){
 		$dir_name = "./$dir";
 	} else {
 		$dir_name = ".";
 	}
-	$file_list = get_list($dir_name,$dir,$page);
+	$file_list = get_list($dir_name);
 
 	$maxsize = count($file_list);
 
-	//	$_out .= "<span data-role=\"button\">count:$maxsize</span> | ";
+	$array['max_size'] = $maxsize;
 
-	//width
 	$maxpage = ceil($maxsize / DATA_PER_PAGE);
 
 	$halfwidth = floor(PAGING_WIDTH /2);
@@ -152,52 +148,34 @@ function showpaging($dir,$page){
 		$to = $maxpage;
 	}
 
+	$array['dir'] = $dir;
+	$array['maxpage'] = $maxpage;
+	$array['page'] = $page;
+	$array['from'] = $from;
+	$array['to'] = $to;
+
 	if($page > $from){
 		$_prev_page = $page -1;
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."?page=1&dir=$dir\">&lt;&lt;</a>|";
-		$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"".SELF_PHP."?page=$_prev_page&dir=$dir\">&lt;</a>|";
-	}else{
-		//		$_out .= "<span data-role=\"button\">&lt;&lt;</span>|<span data-role=\"button\">&lt;</span>|";
-	}
-	for($count = $from ; $count <= $to ; $count++){
-		$_out .= "";
-		if($count !=$from){
-			$_out .= "|";
 
-		}
-		if($count == $page){
-			$_out .= "<span data-role=\"button\" data-inline=\"true\">$count/$maxpage</span>";
-		}else{
-			$accesskey = "";
-			if(is_feature_phone() && $count > 0 && $count < 10){
-				$accesskey = " directkey=\"$count\" accesskey=\"$count\" nonumber";
-			}
-			$_out .= "<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$count&dir=$dir\"$accesskey>$count</a>";
-		}
+		$array['prev'] = $_prev_page;
+	}else{
 	}
+
 	if($page < $to){
 		$_next_page = $page + 1;
-		$_out .= "|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$_next_page&dir=$dir\">&gt;</a>";
-		$_out .="|<a data-role=\"button\" data-inline=\"true\" href=\"$self[0]?page=$maxpage&dir=$dir\">&gt;&gt;</a>";
-	}else{
-		//		$_out .= "|<span data-role=\"button\">&gt;</span>|<span data-role=\"button\">&gt;&gt;</span>";
+		$array['next'] = $_next_page;
 	}
-	if(is_feature_phone()){
-		$_out = str_replace(" data-role=\"button\" data-inline=\"true\"", '', $_out);
-		$_out = str_replace('<span>', '', $_out);
-		$_out = str_replace('</span>', '', $_out);
-	}else{
-		$_out = str_replace('|','',$_out);
-	}
-	return $_out;
+	return $array;
 }
+
 
 /**
  * get image property
  * @param string $file_path
+ * @param string $filename
  * @return string
  */
-function an_file($file_path,$dir,$page,$file_name){
+function an_file($file_path,$file_name){
 
 	$img= @getimagesize($file_path);
 	if (($img[0] < MAX_DIST) and ($img[1] < MAX_DIST)){
@@ -224,13 +202,14 @@ function an_file($file_path,$dir,$page,$file_name){
  * @param string $file_name
  * @param number $filesize
  * @param number $file_mtime
- * @return string
+ * @param string $dir
+ * @param number $page
+ * @return array <string,multitype:>
  */
-function show_dir($file_path, $file_name, $filesize, $file_mtime,$dir,$page){
-	
-	$_out = '';
+function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page){
+	$array = array();
 
-	$img_prop = an_file($file_path,$dir,$page,$file_name);
+	$img_prop = an_file($file_path,$file_name);
 	$img_prop = explode(",",$img_prop);
 	$ext = "$img_prop[0]";
 	$ow = "$img_prop[1]";
@@ -239,7 +218,7 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime,$dir,$page){
 	$th ="$img_prop[4]";
 
 	$web = ("html,htm");
-	$zip = ("zip,lzh,tar,rar,7z,cab,lha");
+	$zip = ("zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z");
 	$media = ("mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4");
 	$swf = ("swf");
 	$txt = ("txt,doc,xls,rtf");
@@ -249,100 +228,106 @@ function show_dir($file_path, $file_name, $filesize, $file_mtime,$dir,$page){
 	$mdate=date(DATE_FORMAT,$file_mtime);
 	$show_size = getFileSizeString($filesize);
 
-	if ($file_name != SELF_PHP){
-		$file=".$dir/$file_name";
-		$_out .= "<tr><td class=\"td\">";
+	$file=".$dir/$file_name";
+	$encoded_url = rawurlencode($file);
+	
+	$array['file'] = $file_name;
+	$array['size'] = $show_size;
+	$array['mdate'] = $mdate;
+
+	if ($file_name == SELF_PHP){
+		$array['type'] = 'self';
+		$array['href'] = SELF_PHP;
+		$array['src'] = HIDE_FOLDER.'/other.gif';
+		$array['alt'] = $file_name;
+	}else{
+		$array['ext'] = $ext;
 		switch($ext){
-			case 1:
-				{
-					$_out .= "<a href=\"javascript:void(0)\" onclick=\"picspop('.$dir','$file_name','$ow','$oh')\">";
-					$_out .= "<img src=\".$dir/$file_name\" width=\"$tw\" height=\"$th\" border=\"0\"></a>";
-					break;
-				}
+			case 1:{
+				$array['type'] = 'img';
+				$array['href'] = $file;
+				$array['src'] = $file;
+				$array['alt'] = $file_name;
+				$array['original_width'] = $ow;
+				$array['original_height'] = $oh;
+				$array['width'] = $tw;
+				$array['height'] = $th;
+				break;
+			}
 			case 2:
-			case 3:
-				{
-					$_out .= "<a href=\"javascript:void(0)\" onclick=\"picspop('.$dir','$file_name','$ow','$oh');\">";
-					$_out .= "<img src=\"".SELF_PHP."?mode=thumb&ext=$ext&f=$file&ow=$ow&oh=$oh&tw=$tw&th=$th\" width=\"$tw\" height=\"$th\" border=\"0\"></a>";
-					break;
-				}
-			default:
-				{
-					$get_ext = explode("." ,$file_name);
-					$type = array_reverse($get_ext);
-					for ($i=0; $i<count($type_list); $i++){
-						if (preg_match("/$type_list[$i]$/i",$file_name)){
-							if (preg_match("/$type[0]/i","$txt")){
-								$icon = 'txt';
-							}
-							if (preg_match("/$type[0]/i","$media")){
-								$icon = 'media';
-							}
-							if (preg_match("/$type[0]/i","$zip")){
-								$icon = 'zip';
-							}
-							if (preg_match("/$type[0]/i","$web")){
-								$icon = 'web';
-							}
-							if (preg_match("/$type[0]/i","$swf")){
-								$icon = 'swf';
-							}
-							if (preg_match("/$type[0]/i","$pdf")){
-								$icon = 'pdf';
-							}
+			case 3:{
+				$array['type'] = 'img';
+				$array['href'] = $file;
+				$array['src'] = SELF_PHP.'?mode=thumb&ext='.$ext.'&f='.$file.'&ow='.$ow.'&oh='.$oh.'&tw='.$tw.'&th='.$th;
+				$array['alt'] = $file_name;
+				$array['original_width'] = $ow;
+				$array['original_height'] = $oh;
+				$array['width'] = $tw;
+				$array['height'] = $th;
+				break;
+			}
+			default:{
+				$get_ext = explode("." ,$file_name);
+				$type = array_reverse($get_ext);
+				$icon = null;
+				for ($i=0; $i<count($type_list); $i++){
+					if (preg_match("/$type_list[$i]$/i",$file_name)){
+						if (preg_match("/$type[0]/i","$txt")){
+							$icon = 'txt';
+						}
+						if (preg_match("/$type[0]/i","$media")){
+							$icon = 'media';
+						}
+						if (preg_match("/$type[0]/i","$zip")){
+							$icon = 'zip';
+						}
+						if (preg_match("/$type[0]/i","$web")){
+							$icon = 'web';
+						}
+						if (preg_match("/$type[0]/i","$swf")){
+							$icon = 'swf';
+						}
+						if (preg_match("/$type[0]/i","$pdf")){
+							$icon = 'pdf';
 						}
 					}
-					if (!$icon){
-						$icon='other';
-					}
-					$dl_media = array("MP3","MP4","3GP","3G2");
-					$get_ext_array = explode("." ,$file_name);
-					$get_ext_array = array_reverse($get_ext_array);
-					$get_ext = strtoupper($get_ext_array[0]);
-					if(in_array($get_ext,$dl_media)){
-						$encoded_url = rawurlencode($file);
-						$_out .= "<a href=\"?mode=dl&f=$file\" target=\"_blank\"><img src=\"".HIDE_FOLDER."/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
-					}else{
-						$_out .= "<a href=\"$file\" target=\"_blank\"><img src=\"".HIDE_FOLDER."/$icon.gif\" border=\"0\" alt=\"$file_name\"></a>";
-					}
-					break;
 				}
-		}
-		$dl_media = array("MP3","MP4","3GP","3G2");
-		$get_ext_array = explode("." ,$file_name);
-		$get_ext_array = array_reverse($get_ext_array);
-		$get_ext = strtoupper($get_ext_array[0]);
-		if(is_feature_phone()){
-			if(in_array($get_ext,$dl_media)){
-				$_out .= "</td><td class=\"td\"><a href=\"".SELF_PHP."?mode=dl&f=$file\" target=\"_blank\">$file_name</a></td>";
-			}else{
-				$_out .= "</td><td class=\"td\"><a href=\"$file\" target=\"_blank\">$file_name</a></td>";
+				if (!$icon){
+					$icon='other';
+				}
+				$dl_media = array("MP3","MP4","3GP","3G2");
+				$get_ext_array = explode("." ,$file_name);
+				$get_ext_array = array_reverse($get_ext_array);
+				$get_ext = strtoupper($get_ext_array[0]);
+					
+				if(in_array($get_ext,$dl_media)){
+					$array['type'] = 'file';
+					$array['href'] = SELF_PHP.'?mode=dl&f='.$encoded_url;
+					$array['src'] = HIDE_FOLDER.'/'.$icon.'.gif';
+					$array['alt'] = $file_name;
+				}else{
+					$array['type'] = 'file';
+					$array['href'] = $file;
+					$array['src'] = HIDE_FOLDER.'/'.$icon.'.gif';
+					$array['alt'] = $file_name;
+				}
+				break;
 			}
-			if (($ow) AND ($oh)){
-				$_out .= "<td class=\"td\">$ow x $oh</td>";
-			} else {
-				$_out .= "<td class=\"td\">-</td>";
-			}
-			$_out .= "<td class=\"td\">$show_size</td><td class=\"td\">$mdate</td></tr>\n";
-		}else{
-			if(in_array($get_ext,$dl_media)){
-				$_out .= "</td><td class=\"td\"><a href=\"".SELF_PHP."?mode=dl&f=$file\" target=\"_blank\">$file_name</a>";
-			}else{
-				$_out .= "</td><td class=\"td\"><a href=\"$file\" target=\"_blank\">$file_name</a>";
-			}
-			if (($ow) AND ($oh)){
-				$_out .= "<br />$ow x $oh<br />";
-			} else {
-				$_out .= "<br />-<br />";
-			}
-			$_out .= "$show_size</td><td class=\"td\">$mdate</td></tr>\n";
 		}
 	}
-	return $_out;
+	return $array;
 }
 
-function show_body($dir,$page){
+/**
+ * get_body_array
+ * @param unknown_type $dir
+ * @param number $page
+ * @return multitype:NULL multitype:string NULL unknown  
+ */
+function get_body_array($dir,$page){
 
+	$array = array();
+	
 	$_out = '';
 	$lock = null;
 	if (preg_match("/\.\./","$dir")){
@@ -354,7 +339,7 @@ function show_body($dir,$page){
 		} else {
 			$dir_name = ".";
 		}
-		$file_list = get_list($dir_name,$dir,$page);
+		$file_list = get_list($dir_name);
 
 		$maxsize = count($file_list);
 
@@ -372,7 +357,7 @@ function show_body($dir,$page){
 			$file_mtime = filemtime($file_path);
 
 			if (is_file($file_path)){
-				$_out .= show_dir($file_path, $file_name, $file_size, $file_mtime,$dir,$page);
+				$array[] = get_dir_array($file_path, $file_name, $file_size, $file_mtime,$dir,$page);
 			} else {
 				$dir_list = "$dir_list,$file_name";
 			}
@@ -382,21 +367,19 @@ function show_body($dir,$page){
 		sort($dir_list);
 
 		for ($count=1;$count<count($dir_list);$count++) {
-			$mdate=date(DATE_FORMAT,$file_mtime);
-			if(is_feature_phone()){
-				$_out .= "<tr><td class=\"td\">";
-				$_out .= "<a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">";
-				$_out .= "<img src=\"".HIDE_FOLDER."/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
-				$_out .= "<td class=\"td\"><a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">-</td><td class=\"td\">-</td><td class=\"td\">$mdate</td></tr>\n";
-			}else{
-				$_out .= "<tr><td class=\"td\">";
-				$_out .= "<a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">";
-				$_out .= "<img src=\"".HIDE_FOLDER."/dir.gif\" border=\"0\" width=\"32\" height=\"26\"></a></td>";
-				$_out .= "<td class=\"td\"><a href=\"".SELF_PHP."?dir=$dir/$dir_list[$count]\">$dir_list[$count]</a></td><td class=\"td\">$mdate</td></tr>\n";
-			}
+			$encoded_url = rawurlencode($dir.'/'.$dir_list[$count]);
+			$_array = array();
+			$_array['file'] = $dir_list[$count];
+			$_array['alt'] = $dir_list[$count];
+			$_array['type'] = 'dir';
+			$_array['href'] = SELF_PHP.'?dir='.$encoded_url;
+			$_array['src'] = HIDE_FOLDER.'/dir.gif';
+			$_array['size'] = '-';
+			$_array['mdate'] = date(DATE_FORMAT,$file_mtime);
+			$array[] = $_array;
 		}
 	}
-	return $_out;
+	return $array;
 }
 /////////main////////////////
 switch($mode){
@@ -418,21 +401,23 @@ switch($mode){
 }
 // doc output
 {
-ob_start('mb_output_handler');
-if(is_feature_phone()){
-	require (HIDE_FOLDER.'/template/tmpl_fp.inc');
-}else{
-	require (HIDE_FOLDER.'/template/tmpl_sp.inc');
-}
-$output = ob_get_contents();
-$output = str_replace('%CHARSET%', CHARSET, $output);
-$output = str_replace('UTF-8', CHARSET, $output);
-$output = str_replace('%TITLE%', $title, $output);
-$output = str_replace('%SELF%', SELF_PHP, $output);
-$output = str_replace('%SHOWMENU%', showmenu($dir,$home,$lock), $output);
-$output = str_replace('%SHOWPAGING%', showpaging($dir,$page), $output);
-$output = str_replace('%SHOWBODY%', show_body($dir,$page), $output);
-ob_end_clean();
-echo $output;
+	$menu = get_menu_array($dir,$home,$lock);
+	$paging = get_paging_array($dir,$page);
+	$data = get_body_array($dir,$page);
+
+	ob_start('mb_output_handler');
+	if(is_feature_phone()){
+		require (HIDE_FOLDER.'/template/tmpl_fp.inc');
+	}else{
+		require (HIDE_FOLDER.'/template/tmpl_sp.inc');
+	}
+	$output = ob_get_contents();
+	$output = str_replace('%CHARSET%', CHARSET, $output);
+	$output = str_replace('%TITLE%', $title, $output);
+	$output = str_replace('%SELF%', SELF_PHP, $output);
+	$output = str_replace('%HIDE_FOLDER%', HIDE_FOLDER, $output);
+	ob_end_clean();
+
+	echo $output;
 }
 ?>
