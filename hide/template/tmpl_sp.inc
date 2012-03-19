@@ -7,8 +7,8 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
 <link href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" rel="stylesheet" type="text/css" />
-<link href="%HIDE_FOLDER%/template/reset.css" rel="stylesheet" type="text/css" />
-<link href="%HIDE_FOLDER%/template/base.css" rel="stylesheet" type="text/css" />
+<link href="%HIDE_FOLDER%/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="%HIDE_FOLDER%/css/base.css" rel="stylesheet" type="text/css" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
