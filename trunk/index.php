@@ -18,11 +18,11 @@ if(is_feature_phone()){
 	define('PAGING_WIDTH',10);
 }else if(is_smart_phone()){
 	define('MAX_DIST',80); 	//thumbnail size
-	define('DATA_PER_PAGE',30);
+	define('DATA_PER_PAGE',50);
 	define('PAGING_WIDTH',5);
 }else{
 	define('MAX_DIST',80); 	//thumbnail size
-	define('DATA_PER_PAGE',30);
+	define('DATA_PER_PAGE',50);
 	define('PAGING_WIDTH',10);
 }
 /////////request////////////////
@@ -407,9 +407,9 @@ switch($mode){
 
 	ob_start('mb_output_handler');
 	if(is_feature_phone()){
-		require (HIDE_FOLDER.'/template/tmpl_fp.inc');
+		require (HIDE_FOLDER.'/template/fp/index.inc');
 	}else{
-		require (HIDE_FOLDER.'/template/tmpl_sp.inc');
+		require (HIDE_FOLDER.'/template/sp/index.inc');
 	}
 	$output = ob_get_contents();
 	$output = str_replace('%CHARSET%', CHARSET, $output);
