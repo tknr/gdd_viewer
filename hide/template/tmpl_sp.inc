@@ -4,17 +4,17 @@
 <meta charset="%CHARSET%">
 <title>%TITLE%</title>
 <meta name="viewport" content="width = device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<link href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
-<link href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" rel="stylesheet" type="text/css" />
-<link href="%HIDE_FOLDER%/css/reset.css" rel="stylesheet" type="text/css" />
-<link href="%HIDE_FOLDER%/css/base.css" rel="stylesheet" type="text/css" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body onload="setTimeout('scrollTo(0,1)',100)">
 <div data-role="page" id="home">
+
 <div data-role="header">
+
 <div data-role="controlgroup" data-type="horizontal">
 <!-- menu -->
 <?php if(array_key_exists('dir_name',$menu)){?>
@@ -34,6 +34,7 @@ Index of <b><?=$menu['dir_name']?></b><br />
 <a data-role="button" data-inline="true" href="<?=$menu['home']?>">Home</a>
 <!-- menu -->
 </div>
+
 <div data-role="controlgroup" data-type="horizontal">
 <!-- paging -->
 <?php if($paging['page'] > $paging['from']){?>
@@ -54,34 +55,56 @@ Index of <b><?=$menu['dir_name']?></b><br />
 <?php }?>
 <!-- paging -->
 </div>
+
 </div>
+
 <div data-role="content">
 
 <div class="content-primary main-content">
 <ul data-role="listview"> 
-<?php foreach($data as $index=>$datum){?>
+	<?php foreach($data as $index=>$datum){?>
 	<?php if(strcmp('img',$datum['type'])==0){?>
 	<li>
-		<a href="<?=$datum['href']?>" target="_blank"><img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" /></a>
-		<p><a href="<?=$datum['href']?>"><?=$datum['file']?></a></p>
-		<p><?=$datum['original_width']?>x<?=$datum['original_height']?></p>
-		<p><?=$datum['size']?></p>
-		<p><?=$datum['mdate']?></p>
+		<a href="<?=$datum['href']?>" target="_blank">
+		<img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
+		<h3><?=$datum['file']?></h3>
+		<p>
+		<?=$datum['original_width']?>x<?=$datum['original_height']?><br />
+		<?=$datum['size']?><br />
+		<?=$datum['mdate']?>
+		</p>
+		</a>
+	</li>
+	<?php }else if(strcmp('dir',$datum['type'])==0){?>
+	<li>
+		<a href="<?=$datum['href']?>">
+		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
+		<h3><?=$datum['file']?></h3>
+		<p>
+		<?=$datum['mdate']?>
+		</p>
+		</a>
 	</li>
 	<?php }else{?>
 	<li>
-		<a href="<?=$datum['href']?>" target="_blank"><img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  /></a>
-		<p><a href="<?=$datum['href']?>"><?=$datum['file']?></a></p>
-		<p><?=$datum['size']?></p>
-		<p><?=$datum['mdate']?></p>
+		<a href="<?=$datum['href']?>" target="_blank">
+		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
+		<h3><?=$datum['file']?></h3>
+		<p>
+		<?=$datum['size']?><br />
+		<?=$datum['mdate']?>
+		</p>
+		</a>
 	</li>
 	<?php }?>
-<?php }?>
+	<?php }?>
 </ul>
 </div>
 
 </div>
+
 <div data-role="footer">
+
 <div data-role="controlgroup" data-type="horizontal">
 <!-- paging -->
 <?php if($paging['page'] > $paging['from']){?>
@@ -102,6 +125,7 @@ Index of <b><?=$menu['dir_name']?></b><br />
 <?php }?>
 <!-- paging -->
 </div>
+
 <div data-role="controlgroup" data-type="horizontal">
 <!-- menu -->
 <?php if(array_key_exists('dir_name',$menu)){?>
@@ -121,7 +145,9 @@ Index of <b><?=$menu['dir_name']?></b><br />
 <a data-role="button" data-inline="true" href="<?=$menu['home']?>">Home</a>
 <!-- menu -->
 </div>
+
 </div>
+
 </div>
 </body>
 </html>
