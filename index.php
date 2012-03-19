@@ -406,10 +406,10 @@ switch($mode){
 	$data = get_body_array($dir,$page);
 
 	ob_start('mb_output_handler');
-	if(is_feature_phone()){
-		require (HIDE_FOLDER.'/template/tmpl_fp.inc');
-	}else{
+	if(is_smart_phone()){
 		require (HIDE_FOLDER.'/template/tmpl_sp.inc');
+	}else{
+		require (HIDE_FOLDER.'/template/tmpl_fp.inc');
 	}
 	$output = ob_get_contents();
 	$output = str_replace('%CHARSET%', CHARSET, $output);
