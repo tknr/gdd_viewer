@@ -23,7 +23,7 @@ if(is_feature_phone()){
 }else{
 	define('MAX_DIST',80); 	//thumbnail size
 	define('DATA_PER_PAGE',50);
-	define('PAGING_WIDTH',10);
+	define('PAGING_WIDTH',5);
 }
 /////////request////////////////
 $dir = http_get("dir");
@@ -219,7 +219,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 
 	$web = ("html,htm");
 	$zip = ("zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z");
-	$media = ("mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4");
+	$media = ("mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv");
 	$swf = ("swf");
 	$txt = ("txt,doc,xls,rtf");
 	$pdf = ("pdf");
@@ -295,7 +295,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 				if (!$icon){
 					$icon='other';
 				}
-				$dl_media = array("MP3","MP4","3GP","3G2");
+				$dl_media = array("MP3","MP4","3GP","3G2","FLV");
 				$get_ext_array = explode("." ,$file_name);
 				$get_ext_array = array_reverse($get_ext_array);
 				$get_ext = strtoupper($get_ext_array[0]);
