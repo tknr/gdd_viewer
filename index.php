@@ -219,7 +219,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 
 	$web = ("html,htm");
 	$zip = ("zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z");
-	$media = ("mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv");
+	$media = ("mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv,mpg");
 	$swf = ("swf");
 	$txt = ("txt,doc,xls,rtf");
 	$pdf = ("pdf");
@@ -295,22 +295,19 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 				if (!$icon){
 					$icon='other';
 				}
-				$dl_media = array("MP3","MP4","3GP","3G2","FLV");
-				$get_ext_array = explode("." ,$file_name);
+				$dl_media = explode(',',$media);
+				$get_ext_array = explode('.' ,$file_name);
 				$get_ext_array = array_reverse($get_ext_array);
-				$get_ext = strtoupper($get_ext_array[0]);
+				$get_ext = strtolower($get_ext_array[0]);
 					
 				if(in_array($get_ext,$dl_media)){
-					$array['type'] = 'file';
-					$array['href'] = SELF_PHP.'?mode=dl&f='.$encoded_url;
-					$array['src'] = HIDE_FOLDER.'/'.$icon.'.gif';
-					$array['alt'] = $file_name;
+					$array['type'] = 'media';
 				}else{
 					$array['type'] = 'file';
-					$array['href'] = $file;
-					$array['src'] = HIDE_FOLDER.'/'.$icon.'.gif';
-					$array['alt'] = $file_name;
 				}
+				$array['href'] = $file;
+				$array['src'] = HIDE_FOLDER.'/'.$icon.'.gif';
+				$array['alt'] = $file_name;
 				break;
 			}
 		}
@@ -393,6 +390,10 @@ switch($mode){
 	}
 	case 'dl':{
 		require_once HIDE_FOLDER . '/plugin/dl.inc';
+		return;
+	}
+	case 'embed':{
+		require_once HIDE_FOLDER . '/plugin/embed.inc';
 		return;
 	}
 	default:{
