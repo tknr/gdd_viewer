@@ -46,7 +46,11 @@ window.open("%SELF%?mode=popup&dir="+d+"&filename="+f,"popup","width="+w+",heigh
 	</li>
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
 	<li>
+		<?php if(strcmp('mp4',$datum['extension'])==0){?>
+		<a href="%SELF%?mode=stream&filename=<?=$datum['href']?>" target="_blank">
+		<?php }else{?>
 		<a href="%SELF%?mode=embed&filename=<?=$datum['href']?>" target="_blank">
+		<?php }?>
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
 		<h3><?=$datum['file']?></h3>
 		<p>
