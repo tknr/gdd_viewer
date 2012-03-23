@@ -12,15 +12,6 @@ a:hover { color: lightcoral; text-decoration: underline; }
 .td { font-size: 13; 	background-color: #ffffff; text-align: left;}
 -->
 </style>
-<script type="text/javascript">
-<!--
-function picspop(d,f,w,h){
-var l=(screen.width-w)/2;
-var t=(screen.height-h)/2;
-window.open("%SELF%?mode=popup&dir="+d+"&filename="+f,"popup","width="+w+",height="+h+",left="+l+",top="+t);
-}
-//-->
-</script>
 </head>
 <body>
 
