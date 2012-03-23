@@ -48,4 +48,15 @@ function getFileSizeString($filesize){
 	}
 	return $file_kb." Kb";
 }
+
+/**
+ * get extension
+ * @param string $filename
+ * @return string
+ */
+function get_extension($filename){
+	$get_ext = explode("." ,$filename);
+	$type = array_reverse($get_ext);
+	return $type[0];
+}
 ?>

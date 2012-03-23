@@ -211,20 +211,19 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 
 	$img_prop = an_file($file_path,$file_name);
 	$img_prop = explode(",",$img_prop);
-	$ext = "$img_prop[0]";
+	$img_ext = "$img_prop[0]";
 	$ow = "$img_prop[1]";
 	$oh = "$img_prop[2]";
 	$tw ="$img_prop[3]";
 	$th ="$img_prop[4]";
 
-	$web = ("html,htm");
-	$zip = ("zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z");
-	$media = ("mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv,mpg");
-	$swf = ("swf");
-	$txt = ("txt,doc,xls,rtf");
-	$pdf = ("pdf");
+	$web = explode(',','html,htm');
+	$zip = explode(',','zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z');
+	$media = explode(',','mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv,mpg');
+	$swf = explode(',','swf');
+	$txt = explode(',','txt,doc,xls,rtf');
+	$pdf = explode(',','pdf');
 
-	$type_list =  explode(",","$web,$zip,$media,$swf,$txt,$pdf");
 	$mdate=date(DATE_FORMAT,$file_mtime);
 	$show_size = getFileSizeString($filesize);
 
@@ -234,6 +233,8 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 	$array['file'] = $file_name;
 	$array['size'] = $show_size;
 	$array['mdate'] = $mdate;
+	$extension = strtolower(get_extension($file_name));
+	$array['extension'] = $extension;
 
 	if ($file_name == SELF_PHP){
 		$array['type'] = 'self';
@@ -241,8 +242,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 		$array['src'] = HIDE_FOLDER.'/other.gif';
 		$array['alt'] = $file_name;
 	}else{
-		$array['ext'] = $ext;
-		switch($ext){
+		switch($img_ext){
 			case 1:{
 				$array['type'] = 'img';
 				$array['href'] = $file;
@@ -258,7 +258,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 			case 3:{
 				$array['type'] = 'img';
 				$array['href'] = $file;
-				$array['src'] = SELF_PHP.'?mode=thumb&ext='.$ext.'&f='.$file.'&ow='.$ow.'&oh='.$oh.'&tw='.$tw.'&th='.$th;
+				$array['src'] = SELF_PHP.'?mode=thumb&ext='.$img_ext.'&f='.$file.'&ow='.$ow.'&oh='.$oh.'&tw='.$tw.'&th='.$th;
 				$array['alt'] = $file_name;
 				$array['original_width'] = $ow;
 				$array['original_height'] = $oh;
@@ -267,40 +267,29 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 				break;
 			}
 			default:{
-				$get_ext = explode("." ,$file_name);
-				$type = array_reverse($get_ext);
 				$icon = null;
-				for ($i=0; $i<count($type_list); $i++){
-					if (preg_match("/$type_list[$i]$/i",$file_name)){
-						if (preg_match("/$type[0]/i","$txt")){
-							$icon = 'txt';
-						}
-						if (preg_match("/$type[0]/i","$media")){
-							$icon = 'media';
-						}
-						if (preg_match("/$type[0]/i","$zip")){
-							$icon = 'zip';
-						}
-						if (preg_match("/$type[0]/i","$web")){
-							$icon = 'web';
-						}
-						if (preg_match("/$type[0]/i","$swf")){
-							$icon = 'swf';
-						}
-						if (preg_match("/$type[0]/i","$pdf")){
-							$icon = 'pdf';
-						}
-					}
+				if (in_array($extension,$txt)){
+					$icon = 'txt';
 				}
-				if (!$icon){
-					$icon='other';
+				else if (in_array($extension,$media)){
+					$icon = 'media';
 				}
-				$dl_media = explode(',',$media);
-				$get_ext_array = explode('.' ,$file_name);
-				$get_ext_array = array_reverse($get_ext_array);
-				$get_ext = strtolower($get_ext_array[0]);
-					
-				if(in_array($get_ext,$dl_media)){
+				else if (in_array($extension,$zip)){
+					$icon = 'zip';
+				}
+				else if (in_array($extension,$web)){
+					$icon = 'web';
+				}
+				else if (in_array($extension,$swf)){
+					$icon = 'swf';
+				}
+				else if (in_array($extension,$pdf)){
+					$icon = 'pdf';
+				}else{
+					$icon = 'other';
+				}
+
+				if(in_array($extension,$media)){
 					$array['type'] = 'media';
 				}else{
 					$array['type'] = 'file';
@@ -394,6 +383,10 @@ switch($mode){
 	}
 	case 'embed':{
 		require_once HIDE_FOLDER . '/plugin/embed.inc';
+		return;
+	}
+	case 'stream':{
+		require_once HIDE_FOLDER . '/plugin/stream.inc';
 		return;
 	}
 	default:{
