@@ -2,15 +2,18 @@
 /*
  * popup
  */
-$filename = http_get("filename");
-global $dir;
+$filename = http_get('filename');
+$dir = http_get('dir');
 if (!$dir){
-	$d='.';
+	$dir='.';
 }
-$_out = '';
-$_out .= "<html>\n<head>\n<title>$filename</title>\n</head>\n";
-$_out .= "<body style=\"margin:0px;\">\n";
-$_out .= "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#ffffff\">\n";
-$_out .= "<tr><td><a href=\"javascript:void(0)\" onclick=\"window.close()\"><img src=\"$d$dir/$filename\" border=\"0\"></a></td></tr>\n</table>\n</body>\n</html>\n";
-echo $_out;
 ?>
+<html><head><title><?=$filename?></title></head>
+<body style="margin:0px;padding:0px;">
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+<tr><td>
+<a href="javascript:void(0)" onclick="window.close()"><img src="<?=$dir.'/'.$filename ?>" border="0"></a>
+</td></tr>
+</table>
+</body>
+</html>
