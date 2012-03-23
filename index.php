@@ -230,7 +230,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 
 	$file=".$dir/$file_name";
 	$encoded_url = rawurlencode($file);
-	
+
 	$array['file'] = $file_name;
 	$array['size'] = $show_size;
 	$array['mdate'] = $mdate;
@@ -319,12 +319,12 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
  * get_body_array
  * @param unknown_type $dir
  * @param number $page
- * @return multitype:NULL multitype:string NULL unknown  
+ * @return multitype:NULL multitype:string NULL unknown
  */
 function get_body_array($dir,$page){
 
 	$array = array();
-	
+
 	$_out = '';
 	$lock = null;
 	if (preg_match("/\.\./","$dir")){
@@ -340,8 +340,8 @@ function get_body_array($dir,$page){
 
 		$maxsize = count($file_list);
 
-		$from = (($page - 1) * DATA_PER_PAGE)+1;
-		$to = (($page * DATA_PER_PAGE)+1);
+		$from = (($page - 1) * DATA_PER_PAGE);
+		$to = (($page * DATA_PER_PAGE));
 		if($to > $maxsize){
 			$to = $maxsize;
 		}
@@ -353,14 +353,14 @@ function get_body_array($dir,$page){
 			$file_size = filesize($file_path);
 			$file_mtime = filemtime($file_path);
 
-			if (is_file($file_path)){
-				$array[] = get_dir_array($file_path, $file_name, $file_size, $file_mtime,$dir,$page);
+			if (is_dir($file_path)){
+				$dir_list = "$dir_list\t$file_name";
 			} else {
-				$dir_list = "$dir_list,$file_name";
+				$array[] = get_dir_array($file_path, $file_name, $file_size, $file_mtime,$dir,$page);
 			}
 		}
 
-		$dir_list = explode(",",$dir_list);
+		$dir_list = explode("\t",$dir_list);
 		sort($dir_list);
 
 		for ($count=1;$count<count($dir_list);$count++) {
