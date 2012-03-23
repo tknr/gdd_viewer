@@ -81,6 +81,14 @@ Index of <b><?=$menu['dir_name']?></b><br />
 		<td class="td"><b><?=$datum['size']?></b></td>
 		<td class="td"><b><?=$datum['mdate']?></b></td>
 	</tr>
+	<?php }else if(strcmp('media',$datum['type'])==0){?>
+	<tr>
+		<td class="td"><b><a href="%SELF%?mode=dl&f=<?=$datum['href']?>"><img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" /></a></b></td>
+		<td class="td"><b><a href="%SELF%?mode=dl&f=<?=$datum['href']?>"><?=$datum['file']?></a></b></td>
+		<td class="td"><b>-</b></td>
+		<td class="td"><b><?=$datum['size']?></b></td>
+		<td class="td"><b><?=$datum['mdate']?></b></td>
+	</tr>
 	<?php }else{?>
 	<tr>
 		<td class="td"><b><a href="<?=$datum['href']?>"><img src="<?=$datum['src']?>" /></a></b></td>
