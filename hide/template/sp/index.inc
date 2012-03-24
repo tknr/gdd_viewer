@@ -25,7 +25,7 @@
 	<?php foreach($data as $index=>$datum){?>
 	<?php if(strcmp('img',$datum['type'])==0){?>
 	<li>
-		<a href="%SELF%?mode=popup&dir=&filename=<?=$datum['href']?>">
+		<a data-ajax=“false” href="%SELF%?mode=popup&dir=&filename=<?=$datum['href']?>">
 		<img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
 		<h3><?=$datum['file']?></h3>
 		<p>
@@ -38,9 +38,9 @@
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
 	<li>
 		<?php if(strcmp('mp4',$datum['extension'])==0){?>
-		<a href="%SELF%?mode=stream&filename=<?=$datum['href']?>">
+		<a data-ajax=“false” href="%SELF%?mode=stream&filename=<?=$datum['href']?>">
 		<?php }else{?>
-		<a href="%SELF%?mode=embed&filename=<?=$datum['href']?>">
+		<a data-ajax=“false” href="%SELF%?mode=embed&filename=<?=$datum['href']?>">
 		<?php }?>
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
 		<h3><?=$datum['file']?></h3>
