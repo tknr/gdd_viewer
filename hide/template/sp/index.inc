@@ -14,6 +14,7 @@
 <div data-role="page" id="home">
 
 <div data-role="header">
+<?php require (HIDE_FOLDER.'/template/sp/dir.inc');?>
 <?php require (HIDE_FOLDER.'/template/sp/menu.inc');?>
 <?php require (HIDE_FOLDER.'/template/sp/paging.inc');?>
 </div>
@@ -80,6 +81,7 @@
 <div data-role="footer">
 <?php require (HIDE_FOLDER.'/template/sp/paging.inc');?>
 <?php require (HIDE_FOLDER.'/template/sp/menu.inc');?>
+<?php require (HIDE_FOLDER.'/template/sp/dir.inc');?>
 </div>
 
 </div>
