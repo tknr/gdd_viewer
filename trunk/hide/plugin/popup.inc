@@ -8,7 +8,7 @@ $filename = http_get('filename');
 <body style="margin:0px;padding:0px;">
 <table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
 <tr><td>
-<a href="javascript:history.back();"><img src="<?=$filename?>" border="0"></a>
+<a href="javascript:history.back();"><img src="<?=$filename?>" width="100%" border="0"></a>
 </td></tr>
 </table>
 </body>
