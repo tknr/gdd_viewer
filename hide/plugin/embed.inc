@@ -8,7 +8,7 @@ $filename = http_get('filename');
 <head>
 <title><?=$filename?></title>
 <style type="text/css">
-img, object, embed { max-width: 100% !important; height: auto !important; }
+embed { width:100% !important; max-width: 100% !important; height: auto !important; }
 </style>
 </head>
 <body style="margin:0px;padding:0px;">
