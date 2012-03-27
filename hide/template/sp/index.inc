@@ -39,13 +39,15 @@
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
 	<li>
 		<?php if(strcmp('mp4',$datum['extension'])==0){?>
-		<a target="_self" href="%SELF%?mode=stream&filename=<?=$datum['href']?>">
+		<a data-ajax="false" href="%SELF%?mode=stream&filename=<?=$datum['href']?>">
 		<?php }else{?>
-		<a target="_self" href="%SELF%?mode=embed&filename=<?=$datum['href']?>">
+		<a data-ajax="false" href="%SELF%?mode=embed&filename=<?=$datum['href']?>">
 		<?php }?>
-		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
+		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
 		<h3><?=$datum['file']?></h3>
 		<p>
+		<?=$datum['extension']?><br />
+		<?=$datum['size']?><br />
 		<?=$datum['mdate']?>
 		</p>
 		</a>
@@ -53,7 +55,7 @@
 	<?php }else if(strcmp('dir',$datum['type'])==0){?>
 	<li>
 		<a href="<?=$datum['href']?>">
-		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
+		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
 		<h3><?=$datum['file']?></h3>
 		<p>
 		<?=$datum['mdate']?>
@@ -62,10 +64,11 @@
 	</li>
 	<?php }else{?>
 	<li>
-		<a  target="_self" href="<?=$datum['href']?>">
+		<a data-ajax="false" href="<?=$datum['href']?>">
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
 		<h3><?=$datum['file']?></h3>
 		<p>
+		<?=$datum['extension']?><br />
 		<?=$datum['size']?><br />
 		<?=$datum['mdate']?>
 		</p>
