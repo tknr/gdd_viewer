@@ -16,15 +16,19 @@ if(is_feature_phone()){
 	define('MAX_DIST',32); 	//thumbnail size
 	define('DATA_PER_PAGE',10);
 	define('PAGING_WIDTH',10);
+	define('TEMPLATE_FOLDER',HIDE_FOLDER.'/template/fp/');
 }else if(is_smart_phone()){
 	define('MAX_DIST',80); 	//thumbnail size
 	define('DATA_PER_PAGE',50);
 	define('PAGING_WIDTH',5);
+	define('TEMPLATE_FOLDER',HIDE_FOLDER.'/template/sp/');
 }else{
 	define('MAX_DIST',80); 	//thumbnail size
 	define('DATA_PER_PAGE',50);
 	define('PAGING_WIDTH',5);
+	define('TEMPLATE_FOLDER',HIDE_FOLDER.'/template/sp/');
 }
+define('ICON_FOLDER', TEMPLATE_FOLDER.'icon/');
 /////////request////////////////
 $dir = http_get("dir");
 $page = floor(http_get("page",1));
@@ -239,7 +243,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 	if ($file_name == SELF_PHP){
 		$array['type'] = 'self';
 		$array['href'] = SELF_PHP;
-		$array['src'] = HIDE_FOLDER.'/other.gif';
+		$array['src'] = ICON_FOLDER.'other.gif';
 		$array['alt'] = $file_name;
 	}else{
 		switch($img_ext){
@@ -295,7 +299,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 					$array['type'] = 'file';
 				}
 				$array['href'] = $file;
-				$array['src'] = HIDE_FOLDER.'/'.$icon.'.gif';
+				$array['src'] = ICON_FOLDER.$icon.'.gif';
 				$array['alt'] = $file_name;
 				break;
 			}
@@ -359,7 +363,7 @@ function get_body_array($dir,$page){
 			$_array['alt'] = $dir_list[$count];
 			$_array['type'] = 'dir';
 			$_array['href'] = SELF_PHP.'?dir='.$encoded_url;
-			$_array['src'] = HIDE_FOLDER.'/dir.gif';
+			$_array['src'] = ICON_FOLDER.'dir.gif';
 			$_array['size'] = '-';
 			$_array['mdate'] = date(DATE_FORMAT,$file_mtime);
 			$array[] = $_array;
@@ -400,11 +404,8 @@ switch($mode){
 	$data = get_body_array($dir,$page);
 
 	ob_start('mb_output_handler');
-	if(is_feature_phone()){
-		require (HIDE_FOLDER.'/template/fp/index.inc');
-	}else{
-		require (HIDE_FOLDER.'/template/sp/index.inc');
-	}
+	require (TEMPLATE_FOLDER.'index.inc');
+
 	$output = ob_get_contents();
 	$output = str_replace('%CHARSET%', CHARSET, $output);
 	$output = str_replace('%TITLE%', $title, $output);
