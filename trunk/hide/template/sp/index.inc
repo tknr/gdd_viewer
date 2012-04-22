@@ -11,6 +11,12 @@
 <script type="text/javascript" src="hide/js/code.photoswipe-3.0.4.min.js"></script>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script type="text/javascript">
+//jQuery version
+$(document).ready(function(){
+	var myPhotoSwipe = $("#Gallery a").photoSwipe({ enableMouseWheel: false , enableKeyboard: false });
+});
+</script>
 </head>
 <body>
 <div data-role="page" id="home">
