@@ -46,12 +46,10 @@ $(document).ready(function(){
 	</li>
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
 	<li>
-		<?php if(strcmp('mp4',$datum['extension'])==0){?>
-		<a data-ajax="false" href="%SELF%?mode=stream&filename=<?=$datum['href']?>">
-		<?php }else{?>
-		<a data-ajax="false" href="%SELF%?mode=embed&filename=<?=$datum['href']?>">
-		<?php }?>
+		<embed src="<?=$datum['src']?>" airplay="allow" control="console" controller="true" autostart="true" /> 
+		<?php /*
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+		*/?>
 		<h3><?=$datum['file']?></h3>
 		<p>
 		<?=$datum['extension']?><br />
@@ -88,14 +86,6 @@ $(document).ready(function(){
 </div>
 
 </div>
-
-<?php /*
-<div data-role="footer" data-position="fixed">
-<?php require (HIDE_FOLDER.'/template/sp/paging.inc');?>
-<?php require (HIDE_FOLDER.'/template/sp/menu.inc');?>
-<?php require (HIDE_FOLDER.'/template/sp/dir.inc');?>
-</div>
-*/?>
 
 </div>
 </body>
