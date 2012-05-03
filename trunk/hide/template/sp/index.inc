@@ -7,21 +7,8 @@
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
-<script type="text/javascript" src="hide/js/jquery.animate-enhanced.min.js"></script>
-<?php /*
-<script type="text/javascript" src="hide/js/klass.min.js"></script>
-*/?>
-<script type="text/javascript" src="hide/js/code.photoswipe-3.0.4.min.js"></script>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<script type="text/javascript">
-		$(document).ready(function(){
-			$('div.gallery-page').live('pageshow', function(e){
-				$("div.gallery a", e.target).photoSwipe();
-				return true;
-			})
-		});
-</script>
 </head>
 <body>
 <div data-role="page" id="home">
@@ -51,10 +38,8 @@
 	</li>
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
 	<li>
-		<embed src="<?=$datum['src']?>" airplay="allow" control="console" controller="true" autostart="true" /> 
-		<?php /*
+		<a target="_self" href="?mode=embed&filename=<?=$datum['href']?>">
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
-		*/?>
 		<h3><?=$datum['file']?></h3>
 		<p>
 		<?=$datum['extension']?><br />
