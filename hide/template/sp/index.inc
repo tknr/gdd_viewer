@@ -37,7 +37,7 @@
 	</li>
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
 	<li>
-		<a target="_self" href="?mode=embed&filename=<?=$datum['href']?>">
+		<a target="_self" href="?mode=embed&filename=<?=rawurlencode($datum['href'])?>">
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
 		<h3><?=$datum['file']?></h3>
 		<p>
