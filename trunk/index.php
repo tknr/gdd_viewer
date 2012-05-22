@@ -372,6 +372,8 @@ function get_body_array($dir,$page){
 	return $array;
 }
 /////////main////////////////
+
+header("Content-type: text/html; charset=utf-8");
 switch($mode){
 	case 'popup':{
 		require_once HIDE_FOLDER . '/plugin/popup.inc';
