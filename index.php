@@ -40,35 +40,48 @@ $mode = http_get("mode");
  * @param unknown_type $dir_cnt
  * @return multitype:
  */
-function get_list($dir_cnt) {
+function get_list($dir_name,$sort_time = false) {
 
-	$dir_handle=opendir($dir_cnt);
-	$file_list = null;
+	$dir_handle=opendir($dir_name);
+
+	$file_list = array();
+	$time_list = array();
+	
 	while ($file = readdir($dir_handle)){
-		$file_list = "$file_list\t$file";
+		$file_list[] = "$file";
+		$time_list[] = filemtime($dir_name.'/'.$file);
 	}
 	closedir($dir_handle);
-	$file_list = explode("\t",$file_list);
 
 	foreach($file_list as $_index=>$_value){
 		if(strlen($_value)==0){
 			unset($file_list[$_index]);
+			unset($time_list[$_index]);
 		}
 		if(strcmp('.', $_value) == 0){
 			unset($file_list[$_index]);
+			unset($time_list[$_index]);
 		}
 		if(strcmp('..', $_value) == 0){
 			unset($file_list[$_index]);
+			unset($time_list[$_index]);
 		}
 		if(strpos($_value, '.') === 0){
 			unset($file_list[$_index]);
+			unset($time_list[$_index]);
 		}
 		if(strcmp(HIDE_FOLDER, $_value) == 0){
 			unset($file_list[$_index]);
+			unset($time_list[$_index]);
 		}
 	}
 
-	sort($file_list);
+	if($sort_time){
+		array_multisort($time_list,SORT_DESC,$file_list);
+	}else{
+		sort($file_list);
+	}
+	
 	return $file_list;
 }
 
