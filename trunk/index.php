@@ -40,48 +40,35 @@ $mode = http_get("mode");
  * @param unknown_type $dir_cnt
  * @return multitype:
  */
-function get_list($dir_name,$sort_time = false) {
+function get_list($dir_cnt) {
 
-	$dir_handle=opendir($dir_name);
-
-	$file_list = array();
-	$time_list = array();
-	
+	$dir_handle=opendir($dir_cnt);
+	$file_list = null;
 	while ($file = readdir($dir_handle)){
-		$file_list[] = "$file";
-		$time_list[] = filemtime($dir_name.'/'.$file);
+		$file_list = "$file_list\t$file";
 	}
 	closedir($dir_handle);
+	$file_list = explode("\t",$file_list);
 
 	foreach($file_list as $_index=>$_value){
 		if(strlen($_value)==0){
 			unset($file_list[$_index]);
-			unset($time_list[$_index]);
 		}
 		if(strcmp('.', $_value) == 0){
 			unset($file_list[$_index]);
-			unset($time_list[$_index]);
 		}
 		if(strcmp('..', $_value) == 0){
 			unset($file_list[$_index]);
-			unset($time_list[$_index]);
 		}
 		if(strpos($_value, '.') === 0){
 			unset($file_list[$_index]);
-			unset($time_list[$_index]);
 		}
 		if(strcmp(HIDE_FOLDER, $_value) == 0){
 			unset($file_list[$_index]);
-			unset($time_list[$_index]);
 		}
 	}
 
-	if($sort_time){
-		array_multisort($time_list,SORT_DESC,$file_list);
-	}else{
-		sort($file_list);
-	}
-	
+	sort($file_list);
 	return $file_list;
 }
 
@@ -236,7 +223,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 
 	$web = explode(',','html,htm');
 	$zip = explode(',','zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z');
-	$media = explode(',','mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv,mpg,m4a');
+	$media = explode(',','mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv,mpg,m4a,mov');
 	$swf = explode(',','swf');
 	$txt = explode(',','txt,doc,xls,rtf');
 	$pdf = explode(',','pdf');
