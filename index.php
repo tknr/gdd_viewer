@@ -223,9 +223,10 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 
 	$web = explode(',','html,htm');
 	$zip = explode(',','zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z');
-	$media = explode(',','mp3,rm,rmi,mid,wav,wma,mpeg,avi,3gp,3g2,mp4,flv,mpg,m4a,mov');
-	$swf = explode(',','swf');
-	$txt = explode(',','txt,doc,xls,rtf');
+	$sound = explode(',','mp3,rm,rmi,mid,wav,aiff');
+	$video = explode(',','wma,mpeg,avi,3gp,3g2,mp4,mpg,m4a,mov');
+	$swf = explode(',','swf,flv');
+	$txt = explode(',','txt,doc,xls,rtf,docx,xslx');
 	$pdf = explode(',','pdf');
 
 	$mdate=date(DATE_FORMAT,$file_mtime);
@@ -273,13 +274,15 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 			default:{
 				$icon = null;
 				if (in_array($extension,$txt)){
-					$icon = 'txt';
+					$icon = 'text';
 				}
-				else if (in_array($extension,$media)){
-					$icon = 'media';
+				else if (in_array($extension,$sound)){
+					$icon = 'sound';
 				}
-				else if (in_array($extension,$zip)){
-					$icon = 'zip';
+				else if (in_array($extension,$video)){
+					$icon = 'movie';
+				}else if (in_array($extension,$zip)){
+					$icon = 'package';
 				}
 				else if (in_array($extension,$web)){
 					$icon = 'web';
@@ -293,7 +296,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 					$icon = 'other';
 				}
 
-				if(in_array($extension,$media)){
+				if(in_array($extension,$sound) || in_array($extension,$video) || in_array($extension, $swf)){
 					$array['type'] = 'media';
 				}else{
 					$array['type'] = 'file';
@@ -363,7 +366,7 @@ function get_body_array($dir,$page){
 			$_array['alt'] = $dir_list[$count];
 			$_array['type'] = 'dir';
 			$_array['href'] = SELF_PHP.'?dir='.$encoded_url;
-			$_array['src'] = ICON_FOLDER.'dir.gif';
+			$_array['src'] = ICON_FOLDER.'folder.gif';
 			$_array['size'] = '-';
 			$_array['mdate'] = date(DATE_FORMAT,$file_mtime);
 			$array[] = $_array;
