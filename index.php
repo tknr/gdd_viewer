@@ -221,12 +221,13 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 	$tw ="$img_prop[3]";
 	$th ="$img_prop[4]";
 
-	$web = explode(',','html,htm');
+	$web = explode(',','html,htm,php,cgi,pl,pm,tt,tmpl');
 	$zip = explode(',','zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z');
 	$sound = explode(',','mp3,rm,rmi,mid,wav,aiff');
 	$video = explode(',','wma,mpeg,avi,3gp,3g2,mp4,mpg,m4a,mov');
 	$swf = explode(',','swf,flv');
-	$txt = explode(',','txt,doc,xls,rtf,docx,xslx');
+	$txt = explode(',','txt,sh,ini,conf,properties');
+	$doc = explode(',','doc,xls,rtf,docx,xslx');
 	$pdf = explode(',','pdf');
 
 	$mdate=date(DATE_FORMAT,$file_mtime);
@@ -273,7 +274,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 			}
 			default:{
 				$icon = null;
-				if (in_array($extension,$txt)){
+				if (in_array($extension,$txt) || in_array($extension,$doc)){
 					$icon = 'text';
 				}
 				else if (in_array($extension,$sound)){
@@ -298,10 +299,14 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 
 				if(in_array($extension,$sound) || in_array($extension,$video) || in_array($extension, $swf)){
 					$array['type'] = 'media';
+					$array['href'] = $file;
+				}else if (in_array($extension,$txt)){
+					$array['type'] = 'text';
+					$array['href'] = SELF_PHP.'?mode=edit&f='.$file; 
 				}else{
 					$array['type'] = 'file';
+					$array['href'] = $file;
 				}
-				$array['href'] = $file;
 				$array['src'] = ICON_FOLDER.$icon.'.gif';
 				$array['alt'] = $file_name;
 				break;
@@ -396,6 +401,10 @@ switch($mode){
 	}
 	case 'stream':{
 		require_once HIDE_FOLDER . '/plugin/stream.inc';
+		return;
+	}
+	case 'edit':{
+		require_once HIDE_FOLDER . '/plugin/editor.inc';
 		return;
 	}
 	default:{
