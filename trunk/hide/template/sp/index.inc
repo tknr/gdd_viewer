@@ -47,19 +47,31 @@
 		</p>
 		</a>
 	</li>
-	<?php }else if(strcmp('dir',$datum['type'])==0){?>
+	<?php }else if(strcmp('text',$datum['type'])==0){?>
 	<li>
-		<a href="<?=$datum['href']?>">
+		<a target="_blank" href="<?=$datum['href']?>">
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
 		<h3><?=$datum['file']?></h3>
 		<p>
+		<?=$datum['extension']?><br />
+		<?=$datum['size']?><br />
 		<?=$datum['mdate']?>
 		</p>
 		</a>
 	</li>
+	<?php }else if(strcmp('dir',$datum['type'])==0){?>
+	<li>   
+		<a href="<?=$datum['href']?>">              
+		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+		<h3><?=$datum['file']?></h3>                
+		<p>
+		<?=$datum['mdate']?>        
+		</p>     
+		</a>     
+	</li> 
 	<?php }else{?>
 	<li>
-		<a data-ajax="false" href="<?=$datum['href']?>">
+		<a target="_blank" href="<?=$datum['href']?>">
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
 		<h3><?=$datum['file']?></h3>
 		<p>
