@@ -300,7 +300,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 				if(in_array($extension,$sound) || in_array($extension,$video) || in_array($extension, $swf)){
 					$array['type'] = 'media';
 					$array['href'] = $file;
-				}else if (in_array($extension,$txt)){
+				}else if (in_array($extension,$txt) || in_array($extension,$web)){
 					$array['type'] = 'text';
 					$array['href'] = SELF_PHP.'?mode=edit&f='.$file; 
 				}else{
