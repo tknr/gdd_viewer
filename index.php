@@ -221,12 +221,12 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 	$tw ="$img_prop[3]";
 	$th ="$img_prop[4]";
 
-	$web = explode(',','html,htm,php,cgi,pl,pm,tt,tmpl,py');
+	$web = explode(',','html,htm,xhtml,php,phps,inc,cgi,pl,pm,tt,tmpl,py,xml,css,js');
 	$zip = explode(',','zip,lzh,tar,rar,7z,cab,lha,bz2,gz,7z');
 	$sound = explode(',','mp3,rm,rmi,mid,wav,aiff');
 	$video = explode(',','wma,mpeg,avi,3gp,3g2,mp4,mpg,m4a,mov');
 	$swf = explode(',','swf,flv');
-	$txt = explode(',','txt,sh,ini,conf,properties');
+	$txt = explode(',','txt,sh,ini,conf,properties,java,c,cpp,h,cs');
 	$doc = explode(',','doc,xls,rtf,docx,xslx');
 	$pdf = explode(',','pdf');
 
