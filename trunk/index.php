@@ -19,7 +19,7 @@ if(is_feature_phone()){
 	define('TEMPLATE_FOLDER',HIDE_FOLDER.'/template/fp/');
 }else if(is_smart_phone()){
 	define('MAX_DIST',80); 	//thumbnail size
-	define('DATA_PER_PAGE',50);
+	define('DATA_PER_PAGE',100);
 	define('PAGING_WIDTH',5);
 	define('TEMPLATE_FOLDER',HIDE_FOLDER.'/template/sp/');
 }else{
