@@ -53,30 +53,33 @@ function get_list($dir_cnt) {
 			$file_list = "$file_list\t$file";
 		}
 		closedir($dir_handle);
+		
+
+		$file_list = explode("\t",$file_list);
+		
+		foreach($file_list as $_index=>$_value){
+			if(strlen($_value)==0){
+				unset($file_list[$_index]);
+			}
+			if(strcmp('.', $_value) == 0){
+				unset($file_list[$_index]);
+			}
+			if(strcmp('..', $_value) == 0){
+				unset($file_list[$_index]);
+			}
+			if(strpos($_value, '.') === 0){
+				unset($file_list[$_index]);
+			}
+			if(strcmp(HIDE_FOLDER, $_value) == 0){
+				unset($file_list[$_index]);
+			}
+		}
+		
+		sort($file_list);
+		
 		put_apc_value(SCRIPT_TITLE.'_'.$dir_cnt, $file_list);
 	}
-		
-	$file_list = explode("\t",$file_list);
 
-	foreach($file_list as $_index=>$_value){
-		if(strlen($_value)==0){
-			unset($file_list[$_index]);
-		}
-		if(strcmp('.', $_value) == 0){
-			unset($file_list[$_index]);
-		}
-		if(strcmp('..', $_value) == 0){
-			unset($file_list[$_index]);
-		}
-		if(strpos($_value, '.') === 0){
-			unset($file_list[$_index]);
-		}
-		if(strcmp(HIDE_FOLDER, $_value) == 0){
-			unset($file_list[$_index]);
-		}
-	}
-
-	sort($file_list);
 	return $file_list;
 }
 
