@@ -1,7 +1,8 @@
 <?php
 /////////config//////////
 date_default_timezone_set('Asia/Tokyo');
-$title=$_SERVER['SCRIPT_NAME'];	//Page title
+define('SCRIPT_TITLE','gdd_viewer');
+$title=SCRIPT_TITLE;	//Page title
 $home='../'; 	//Home URL
 $self = array_reverse( explode("/",$_SERVER["SCRIPT_NAME"]) );
 define('SELF_PHP',$self[0]);
@@ -11,6 +12,7 @@ define('HIDE_FOLDER','hide');
 $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
 $lock = null;
 /////////size config////////////////
+require_once HIDE_FOLDER . '/lib/apc.inc';
 require_once HIDE_FOLDER . '/lib/function.inc';
 if(is_feature_phone()){
 	define('MAX_DIST',32); 	//thumbnail size
@@ -42,12 +44,18 @@ $mode = http_get("mode");
  */
 function get_list($dir_cnt) {
 
-	$dir_handle=opendir($dir_cnt);
 	$file_list = null;
-	while ($file = readdir($dir_handle)){
-		$file_list = "$file_list\t$file";
+	
+	$file_list = get_apc_value(SCRIPT_TITLE.'_'.$dir_cnt);
+	if(!$file_list){
+		$dir_handle=opendir($dir_cnt);
+		while ($file = readdir($dir_handle)){
+			$file_list = "$file_list\t$file";
+		}
+		closedir($dir_handle);
+		put_apc_value(SCRIPT_TITLE.'_'.$dir_cnt, $file_list);
 	}
-	closedir($dir_handle);
+		
 	$file_list = explode("\t",$file_list);
 
 	foreach($file_list as $_index=>$_value){
