@@ -197,10 +197,10 @@ function an_file($file_path,$file_name){
 		$tw=$img[0]; $th=$img[1];
 	} else {
 		if ($img[0] < $img[1]){
-			$th=MAX_DIST; $tw=$img[0]*$th/$img[1];
+			$th=MAX_DIST; $tw=floor($img[0]*$th/$img[1]);
 		}
 		if ($img[0] > $img[1]){
-			$tw=MAX_DIST; $th=$img[1]*$tw/$img[0];
+			$tw=MAX_DIST; $th=floor($img[1]*$tw/$img[0]);
 		}
 		if ($img[0] == $img[1]){
 			$tw=MAX_DIST; $th=MAX_DIST;
@@ -275,7 +275,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 			case 3:{
 				$array['type'] = 'img';
 				$array['href'] = $file;
-				$array['src'] = SELF_PHP.'?mode=thumb&ext='.$img_ext.'&f='.$file.'&ow='.$ow.'&oh='.$oh.'&tw='.$tw.'&th='.$th;
+				$array['src'] = SELF_PHP."?mode=thumb&ext=".$img_ext."&f=".$file."&ow=".$ow."&oh=".$oh."&tw=".$tw."&th=".$th;
 				$array['alt'] = $file_name;
 				$array['original_width'] = $ow;
 				$array['original_height'] = $oh;
@@ -313,7 +313,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 					$array['href'] = $file;
 				}else if (in_array($extension,$txt) || in_array($extension,$web)){
 					$array['type'] = 'text';
-					$array['href'] = SELF_PHP.'?mode=edit&f='.$file; 
+					$array['href'] = SELF_PHP."?mode=edit&f=".$file; 
 				}else{
 					$array['type'] = 'file';
 					$array['href'] = $file;
