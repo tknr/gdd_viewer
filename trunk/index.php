@@ -21,7 +21,7 @@ if(is_feature_phone()){
 	define('TEMPLATE_FOLDER',HIDE_FOLDER.'/template/fp/');
 }else if(is_smart_phone()){
 	define('MAX_DIST',80); 	//thumbnail size
-	define('DATA_PER_PAGE',100);
+	define('DATA_PER_PAGE',40);
 	define('PAGING_WIDTH',5);
 	define('TEMPLATE_FOLDER',HIDE_FOLDER.'/template/sp/');
 }else{
@@ -47,8 +47,20 @@ function get_list($dir_cnt) {
 	$file_list = null;
 	
 	$file_list = get_apc_value(SCRIPT_TITLE.'_'.$dir_cnt);
-	if(!$file_list){
-		$dir_handle=opendir($dir_cnt);
+    if(!$file_list){
+
+        
+        $command='export IFS=$\'\n\';list=\'\';for dir in `ls -1r "'.$dir_cnt.'"`;do list=${dir}"\t"${list};done;echo -e ${list}';
+        //echo $command;
+        $file_list=exec($command);
+        if($file_list){
+            $file_list = explode("\t",$file_list);
+            put_apc_value(SCRIPT_TITLE.'_'.$dir_cnt, $file_list);
+            return $file_list;
+        }
+        
+
+        $dir_handle=opendir($dir_cnt);
 		while ($file = readdir($dir_handle)){
 			$file_list = "$file_list\t$file";
 		}
@@ -342,51 +354,52 @@ function get_body_array($dir,$page){
 	if (preg_match("/\.\./","$dir")){
 		$lock ='1';
 	}
-	if(!$lock){
-		if ($dir){
-			$dir_name = "./$dir";
+    if($lock){
+        return $array;
+    }
+	if ($dir){
+		$dir_name = "./$dir";
+	} else {
+		$dir_name = ".";
+	}
+	$file_list = get_list($dir_name);
+
+	$maxsize = count($file_list);
+
+	$from = (($page - 1) * DATA_PER_PAGE);
+	$to = (($page * DATA_PER_PAGE));
+	if($to > $maxsize){
+		$to = $maxsize;
+	}
+
+	$dir_list = null;
+	for ($count=$from ;$count<$to;$count++) {
+		$file_name=$file_list[$count];
+		$file_path = "$dir_name/$file_name";
+		$file_size = filesize($file_path);
+		$file_mtime = filemtime($file_path);
+
+		if (is_dir($file_path)){
+			$dir_list = "$dir_list\t$file_name";
 		} else {
-			$dir_name = ".";
+			$array[] = get_dir_array($file_path, $file_name, $file_size, $file_mtime,$dir,$page);
 		}
-		$file_list = get_list($dir_name);
+	}
 
-		$maxsize = count($file_list);
+	$dir_list = explode("\t",$dir_list);
+	sort($dir_list);
 
-		$from = (($page - 1) * DATA_PER_PAGE);
-		$to = (($page * DATA_PER_PAGE));
-		if($to > $maxsize){
-			$to = $maxsize;
-		}
-
-		$dir_list = null;
-		for ($count=$from ;$count<$to;$count++) {
-			$file_name=$file_list[$count];
-			$file_path = "$dir_name/$file_name";
-			$file_size = filesize($file_path);
-			$file_mtime = filemtime($file_path);
-
-			if (is_dir($file_path)){
-				$dir_list = "$dir_list\t$file_name";
-			} else {
-				$array[] = get_dir_array($file_path, $file_name, $file_size, $file_mtime,$dir,$page);
-			}
-		}
-
-		$dir_list = explode("\t",$dir_list);
-		sort($dir_list);
-
-		for ($count=1;$count<count($dir_list);$count++) {
-			$encoded_url = rawurlencode($dir.'/'.$dir_list[$count]);
-			$_array = array();
-			$_array['file'] = $dir_list[$count];
-			$_array['alt'] = $dir_list[$count];
-			$_array['type'] = 'dir';
-			$_array['href'] = SELF_PHP.'?dir='.$encoded_url;
-			$_array['src'] = ICON_FOLDER.'folder.gif';
-			$_array['size'] = '-';
-			$_array['mdate'] = date(DATE_FORMAT,$file_mtime);
-			$array[] = $_array;
-		}
+	for ($count=1;$count<count($dir_list);$count++) {
+		$encoded_url = rawurlencode($dir.'/'.$dir_list[$count]);
+		$_array = array();
+		$_array['file'] = $dir_list[$count];
+		$_array['alt'] = $dir_list[$count];
+		$_array['type'] = 'dir';
+		$_array['href'] = SELF_PHP.'?dir='.$encoded_url;
+		$_array['src'] = ICON_FOLDER.'folder.gif';
+		$_array['size'] = '-';
+		$_array['mdate'] = date(DATE_FORMAT,$file_mtime);
+		$array[] = $_array;
 	}
 	return $array;
 }
