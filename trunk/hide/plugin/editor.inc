@@ -2,22 +2,21 @@
 /*
  * editor
  */
-$filename = http_get('f');
-$text = file_get_contents($filename);
-//$text = htmlspecialchars($text);
-$ext = substr($filename, strrpos($filename, '.') + 1);
+$filename = http_get ( 'f' );
+$text = file_get_contents ( $filename );
+// $text = htmlspecialchars($text);
+$ext = substr ( $filename, strrpos ( $filename, '.' ) + 1 );
 $result = '';
-if ($_POST['save']) {
-	$fp = @fopen($filename, 'w');
-	if (!$fp){
-		$result = 'cannot write';
-	}
-	else {
-		$contents = htmlspecialchars($_POST['contents']);
-		fwrite($fp, $contents);
-		fclose($fp);
-		$result = 'write succeded.';
-	}
+if (array_key_exist ( 'save', $_POST ) && $_POST ['save']) {
+    $fp = @fopen ( $filename, 'w' );
+    if (! $fp) {
+        $result = 'cannot write';
+    } else {
+        $contents = htmlspecialchars ( $_POST ['contents'] );
+        fwrite ( $fp, $contents );
+        fclose ( $fp );
+        $result = 'write succeded.';
+    }
 }
 ?>
 <html>
@@ -33,29 +32,33 @@ if ($_POST['save']) {
 <script src="http://alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js" type="text/javascript"></script>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
-<body style="margin:0px;padding:0px;">
-<div data-role="page" id="home">
-<div data-role="content">
-<div class="content-primary main-content">
-<form method="post" action="<?=$_SERVER["PHP_SELF"]?>">
-<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
-<tr><td><a data-role="button" target="_blank" href="<?=$_SERVER["PHP_SELF"]?>?mode=dl&f=<?=$filename?>"><?=$filename?></a></td></tr>
-<tr><td><?=$result?></td></tr>
-<tr><td>
-<textarea name="contents" class="brush: <?=$ext?>;" cols="32" rows="20" wrap="off"><?=$text?></textarea>
-</td></tr>
-<tr>
-<td>
-<input type="reset" name="reset" value="reset" data-role="button" />
-<input type="submit" name="save" value="save" data-role="button" />
-</td>
-</tr>
-</table>
-</form>
-</div>
-</div>
-</div>
-<script type="text/javascript">
+<body style="margin: 0px; padding: 0px;">
+	<div data-role="page" id="home">
+		<div data-role="content">
+			<div class="content-primary main-content">
+				<form method="post" action="<?=$_SERVER ["PHP_SELF"]?>
+					">
+					<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+						<tr>
+							<td><a data-role="button" target="_blank" href="<?=$_SERVER ["PHP_SELF"]?>?mode=dl&f=<?=$filename?>"><?=$filename?></a></td>
+						</tr>
+						<tr>
+							<td>
+								<?=$result?>
+							</td>
+						</tr>
+						<tr>
+							<td><textarea name="contents" class="brush: <?=$ext?>;" cols="32" rows="20" wrap="off"><?=$text?></textarea></td>
+						</tr>
+						<tr>
+							<td><input type="reset" name="reset" value="reset" data-role="button" /> <input type="submit" name="save" value="save" data-role="button" /></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
 function path()
 {
 	var args = arguments,
