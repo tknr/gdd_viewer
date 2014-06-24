@@ -39,7 +39,7 @@ if ($_POST['save']) {
 <div class="content-primary main-content">
 <form method="post" action="<?=$_SERVER["PHP_SELF"]?>">
 <table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
-<tr><td><a data-role="button" target="_blank" href="<?=$filename?>"><?=$filename?></a></td></tr>
+<tr><td><a data-role="button" target="_blank" href="<?=$_SERVER["PHP_SELF"]?>?mode=dl&f=<?=$filename?>"><?=$filename?></a></td></tr>
 <tr><td><?=$result?></td></tr>
 <tr><td>
 <textarea name="contents" class="brush: <?=$ext?>;" cols="32" rows="20" wrap="off"><?=$text?></textarea>

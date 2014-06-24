@@ -71,7 +71,7 @@
 	</li> 
 	<?php }else{?>
 	<li>
-		<a target="_blank" href="<?=$datum['href']?>">
+		<a target="_blank" href="?mode=dl&f=<?=$datum['href']?>">
 		<img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>"  />
 		<h3><?=$datum['file']?></h3>
 		<p>
