@@ -36,8 +36,7 @@ if (array_key_exist ( 'save', $_POST ) && $_POST ['save']) {
 	<div data-role="page" id="home">
 		<div data-role="content">
 			<div class="content-primary main-content">
-				<form method="post" action="<?=$_SERVER ["PHP_SELF"]?>
-					">
+				<form method="post" action="<?=$_SERVER ["PHP_SELF"]?>">
 					<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
 						<tr>
 							<td><a data-role="button" target="_blank" href="<?=$_SERVER ["PHP_SELF"]?>?mode=dl&f=<?=$filename?>"><?=$filename?></a></td>
