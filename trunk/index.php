@@ -249,7 +249,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime,$dir,$page
 	$sound = explode(',','mp3,rm,rmi,mid,wav,aiff');
 	$video = explode(',','wma,mpeg,avi,3gp,3g2,mp4,mpg,m4a,mov');
 	$swf = explode(',','swf,flv');
-	$txt = explode(',','txt,sh,ini,conf,properties,java,c,cpp,h,cs');
+	$txt = explode(',','txt,sh,ini,conf,properties,java,c,cpp,h,cs,sql');
 	$doc = explode(',','doc,xls,rtf,docx,xslx');
 	$pdf = explode(',','pdf');
 

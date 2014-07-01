@@ -7,7 +7,7 @@ $text = file_get_contents ( $filename );
 // $text = htmlspecialchars($text);
 $ext = substr ( $filename, strrpos ( $filename, '.' ) + 1 );
 $result = '';
-if (array_key_exist ( 'save', $_POST ) && $_POST ['save']) {
+if (array_key_exists ( 'save', $_POST ) && $_POST ['save']) {
     $fp = @fopen ( $filename, 'w' );
     if (! $fp) {
         $result = 'cannot write';
@@ -47,7 +47,7 @@ if (array_key_exist ( 'save', $_POST ) && $_POST ['save']) {
 							</td>
 						</tr>
 						<tr>
-							<td><textarea name="contents" class="brush: <?=$ext?>;" cols="32" rows="20" wrap="off"><?=$text?></textarea></td>
+							<td><textarea name="contents" class="brush: <?php echo strtolower($ext)?>;" cols="32" rows="20" wrap="off"><?=$text?></textarea></td>
 						</tr>
 						<tr>
 							<td><input type="reset" name="reset" value="reset" data-role="button" /> <input type="submit" name="save" value="save" data-role="button" /></td>
