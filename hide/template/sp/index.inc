@@ -29,7 +29,7 @@
 		<p>
 		<?=$datum['original_width']?>x<?=$datum['original_height']?><br />
 		<?=$datum['size']?><br />
-		<?=$datum['mdate']?>
+		<?=$datum['mdate']?><br />
 		</p>
 		</a>
 	</li>
