@@ -132,9 +132,11 @@ function get_menu_array($dir, $home, $lock)
  *
  * @param string $dir            
  * @param number $page            
+ * @param number $data_per_page            
+ * @param number $paging_width            
  * @return array <string,multitype:>
  */
-function get_paging_array($dir, $page)
+function get_paging_array($dir, $page, $data_per_page = DATA_PER_PAGE, $paging_width = PAGING_WIDTH)
 {
     $array = array();
     
@@ -149,27 +151,27 @@ function get_paging_array($dir, $page)
     
     $array['max_size'] = $maxsize;
     
-    $maxpage = ceil($maxsize / DATA_PER_PAGE);
+    $maxpage = ceil($maxsize / $data_per_page);
     
-    $halfwidth = floor(PAGING_WIDTH / 2);
+    $halfwidth = floor($paging_width / 2);
     $from = $page - $halfwidth;
     $to = $page + $halfwidth;
     if ($to > $maxpage) {
         $to = $maxpage;
     }
-    if ($maxpage <= PAGING_WIDTH) {
+    if ($maxpage <= $paging_width) {
         $from = 1;
         $to = $maxpage;
     } else 
         if ($page <= $halfwidth) {
             $from = 1;
-            $to = PAGING_WIDTH;
+            $to = $paging_width;
             if ($to > $maxpage) {
                 $to = $maxpage;
             }
         } else 
-            if (($page > ($maxpage - $halfwidth)) && ($maxpage - PAGING_WIDTH > 0)) {
-                $from = $maxpage - PAGING_WIDTH + 1;
+            if (($page > ($maxpage - $halfwidth)) && ($maxpage - $paging_width > 0)) {
+                $from = $maxpage - $paging_width + 1;
                 $to = $maxpage;
             }
     
@@ -349,9 +351,10 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
  *
  * @param unknown_type $dir            
  * @param number $page            
+ * @param number $data_per_page            
  * @return multitype:NULL multitype:string NULL unknown
  */
-function get_body_array($dir, $page)
+function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
 {
     $array = array();
     
@@ -371,8 +374,8 @@ function get_body_array($dir, $page)
     
     $maxsize = count($file_list);
     
-    $from = (($page - 1) * DATA_PER_PAGE);
-    $to = (($page * DATA_PER_PAGE));
+    $from = (($page - 1) * $data_per_page);
+    $to = (($page * $data_per_page));
     if ($to > $maxsize) {
         $to = $maxsize;
     }
@@ -443,6 +446,11 @@ switch ($mode) {
             require_once HIDE_FOLDER . '/plugin/editor.inc';
             return;
         }
+    case 'photoswipe':
+        {
+            require_once HIDE_FOLDER . '/plugin/photoswipe.inc';
+            return;
+        }
     default:
         {
             break;
@@ -452,7 +460,7 @@ switch ($mode) {
 {
     $menu = get_menu_array($dir, $home, $lock);
     $paging = get_paging_array($dir, $page);
-    $data = get_body_array($dir, $page);
+    $data = get_body_array($dir, $page, DATA_PER_PAGE);
     
     ob_start('mb_output_handler');
     require (TEMPLATE_FOLDER . 'index.inc');
