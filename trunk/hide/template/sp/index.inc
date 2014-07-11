@@ -23,7 +23,7 @@
 				<ul data-role="listview" id="Gallery"> 
 	<?php foreach($data as $index=>$datum){?>
 	<?php if(strcmp('img',$datum['type'])==0){?>
-	<li><a href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a id="image" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
 								<?=$datum['file']?>
 							</h3>
@@ -104,7 +104,7 @@
 			document.addEventListener('DOMContentLoaded', function(){
 				var
 					options = {},
-					instance = PhotoSwipe.attach( window.document.querySelectorAll('#Gallery a'), options );
+					instance = PhotoSwipe.attach( window.document.querySelectorAll('#Gallery a#image'), options );
 			}, false);
 		}(window, window.Code.PhotoSwipe));
     </script>
