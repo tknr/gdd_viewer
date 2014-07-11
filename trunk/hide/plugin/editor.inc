@@ -2,7 +2,7 @@
 /*
  * editor
  */
-$filename = http_get ( 'f' );
+$filename = HttpUtil::get ( 'f' );
 $text = file_get_contents ( $filename );
 // $text = htmlspecialchars($text);
 $ext = substr ( $filename, strrpos ( $filename, '.' ) + 1 );

@@ -2,7 +2,7 @@
 /*
  * @filesource pastak/mp4-Streaming-for-iPhone https://github.com/pastak/mp4-Streaming-for-iPhone
 */
-$filename = http_get('filename');
+$filename = HttpUtil::get('filename');
 $file_size = filesize( $filename ) ;
 
 $unique_name = $filename;

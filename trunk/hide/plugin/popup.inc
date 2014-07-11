@@ -2,7 +2,7 @@
 /*
  * popup
  */
-$filename = http_get('filename');
+$filename = HttpUtil::get('filename');
 ?>
 <html><head><title><?=$filename?></title></head>
 <body style="margin:0px;padding:0px;">

@@ -445,11 +445,6 @@ switch ($mode) {
             require_once HIDE_FOLDER . '/plugin/editor.inc';
             return;
         }
-    case 'photoswipe':
-        {
-            require_once HIDE_FOLDER . '/plugin/photoswipe.inc';
-            return;
-        }
     default:
         {
             break;

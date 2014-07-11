@@ -3,7 +3,7 @@
  * dl
  */
 mb_http_output("pass");
-$f = http_get('f');
+$f = HttpUtil::get('f');
 $ff = split('/',$f);
 $ff = array_reverse($ff);
 $filename= $ff[0];
