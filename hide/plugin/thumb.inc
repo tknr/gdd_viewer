@@ -3,12 +3,12 @@ $gdv=0; 	//GD Ver. 1.x--'1' 2.x--'0'
 /*
  * thumb
  */
-$ext = http_get("ext");
-$f = http_get("f");
-$ow = http_get("ow");
-$oh = http_get("oh");
-$tw = http_get("tw");
-$th = http_get("th");
+$ext = HttpUtil::get("ext");
+$f = HttpUtil::get("f");
+$ow = HttpUtil::get("ow");
+$oh = HttpUtil::get("oh");
+$tw = HttpUtil::get("tw");
+$th = HttpUtil::get("th");
 
 
 if($ext == "2"){
@@ -29,7 +29,7 @@ if($ext == "2"){
 	header("content-type: image/png");
 	imagepng($t);
 }
-put_apc_value(SCRIPT_TITLE.'_'.$ext.'_'.$f.'_'.$ow.'_'.$oh.'_'.$tw.'_'.$th, $t);
+APCUtil::put(SCRIPT_TITLE.'_'.$ext.'_'.$f.'_'.$ow.'_'.$oh.'_'.$tw.'_'.$th, $t);
 ImageDestroy($o);
 ImageDestroy($t);
 ?>

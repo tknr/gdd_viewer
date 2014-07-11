@@ -2,7 +2,7 @@
 /*
  * embed
  */
-$filename = http_get('filename');
+$filename = HttpUtil::get('filename');
 ?>
 <html>
 <head>

@@ -9,6 +9,5 @@
 <?php }?>
 <?php }?>
 <a data-role="button" data-inline="true" data-mini="true" data-icon="home" href="<?=$menu['home']?>">Home</a>
-<a data-role="button" data-inline="true" data-mini="true" target="_blank" href="%SELF%?page=<?=$page?>&amp;dir=<?php echo rawurlencode($dir);?>&amp;mode=photoswipe">photoswipe</a>
 <!-- menu -->
 </div>
