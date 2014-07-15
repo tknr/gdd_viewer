@@ -34,7 +34,7 @@ if ($user_agent->is_feature_phone()) {
 define('ICON_FOLDER', TEMPLATE_FOLDER . 'icon/');
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
-$page = floor(HttpUtil::get("page", 1));
+$page = HttpUtil::getInt("page", 1);
 $mode = HttpUtil::get("mode");
 // ///////function////////////////
 
@@ -42,51 +42,48 @@ $mode = HttpUtil::get("mode");
  * get_list
  *
  * @param unknown_type $dir_cnt            
+ * @param array $exclude_array            
+ * @param string $apc_key_head            
  * @return multitype:
  */
-function get_list($dir_cnt)
+function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_key_head = SCRIPT_TITLE)
 {
     $file_list = null;
     
-    $file_list = APCUtil::get(SCRIPT_TITLE . '_' . $dir_cnt);
-    if (! $file_list) {
-        
-        $command = 'export IFS=$\'\n\';list=\'\';for dir in `ls -1r "' . $dir_cnt . '"`;do list=${dir}"\t"${list};done;echo -e ${list}';
-        // echo $command;
-        $file_list = exec($command);
-        if ($file_list) {
-            $file_list = explode("\t", $file_list);
-            APCUtil::put(SCRIPT_TITLE . '_' . $dir_cnt, $file_list);
-            return $file_list;
-        }
-        
-        $dir_handle = opendir($dir_cnt);
-        while ($file = readdir($dir_handle)) {
-            $file_list = "$file_list\t$file";
-        }
-        closedir($dir_handle);
-        
-        $file_list = explode("\t", $file_list);
-        
-        foreach ($file_list as $_index => $_value) {
-            if (strlen($_value) == 0) {
-                unset($file_list[$_index]);
-            }
-            if (strcmp('.', $_value) == 0) {
-                unset($file_list[$_index]);
-            }
-            if (strcmp('..', $_value) == 0) {
-                unset($file_list[$_index]);
-            }
-            if (strcmp(HIDE_FOLDER, $_value) == 0) {
-                unset($file_list[$_index]);
-            }
-        }
-        
-        sort($file_list);
-        
-        APCUtil::put(SCRIPT_TITLE . '_' . $dir_cnt, $file_list);
+    $file_list = APCUtil::get($apc_key_head . '_' . $dir_cnt);
+    if ($file_list !== false) {
+        return $file_list;
     }
+    
+    $command = 'export IFS=$\'\n\';list=\'\';for dir in `ls -1r "' . $dir_cnt . '"`;do list=${dir}"\t"${list};done;echo -e ${list}';
+    // echo $command;
+    $file_list = exec($command);
+    if ($file_list) {
+        $file_list = explode("\t", $file_list);
+        APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
+        return $file_list;
+    }
+    
+    $dir_handle = opendir($dir_cnt);
+    while ($file = readdir($dir_handle)) {
+        $file_list = "$file_list\t$file";
+    }
+    closedir($dir_handle);
+    
+    $file_list = explode("\t", $file_list);
+    
+    foreach ($file_list as $_index => $_value) {
+        if (strlen($_value) == 0) {
+            unset($file_list[$_index]);
+        }
+        if (in_array($_value, $exclude_array)) {
+            unset($file_list[$_index]);
+        }
+    }
+    
+    sort($file_list);
+    
+    APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
     
     return $file_list;
 }
@@ -199,26 +196,27 @@ function get_paging_array($dir, $page, $data_per_page = DATA_PER_PAGE, $paging_w
  *
  * @param string $file_path            
  * @param string $filename            
+ * @param number $max_dist            
  * @return string
  */
-function an_file($file_path, $file_name)
+function an_file($file_path, $file_name, $max_dist = MAX_DIST)
 {
     $img = @getimagesize($file_path);
-    if (($img[0] < MAX_DIST) and ($img[1] < MAX_DIST)) {
+    if (($img[0] < $max_dist) and ($img[1] < $max_dist)) {
         $tw = $img[0];
         $th = $img[1];
     } else {
         if ($img[0] < $img[1]) {
-            $th = MAX_DIST;
+            $th = $max_dist;
             $tw = floor($img[0] * $th / $img[1]);
         }
         if ($img[0] > $img[1]) {
-            $tw = MAX_DIST;
+            $tw = $max_dist;
             $th = floor($img[1] * $tw / $img[0]);
         }
         if ($img[0] == $img[1]) {
-            $tw = MAX_DIST;
-            $th = MAX_DIST;
+            $tw = $max_dist;
+            $th = $max_dist;
         }
     }
     $img_type = null;
