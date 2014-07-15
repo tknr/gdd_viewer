@@ -233,9 +233,10 @@ function an_file($file_path, $file_name, $max_dist = MAX_DIST)
  * @param number $file_mtime            
  * @param string $dir            
  * @param number $page            
+ * @param string $date_format            
  * @return array <string,multitype:>
  */
-function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $page)
+function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $page, $date_format = DATE_FORMAT)
 {
     $array = array();
     
@@ -256,7 +257,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
     $doc = explode(',', 'doc,xls,rtf,docx,xslx');
     $pdf = explode(',', 'pdf');
     
-    $mdate = date(DATE_FORMAT, $file_mtime);
+    $mdate = date($date_format, $file_mtime);
     $show_size = FileUtil::getFileSizeString($filesize);
     
     $file = ".$dir/$file_name";
