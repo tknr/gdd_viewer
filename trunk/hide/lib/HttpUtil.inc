@@ -16,4 +16,14 @@ class HttpUtil
         }
         return $_GET[$key];
     }
+
+    /**
+     * @param string $key
+     * @param number $default
+     * @return number
+     */
+    public static function getInt($key, $default = 0)
+    {
+        return intval(self::get($key, $default));
+    }
 }
