@@ -1,37 +1,42 @@
 <?php
-// ///////config//////////
+// ///////init//////////
 date_default_timezone_set('Asia/Tokyo');
-define('SCRIPT_TITLE', 'gdd_viewer');
-$title = SCRIPT_TITLE; // Page title
-$home = '../'; // Home URL
+require_once './hide/lib/function.inc';
+$define = array();
+// ///////define//////////
+$define['SCRIPT_TITLE'] = 'gdd_viewer';
 $self = array_reverse(explode("/", $_SERVER["SCRIPT_NAME"]));
-define('SELF_PHP', $self[0]);
-define('CHARSET', 'UTF-8'); // Shift_JIS
-define('DATE_FORMAT', 'Y/m/d H:i:s'); // Y/m/d H:i:s
-define('HIDE_FOLDER', 'hide');
-$c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
-$lock = null;
-// ///////size config////////////////
-require_once HIDE_FOLDER . '/lib/function.inc';
+$define['SELF_PHP'] = $self[0];
+$define['CHARSET'] = 'UTF-8'; // Shift_JIS
+$define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
+$define['HIDE_FOLDER'] = 'hide';
+// ///////define size////////////////
+require_once $define['HIDE_FOLDER'] . '/lib/function.inc';
 $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
 if ($user_agent->is_feature_phone()) {
-    define('MAX_DIST', 32); // thumbnail size
-    define('DATA_PER_PAGE', 10);
-    define('PAGING_WIDTH', 10);
-    define('TEMPLATE_FOLDER', HIDE_FOLDER . '/template/fp/');
+    $define['MAX_DIST'] = 32; // thumbnail size
+    $define['DATA_PER_PAGE'] = 10;
+    $define['PAGING_WIDTH'] = 10;
+    $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/fp/';
 } else 
     if ($user_agent->is_smart_phone()) {
-        define('MAX_DIST', 80); // thumbnail size
-        define('DATA_PER_PAGE', 40);
-        define('PAGING_WIDTH', 5);
-        define('TEMPLATE_FOLDER', HIDE_FOLDER . '/template/sp/');
+        $define['MAX_DIST'] = 80; // thumbnail size
+        $define['DATA_PER_PAGE'] = 40;
+        $define['PAGING_WIDTH'] = 5;
+        $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     } else {
-        define('MAX_DIST', 80); // thumbnail size
-        define('DATA_PER_PAGE', 50);
-        define('PAGING_WIDTH', 5);
-        define('TEMPLATE_FOLDER', HIDE_FOLDER . '/template/sp/');
+        $define['MAX_DIST'] = 80; // thumbnail size
+        $define['DATA_PER_PAGE'] = 50;
+        $define['PAGING_WIDTH'] = 5;
+        $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     }
-define('ICON_FOLDER', TEMPLATE_FOLDER . 'icon/');
+$define['ICON_FOLDER'] = $define['TEMPLATE_FOLDER'] . 'icon/';
+APCUtil::define_array($define['SCRIPT_TITLE'], $define);
+// ///////config//////////
+$title = SCRIPT_TITLE; // Page title
+$home = '../'; // Home URL
+$c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
+$lock = null;
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);

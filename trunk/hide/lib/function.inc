@@ -1,6 +1,6 @@
 <?php
-require_once HIDE_FOLDER . '/lib/APCUtil.inc';
-require_once HIDE_FOLDER . '/lib/FileUtil.inc';
-require_once HIDE_FOLDER . '/lib/UserAgent.inc';
-require_once HIDE_FOLDER . '/lib/HttpUtil.inc';
+require_once dirname(__FILE__) . '/APCUtil.inc';
+require_once dirname(__FILE__) . '/FileUtil.inc';
+require_once dirname(__FILE__) . '/UserAgent.inc';
+require_once dirname(__FILE__) . '/HttpUtil.inc';
 ?>
