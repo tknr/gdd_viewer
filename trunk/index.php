@@ -11,7 +11,6 @@ $define['CHARSET'] = 'UTF-8'; // Shift_JIS
 $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
 $define['HIDE_FOLDER'] = 'hide';
 // ///////define size////////////////
-require_once $define['HIDE_FOLDER'] . '/lib/function.inc';
 $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
 if ($user_agent->is_feature_phone()) {
     $define['MAX_DIST'] = 32; // thumbnail size
