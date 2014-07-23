@@ -1,7 +1,7 @@
 <?php
 // ///////init//////////
 date_default_timezone_set('Asia/Tokyo');
-require_once './hide/lib/function.inc';
+require_once __DIR__ . '/hide/lib/function.inc';
 $define = array();
 // ///////define//////////
 $define['SCRIPT_TITLE'] = 'gdd_viewer';
