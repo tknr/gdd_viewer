@@ -20,12 +20,12 @@ if ($user_agent->is_feature_phone()) {
 } else 
     if ($user_agent->is_smart_phone()) {
         $define['MAX_DIST'] = 80; // thumbnail size
-        $define['DATA_PER_PAGE'] = 40;
+        $define['DATA_PER_PAGE'] = 100;
         $define['PAGING_WIDTH'] = 5;
         $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     } else {
         $define['MAX_DIST'] = 80; // thumbnail size
-        $define['DATA_PER_PAGE'] = 50;
+        $define['DATA_PER_PAGE'] = 100;
         $define['PAGING_WIDTH'] = 5;
         $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     }

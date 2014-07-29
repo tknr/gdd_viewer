@@ -23,7 +23,7 @@
 				<ul data-role="listview" id="Gallery"> 
 	<?php foreach($data as $index=>$datum){?>
 	<?php if(strcmp('img',$datum['type'])==0){?>
-	<li><a id="image" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a id="image" rel="external" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
 								<?=$datum['file']?>
 							</h3>
@@ -100,13 +100,9 @@
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/3.0.5/klass.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/3.0.5/code.photoswipe.jquery.min.js"></script>
 	<script type="text/javascript">
-	(function(window, PhotoSwipe){
-			document.addEventListener('DOMContentLoaded', function(){
-				var
-					options = {},
-					instance = PhotoSwipe.attach( window.document.querySelectorAll('#Gallery a#image'), options );
-			}, false);
-		}(window, window.Code.PhotoSwipe));
+    $(document).ready(function(){  
+        var myPhotoSwipe = $("ul#Gallery a#image").photoSwipe({ enableMouseWheel: true , enableKeyboard: true });  
+    });  
     </script>
 </body>
 </html>
