@@ -7,6 +7,7 @@ $define = array();
 $define['SCRIPT_TITLE'] = 'gdd_viewer';
 $self = array_reverse(explode("/", $_SERVER["SCRIPT_NAME"]));
 $define['SELF_PHP'] = $self[0];
+$define['SCRIPT_PATH'] = rtrim($_SERVER["SCRIPT_NAME"], $define['SELF_PHP']);
 $define['CHARSET'] = 'UTF-8'; // Shift_JIS
 $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
 $define['HIDE_FOLDER'] = 'hide';
@@ -40,6 +41,7 @@ $lock = null;
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
 $mode = HttpUtil::get("mode");
+
 // ///////function////////////////
 
 /**
@@ -54,18 +56,20 @@ function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_k
 {
     $file_list = null;
     
-    $file_list = APCUtil::get($apc_key_head . '_' . $dir_cnt);
-    if ($file_list !== false) {
-        return $file_list;
-    }
-    
-    $command = 'export IFS=$\'\n\';list=\'\';for dir in `ls -1r "' . $dir_cnt . '"`;do list=${dir}"\t"${list};done;echo -e ${list}';
-    // echo $command;
-    $file_list = exec($command);
-    if ($file_list) {
-        $file_list = explode("\t", $file_list);
-        APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
-        return $file_list;
+    if (false) {
+        $file_list = APCUtil::get($apc_key_head . '_' . $dir_cnt);
+        if ($file_list !== false) {
+            return $file_list;
+        }
+        
+        $command = 'export IFS=$\'\n\';list=\'\';for dir in `ls -1r "' . $dir_cnt . '"`;do list=${dir}"\t"${list};done;echo -e ${list}';
+        // echo $command;
+        $file_list = exec($command);
+        if ($file_list) {
+            $file_list = explode("\t", $file_list);
+            APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
+            return $file_list;
+        }
     }
     
     $dir_handle = opendir($dir_cnt);
@@ -260,6 +264,8 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
     $txt = explode(',', 'txt,sh,ini,conf,properties,java,c,cpp,h,cs,sql');
     $doc = explode(',', 'doc,xls,rtf,docx,xslx');
     $pdf = explode(',', 'pdf');
+    $ipa = explode(',', 'ipa');
+    $apk = explode(',', 'apk');
     
     $mdate = date($date_format, $file_mtime);
     $show_size = FileUtil::getFileSizeString($filesize);
@@ -328,6 +334,12 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     if (in_array($extension, $pdf)) {
                         $icon = 'pdf';
                     }
+                    if (in_array($extension, $ipa)) {
+                        $icon = 'ipa';
+                    }
+                    if (in_array($extension, $apk)) {
+                        $icon = 'apk';
+                    }
                     
                     if (in_array($extension, $sound) || in_array($extension, $video) || in_array($extension, $swf)) {
                         $array['type'] = 'media';
@@ -335,6 +347,12 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     } elseif (in_array($extension, $txt) || in_array($extension, $web)) {
                         $array['type'] = 'text';
                         $array['href'] = SELF_PHP . "?mode=edit&f=" . $file;
+                    } elseif (in_array($extension, $ipa)) {
+                        $array['type'] = 'ipa';
+                        $array['href'] = rawurlencode('https://' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=install_ipa&f=http://" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file);
+                    } elseif (in_array($extension, $apk)) {
+                        $array['type'] = 'apk';
+                        $array['href'] = $file;
                     } else {
                         $array['type'] = 'file';
                         $array['href'] = $file;
@@ -451,6 +469,11 @@ switch ($mode) {
     case 'photoswipe':
         {
             require_once HIDE_FOLDER . '/plugin/photoswipe.inc';
+            return;
+        }
+    case 'install_ipa':
+        {
+            require_once HIDE_FOLDER . '/plugin/install_ipa.inc';
             return;
         }
     default:
