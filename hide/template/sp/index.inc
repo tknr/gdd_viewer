@@ -64,6 +64,24 @@
 								<?=$datum['mdate']?>
 							</p>
 					</a></li>
+	<?php }else if(strcmp('ipa',$datum['type'])==0){?>
+	<li><a href="itms-services://?action=download-manifest&url=<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+							<h3>
+								<?=$datum['file']?>
+							</h3>
+							<p>
+								<?=$datum['mdate']?>
+							</p>
+					</a></li> 
+	<?php }else if(strcmp('apk',$datum['type'])==0){?>
+	<li><a href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+							<h3>
+								<?=$datum['file']?>
+							</h3>
+							<p>
+								<?=$datum['mdate']?>
+							</p>
+					</a></li> 
 	<?php }else if(strcmp('dir',$datum['type'])==0){?>
 	<li><a href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
