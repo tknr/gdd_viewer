@@ -349,7 +349,13 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                         $array['href'] = SELF_PHP . "?mode=edit&f=" . $file;
                     } elseif (in_array($extension, $ipa)) {
                         $array['type'] = 'ipa';
-                        $array['href'] = rawurlencode('https://' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=install_ipa&f=http://" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file);
+                        $package = 'anaplayer';
+                        if (strstr($file, 'anaplayer')) {
+                            $package = 'jp.mytheater.anaplayer';
+                        } elseif (strstr($file, 'highplayer')) {
+                            $package = 'jp.mytheater.highplayer';
+                        }
+                        $array['href'] = rawurlencode('https://' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=install_ipa&f=http://" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file . '&package=' . $package);
                     } elseif (in_array($extension, $apk)) {
                         $array['type'] = 'apk';
                         $array['href'] = $file;
