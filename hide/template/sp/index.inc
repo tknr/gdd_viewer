@@ -23,7 +23,7 @@
 				<ul data-role="listview" id="Gallery"> 
 	<?php foreach($data as $index=>$datum){?>
 	<?php if(strcmp('img',$datum['type'])==0){?>
-	<li><a id="image" target="_blank" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" id="image" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
 								<?=$datum['file']?>
 							</h3>
@@ -74,7 +74,7 @@
 							</p>
 					</a></li> 
 	<?php }else if(strcmp('apk',$datum['type'])==0){?>
-	<li><a href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
 								<?=$datum['file']?>
 							</h3>
