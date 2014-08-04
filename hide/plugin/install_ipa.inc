@@ -1,5 +1,6 @@
 <?php
 $filename = HttpUtil::get ( 'f' );
+$package = HttpUtil::get ( 'package' );
 header("Content-type: text/xml");
 ?>
 <?xml version="1.0" encoding="UTF-8"?>
@@ -21,13 +22,13 @@ header("Content-type: text/xml");
 			<key>metadata</key>
 			<dict>
 				<key>bundle-identifier</key>
-				<string>jp.mytheater.anaplayer</string>
+				<string><?=$package?></string>
 				<key>bundle-version</key>
 				<string>1.0</string>
 				<key>kind</key>
 				<string>software</string>
 				<key>title</key>
-				<string>install anaplayer</string>
+				<string>install <?=$package?></string>
 			</dict>
 		</dict>
 	</array>
