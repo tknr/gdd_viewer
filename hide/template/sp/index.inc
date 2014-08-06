@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/photoswipe/3.0.5/photoswipe.min.css" />
 </head>
 <body>
 	<div data-role="page" id="home">
@@ -115,12 +114,5 @@
 	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.animate-enhanced/1.07/jquery.animate-enhanced.min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/3.0.5/klass.min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/3.0.5/code.photoswipe.jquery.min.js"></script>
-	<script type="text/javascript">
-    $(document).ready(function(){  
-        var myPhotoSwipe = $("ul#Gallery a#image").photoSwipe({ enableMouseWheel: true , enableKeyboard: true });  
-    });  
-    </script>
 </body>
 </html>
