@@ -11,6 +11,7 @@ $define['SCRIPT_PATH'] = rtrim($_SERVER["SCRIPT_NAME"], $define['SELF_PHP']);
 $define['CHARSET'] = 'UTF-8'; // Shift_JIS
 $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
 $define['HIDE_FOLDER'] = 'hide';
+$define['USE_APC_CACHE'] = true;
 // ///////define size////////////////
 $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
 if ($user_agent->is_feature_phone()) {
@@ -56,42 +57,38 @@ function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_k
 {
     $file_list = null;
     
-    if (false) {
+    if (USE_APC_CACHE) {
         $file_list = APCUtil::get($apc_key_head . '_' . $dir_cnt);
         if ($file_list !== false) {
-            return $file_list;
-        }
-        
-        $command = 'export IFS=$\'\n\';list=\'\';for dir in `ls -1r "' . $dir_cnt . '"`;do list=${dir}"\t"${list};done;echo -e ${list}';
-        // echo $command;
-        $file_list = exec($command);
-        if ($file_list) {
-            $file_list = explode("\t", $file_list);
-            APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
             return $file_list;
         }
     }
     
     $dir_handle = opendir($dir_cnt);
     while ($file = readdir($dir_handle)) {
-        $file_list = "$file_list\t$file";
+        if (strpos($file, '.') === 0) {
+            continue;
+        }
+        if (strpos($file, '/') === 0) {
+            continue;
+        }
+        if (strlen(trim($file)) == 0) {
+            continue;
+        }
+        if (strlen($file_list) != 0) {
+            $file_list .= "\t";
+        }
+        $file_list .= $file;
     }
     closedir($dir_handle);
     
-    $file_list = explode("\t", $file_list);
-    
-    foreach ($file_list as $_index => $_value) {
-        if (strlen($_value) == 0) {
-            unset($file_list[$_index]);
-        }
-        if (in_array($_value, $exclude_array)) {
-            unset($file_list[$_index]);
+    if ($file_list) {
+        $file_list = explode("\t", $file_list);
+        sort($file_list);
+        if (USE_APC_CACHE) {
+            APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
         }
     }
-    
-    sort($file_list);
-    
-    APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
     
     return $file_list;
 }

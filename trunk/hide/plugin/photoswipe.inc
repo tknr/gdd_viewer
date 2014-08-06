@@ -20,7 +20,7 @@ $data = get_body_array($dir, 1, PHP_INT_MAX);
 				<ul data-role="listview" id="Gallery"> 
 	<?php foreach($data as $index=>$datum){?>
 	<?php if(strcmp('img',$datum['type'])==0){?>
-	<li><a id="image" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" id="image" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
 								<?=$datum['file']?>
 							</h3>
