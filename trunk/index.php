@@ -75,6 +75,9 @@ function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_k
         if (strlen(trim($file)) == 0) {
             continue;
         }
+        if (in_array($file, $exclude_array)) {
+            continue;
+        }
         if (strlen($file_list) != 0) {
             $file_list .= "\t";
         }
