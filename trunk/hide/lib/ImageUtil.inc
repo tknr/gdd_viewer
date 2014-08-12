@@ -46,7 +46,7 @@ class ImageUtil
      * @return boolean
      * @see http://php.net/manual/ja/function.imagecopyresampled.php#104028
      */
-    public function image_resize($width, $height, $crop = 0)
+    public function resize($width, $height, $crop = 0)
     {
         if (! list ($w, $h) = getimagesize($this->src_image)) {
             return false;
@@ -118,7 +118,7 @@ class ImageUtil
     /**
      * @return boolean
      */
-    public function outImage()
+    public function printOut()
     {
         switch ($this->getType()) {
             case 'bmp':
