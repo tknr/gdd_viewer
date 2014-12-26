@@ -20,12 +20,13 @@ class APCUtil
      *
      * @param string $key            
      * @param mixed $value            
+     * @param int $ttl
      * @return boolean
      */
-    public static function put($key, $value)
+    public static function put($key, $value, $ttl = 0)
     {
         if (function_exists('apc_store')) {
-            return apc_store($key, $value);
+            return apc_store($key, $value, $ttl = 0);
         }
         return false;
     }

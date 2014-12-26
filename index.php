@@ -38,6 +38,7 @@ $title = SCRIPT_TITLE; // Page title
 $home = '../'; // Home URL
 $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
 $lock = null;
+$apc_ttl = 60 * 60 * 1;
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
