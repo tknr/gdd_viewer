@@ -6,6 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" />
+<style>
+.ui-header .ui-title, /* header */
+.ui-footer .ui-title, /* footer */
+.ui-btn-inner, /* button */
+.ui-li-heading, /* listview heading */
+.ui-li .ui-btn-text a.ui-link-inherit, /* listview link */
+.ui-li-desc /* listview description */
+{
+    overflow: visible;
+    white-space: normal;
+}
+</style>
 </head>
 <body>
 	<div data-role="page" id="home">
