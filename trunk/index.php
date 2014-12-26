@@ -19,7 +19,7 @@ if ($user_agent->is_feature_phone()) {
     $define['DATA_PER_PAGE'] = 10;
     $define['PAGING_WIDTH'] = 10;
     $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/fp/';
-} else 
+} else {
     if ($user_agent->is_smart_phone()) {
         $define['MAX_DIST'] = 80; // thumbnail size
         $define['DATA_PER_PAGE'] = 100;
@@ -31,6 +31,7 @@ if ($user_agent->is_feature_phone()) {
         $define['PAGING_WIDTH'] = 5;
         $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     }
+}
 $define['ICON_FOLDER'] = $define['TEMPLATE_FOLDER'] . 'icon/';
 APCUtil::define_array($define['SCRIPT_TITLE'], $define);
 // ///////config//////////
