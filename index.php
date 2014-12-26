@@ -12,6 +12,7 @@ $define['CHARSET'] = 'UTF-8'; // Shift_JIS
 $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
 $define['HIDE_FOLDER'] = 'hide';
 $define['USE_APC_CACHE'] = true;
+$define['APC_TTL'] = 60 * 60 * 1;
 // ///////define size////////////////
 $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
 if ($user_agent->is_feature_phone()) {
@@ -39,7 +40,6 @@ $title = SCRIPT_TITLE; // Page title
 $home = '../'; // Home URL
 $c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
 $lock = null;
-$apc_ttl = 60 * 60 * 1;
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
@@ -53,9 +53,10 @@ $mode = HttpUtil::get("mode");
  * @param unknown_type $dir_cnt            
  * @param array $exclude_array            
  * @param string $apc_key_head            
+ * @param int $apc_ttl            
  * @return multitype:
  */
-function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_key_head = SCRIPT_TITLE)
+function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_key_head = SCRIPT_TITLE, $apc_ttl = APC_TTL)
 {
     $file_list = null;
     
@@ -91,7 +92,7 @@ function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_k
         $file_list = explode("\t", $file_list);
         sort($file_list);
         if (USE_APC_CACHE) {
-            APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list);
+            APCUtil::put($apc_key_head . '_' . $dir_cnt, $file_list, $apc_ttl);
         }
     }
     
