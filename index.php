@@ -11,7 +11,7 @@ $define['SCRIPT_PATH'] = rtrim($_SERVER["SCRIPT_NAME"], $define['SELF_PHP']);
 $define['CHARSET'] = 'UTF-8'; // Shift_JIS
 $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
 $define['HIDE_FOLDER'] = 'hide';
-$define['USE_APC_CACHE'] = true;
+$define['USE_APC_CACHE'] = false;
 $define['APC_TTL'] = 60 * 60 * 1;
 // ///////define size////////////////
 $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
