@@ -1,28 +1,8 @@
-<?php
-/*
- * editor
- */
-$filename = HttpUtil::get ( 'f' );
-$text = file_get_contents ( $filename );
-// $text = htmlspecialchars($text);
-$ext = substr ( $filename, strrpos ( $filename, '.' ) + 1 );
-$result = '';
-if (array_key_exists ( 'save', $_POST ) && $_POST ['save']) {
-    $fp = @fopen ( $filename, 'w' );
-    if (! $fp) {
-        $result = 'cannot write';
-    } else {
-        $contents = htmlspecialchars ( $_POST ['contents'] );
-        fwrite ( $fp, $contents );
-        fclose ( $fp );
-        $result = 'write succeded.';
-    }
-}
-?>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="<?=CHARSET?>">
-<title><?=$filename?></title>
+<meta charset="%CHARSET%">
+<title>%TITLE%</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="//code.jquery.com/mobile/latest/jquery.mobile.min.css" />
@@ -32,18 +12,16 @@ if (array_key_exists ( 'save', $_POST ) && $_POST ['save']) {
 	<div data-role="page" id="home">
 		<div data-role="content">
 			<div class="content-primary main-content">
-				<form method="post" action="<?=$_SERVER ["PHP_SELF"]?>">
+				<form method="post" action="%SELF%">
 					<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
 						<tr>
-							<td><a data-role="button" target="_blank" href="<?=$_SERVER ["PHP_SELF"]?>?mode=dl&f=<?=$filename?>"><?=$filename?></a></td>
+							<td><a data-role="button" target="_blank" href="%SELF%?mode=dl&f=%FILENAME%">%FILENAME%</a></td>
 						</tr>
 						<tr>
-							<td>
-								<?=$result?>
-							</td>
+							<td>%RESULT%</td>
 						</tr>
 						<tr>
-							<td><textarea name="contents" class="brush: <?php echo strtolower($ext)?>;" cols="32" rows="20" wrap="off"><?=$text?></textarea></td>
+							<td><textarea name="contents" class="brush: %EXT%;" cols="32" rows="20" wrap="off">%TEXT%</textarea></td>
 						</tr>
 						<tr>
 							<td><input type="reset" name="reset" value="reset" data-role="button" /> <input type="submit" name="save" value="save" data-role="button" /></td>
@@ -53,10 +31,10 @@ if (array_key_exists ( 'save', $_POST ) && $_POST ['save']) {
 			</div>
 		</div>
 	</div>
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
-<script src="//alexgorbatchev.com/pub/sh/current/scripts/shCore.js" type="text/javascript"></script>
-<script src="//alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js" type="text/javascript"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
+<script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+<script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js"></script>
 <script type="text/javascript">
 function path()
 {

@@ -4,24 +4,26 @@ date_default_timezone_set('Asia/Tokyo');
 require_once __DIR__ . '/hide/lib/function.inc';
 $define = array();
 // ///////define//////////
-$define['SCRIPT_TITLE'] = 'gdd_viewer';
-$self = array_reverse(explode("/", $_SERVER["SCRIPT_NAME"]));
-$define['SELF_PHP'] = $self[0];
-$define['SCRIPT_PATH'] = rtrim($_SERVER["SCRIPT_NAME"], $define['SELF_PHP']);
-$define['CHARSET'] = 'UTF-8'; // Shift_JIS
-$define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
-$define['HIDE_FOLDER'] = 'hide';
-$define['USE_APC_CACHE'] = false;
-$define['APC_TTL'] = 60 * 60 * 1;
+{
+    $define['SCRIPT_TITLE'] = 'gdd_viewer'; // Page title
+    $self = array_reverse(explode("/", $_SERVER["SCRIPT_NAME"]));
+    $define['SELF_PHP'] = $self[0];
+    $define['SCRIPT_PATH'] = rtrim($_SERVER["SCRIPT_NAME"], $define['SELF_PHP']);
+    $define['CHARSET'] = 'UTF-8'; // Shift_JIS
+    $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
+    $define['HIDE_FOLDER'] = 'hide';
+    $define['USE_APC_CACHE'] = false;
+    $define['APC_TTL'] = 60 * 60 * 1;
+}
 // ///////define size////////////////
-$user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
-if ($user_agent->is_feature_phone()) {
-    $define['MAX_DIST'] = 32; // thumbnail size
-    $define['DATA_PER_PAGE'] = 10;
-    $define['PAGING_WIDTH'] = 10;
-    $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/fp/';
-} else {
-    if ($user_agent->is_smart_phone()) {
+{
+    $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
+    if ($user_agent->is_feature_phone()) {
+        $define['MAX_DIST'] = 32; // thumbnail size
+        $define['DATA_PER_PAGE'] = 10;
+        $define['PAGING_WIDTH'] = 10;
+        $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/fp/';
+    } elseif ($user_agent->is_smart_phone()) {
         $define['MAX_DIST'] = 80; // thumbnail size
         $define['DATA_PER_PAGE'] = 100;
         $define['PAGING_WIDTH'] = 5;
@@ -32,21 +34,14 @@ if ($user_agent->is_feature_phone()) {
         $define['PAGING_WIDTH'] = 5;
         $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     }
+    $define['ICON_FOLDER'] = $define['TEMPLATE_FOLDER'] . 'icon/';
+    APCUtil::define_array($define['SCRIPT_TITLE'], $define);
 }
-$define['ICON_FOLDER'] = $define['TEMPLATE_FOLDER'] . 'icon/';
-APCUtil::define_array($define['SCRIPT_TITLE'], $define);
-// ///////config//////////
-$title = SCRIPT_TITLE; // Page title
-$home = '../'; // Home URL
-$c = '(c) <a href="http://tknr.com/" target="_blank">tknr.com</a>';
-$lock = null;
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
 $mode = HttpUtil::get("mode");
-
 // ///////function////////////////
-
 /**
  * get_list
  *
@@ -104,12 +99,12 @@ function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_k
  *
  * @param string $dir            
  * @param string $home            
- * @param string $lock            
  * @return array <string,multitype:>
  */
-function get_menu_array($dir, $home, $lock)
+function get_menu_array($dir, $home = '../')
 {
     $array = array();
+    $lock = null;
     
     if (preg_match("/\.\./", "$dir")) {
         $lock = '1';
@@ -443,12 +438,13 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
 }
 // ///////main////////////////
 
-header("Content-type: text/html; charset=utf-8");
 switch ($mode) {
     case 'popup':
         {
-            require_once HIDE_FOLDER . '/plugin/popup.inc';
-            return;
+            $template = new EZTemplate(HIDE_FOLDER . '/plugin/popup.inc');
+            $template->setReplace('%CHARSET%', CHARSET);
+            $template->setReplace('%FILENAME%', HttpUtil::get('filename'));
+            return $template->render();
         }
     case 'thumb':
         {
@@ -462,8 +458,10 @@ switch ($mode) {
         }
     case 'embed':
         {
-            require_once HIDE_FOLDER . '/plugin/embed.inc';
-            return;
+            $template = new EZTemplate(HIDE_FOLDER . '/plugin/embed.inc');
+            $template->setReplace('%CHARSET%', CHARSET);
+            $template->setReplace('%FILENAME%', HttpUtil::get('filename'));
+            return $template->render();
         }
     case 'stream':
         {
@@ -472,40 +470,69 @@ switch ($mode) {
         }
     case 'edit':
         {
-            require_once HIDE_FOLDER . '/plugin/editor.inc';
-            return;
+            $filename = HttpUtil::get('f');
+            $text = file_get_contents($filename);
+            $ext = substr($filename, strrpos($filename, '.') + 1);
+            $result = '';
+            if (array_key_exists('save', $_POST) && $_POST['save']) {
+                $fp = @fopen($filename, 'w');
+                if (! $fp) {
+                    $result = 'cannot write';
+                } else {
+                    $contents = htmlspecialchars($_POST['contents']);
+                    fwrite($fp, $contents);
+                    fclose($fp);
+                    $result = 'write succeded.';
+                }
+            }
+            $template = new EZTemplate(HIDE_FOLDER . '/plugin/editor.inc');
+            $template->setValue('filename', $filename);
+            $template->setValue('text', $text);
+            $template->setValue('ext', $ext);
+            $template->setReplace('%CHARSET%', CHARSET);
+            $template->setReplace('%TITLE%', $filename);
+            $template->setReplace('%FILENAME%', $filename);
+            $template->setReplace('%RESULT%', $result);
+            $template->setReplace('%TEXT%', $text);
+            $template->setReplace('%EXT%', strtolower($ext));
+            $template->setReplace('%SELF%', SELF_PHP);
+            
+            return $template->render();
         }
     case 'photoswipe':
         {
-            require_once HIDE_FOLDER . '/plugin/photoswipe.inc';
-            return;
+            $template = new EZTemplate(HIDE_FOLDER . '/plugin/photoswipe.inc');
+            $template->setValue('data', get_body_array($dir, 1, PHP_INT_MAX));
+            $template->setReplace('%CHARSET%', CHARSET);
+            $template->setReplace('%TITLE%', 'photoswipe');
+            return $template->render();
         }
     case 'install_ipa':
         {
-            require_once HIDE_FOLDER . '/plugin/install_ipa.inc';
-            return;
+            $template = new EZTemplate(HIDE_FOLDER . '/plugin/install_ipa.inc', array(
+                'Content-type: text/xml'
+            ));
+            $template->setValue('data', get_body_array($dir, 1, PHP_INT_MAX));
+            $template->setReplace('%CHARSET%', CHARSET);
+            $template->setReplace('%FILENAME%', HttpUtil::get('f'));
+            $template->setReplace('%PACKAGE%', HttpUtil::get('package'));
+            return $template->render();
         }
     default:
         {
-            break;
+            // XXX normal output
+            $template = new EZTemplate(TEMPLATE_FOLDER . 'index.inc');
+            $template->setValue('dir', $dir);
+            $template->setValue('page', $page);
+            $template->setValue('mode', $mode);
+            $template->setValue('menu', get_menu_array($dir));
+            $template->setValue('paging', get_paging_array($dir, $page));
+            $template->setValue('data', get_body_array($dir, $page, DATA_PER_PAGE));
+            $template->setReplace('%CHARSET%', CHARSET);
+            $template->setReplace('%TITLE%', SCRIPT_TITLE);
+            $template->setReplace('%SELF%', SELF_PHP);
+            $template->setReplace('%HIDE_FOLDER%', HIDE_FOLDER);
+            return $template->render();
         }
-}
-// doc output
-{
-    $menu = get_menu_array($dir, $home, $lock);
-    $paging = get_paging_array($dir, $page);
-    $data = get_body_array($dir, $page, DATA_PER_PAGE);
-    
-    ob_start('mb_output_handler');
-    require (TEMPLATE_FOLDER . 'index.inc');
-    
-    $output = ob_get_contents();
-    $output = str_replace('%CHARSET%', CHARSET, $output);
-    $output = str_replace('%TITLE%', $title, $output);
-    $output = str_replace('%SELF%', SELF_PHP, $output);
-    $output = str_replace('%HIDE_FOLDER%', HIDE_FOLDER, $output);
-    ob_end_clean();
-    
-    echo $output;
 }
 ?>

@@ -72,7 +72,8 @@ if (! function_exists('get_file_info')) {
             'readable' => is_readable($file), // 読み込み可能か否か
             'writeable' => is_writable($file), // 書き込み可能か否か
             'executable' => is_executable($file), // 実行可能か否か
-            'permission' => substr(sprintf('%o', fileperms($file)), - 3) // パーミッション
-                );
+            'permission' => substr(sprintf('%o', fileperms($file)), - 3)
+        ) // パーミッション
+;
     }
 }

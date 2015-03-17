@@ -18,8 +18,9 @@ class HttpUtil
     }
 
     /**
-     * @param string $key
-     * @param number $default
+     *
+     * @param string $key            
+     * @param number $default            
      * @return number
      */
     public static function getInt($key, $default = 0)

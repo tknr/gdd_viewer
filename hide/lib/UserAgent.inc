@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 
  */
 class UserAgent
 {
@@ -13,7 +12,8 @@ class UserAgent
     private $user_agent;
 
     /**
-     * @param string $user_agent
+     *
+     * @param string $user_agent            
      */
     function __construct($user_agent)
     {
@@ -22,6 +22,7 @@ class UserAgent
 
     /**
      * get if smart phone or not
+     * 
      * @return boolean
      */
     function is_smart_phone()
@@ -31,6 +32,7 @@ class UserAgent
 
     /**
      * get if feature phone or not
+     * 
      * @return boolean
      */
     function is_feature_phone()

@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 
  */
 class ImageUtil
 {
@@ -116,6 +115,7 @@ class ImageUtil
     }
 
     /**
+     *
      * @return boolean
      */
     public function printOut()
