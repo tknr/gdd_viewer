@@ -61,7 +61,7 @@ class ReflexiveLoader
         $list = glob($dir . '/*');
         foreach ($list as $path) {
             if (is_dir($path)) {
-                $list = array_merge($list, search($path));
+                $list = array_merge($list, $this->search($path));
             }
         }
         return $list;
@@ -74,7 +74,7 @@ class ReflexiveLoader
      */
     private function require_list($dir)
     {
-        $list = search($dir);
+        $list = $this->search($dir);
         foreach ($list as $index => $path) {
             $is_match = preg_match("/\.(php|inc)$/", $path);
             if ($is_match === false || $is_match === 0) {
