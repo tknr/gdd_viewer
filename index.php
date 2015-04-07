@@ -1,7 +1,9 @@
 <?php
 // ///////init//////////
 date_default_timezone_set('Asia/Tokyo');
-require_once __DIR__ . '/hide/lib/function.inc';
+require_once __DIR__ . '/hide/lib/ReflexiveLoader.inc';
+$loader = new ReflexiveLoader();
+$loader->registerDir(__DIR__ . '/hide/lib');
 $define = array();
 // ///////define//////////
 {
