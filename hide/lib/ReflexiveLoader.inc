@@ -45,7 +45,7 @@ class ReflexiveLoader
             $list = $this->require_list($dir);
             foreach ($list as $path) {
                 if (is_readable($path)) {
-                    require $path;
+                    require_once $path;
                 }
             }
         }
