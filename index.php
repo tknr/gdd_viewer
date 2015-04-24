@@ -37,8 +37,8 @@ $define = array();
         $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     }
     $define['ICON_FOLDER'] = $define['TEMPLATE_FOLDER'] . 'icon/';
-    APCUtil::define_array($define['SCRIPT_TITLE'], $define);
 }
+APCUtil::define_array($define['SCRIPT_TITLE'], $define);
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
