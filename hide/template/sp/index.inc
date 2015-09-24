@@ -50,7 +50,7 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
-	<li><a target="_blank" href="?mode=embed&f=<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" href="?mode=embed&filename=<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
 								<?=$datum['file']?>
 							</h3>
