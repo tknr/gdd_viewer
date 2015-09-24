@@ -8,7 +8,9 @@
 <body style="margin: 0px; padding: 0px;">
 	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
 		<tr>
-			<td><embed src="%FILENAME%" width="100%" height="auto" airplay="allow" control="console" controller="true" autostart="true" /></td>
+			<td>
+				<video src="%FILENAME%" preload="none" onclick="this.play()" controls></video>
+			</td>
 		</tr>
 	</table>
 </body>
