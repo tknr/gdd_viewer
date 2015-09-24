@@ -15,7 +15,7 @@ $define = array();
     $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
     $define['HIDE_FOLDER'] = 'hide';
     $define['USE_APC_CACHE'] = true;
-    $define['APC_TTL'] = 60 * 60 * 1;
+    $define['APC_TTL'] = 60 * 60 * 0.5;
 }
 // ///////define size////////////////
 {
