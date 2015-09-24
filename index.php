@@ -302,7 +302,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                 {
                     $array['type'] = 'img';
                     $array['href'] = $file;
-                    $array['src'] = '//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=thumb&ext=" . $img_ext . "&f=" . $file . "&ow=" . $ow . "&oh=" . $oh . "&tw=" . $tw . "&th=" . $th ;
+                    $array['src'] = '//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=thumb&ext=" . $img_ext . "&f=" . rawurlencode( $file ) . "&ow=" . $ow . "&oh=" . $oh . "&tw=" . $tw . "&th=" . $th ;
                     $array['alt'] = $file_name;
                     $array['original_width'] = $ow;
                     $array['original_height'] = $oh;
