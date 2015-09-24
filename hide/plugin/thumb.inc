@@ -2,7 +2,7 @@
 /*
  * thumb
  */
-$f = HttpUtil::get("f");
+$f = rawurldecode( HttpUtil::get("f") );
 $tw = HttpUtil::getInt("tw");
 $th = HttpUtil::getInt("th");
 
