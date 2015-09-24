@@ -9,7 +9,7 @@
 	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
 		<tr>
 			<td>
-				<video src="%FILENAME%" preload="none" onclick="this.play()" controls></video>
+				<video src="%FILENAME%" preload="none" onclick="this.play()" controls loop></video>
 			</td>
 		</tr>
 	</table>
