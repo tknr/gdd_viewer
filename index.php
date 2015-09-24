@@ -343,10 +343,10 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     
                     if (in_array($extension, $sound) || in_array($extension, $video) || in_array($extension, $swf)) {
                         $array['type'] = 'media';
-                        $array['href'] = rawurlencode('//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file);
+                        $array['href'] = rawurlencode($file);
                     } elseif (in_array($extension, $txt) || in_array($extension, $web)) {
                         $array['type'] = 'text';
-                        $array['href'] = rawurlencode('//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=edit&f=//" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file );
+                        $array['href'] = rawurlencode("?mode=edit&f=//" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file );
                     } elseif (in_array($extension, $ipa)) {
                         $array['type'] = 'ipa';
                         $package = 'anaplayer';
@@ -358,10 +358,10 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                         $array['href'] = rawurlencode('https://' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=install_ipa&f=http://" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file . '&package=' . $package);
                     } elseif (in_array($extension, $apk)) {
                         $array['type'] = 'apk';
-                        $array['href'] = rawurlencode('//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file);
+                        $array['href'] = rawurlencode( $file);
                     } else {
                         $array['type'] = 'file';
-                        $array['href'] = rawurlencode('//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file);
+                        $array['href'] = rawurlencode( $file);
                     }
                     $array['src'] = ICON_FOLDER . $icon . '.gif';
                     $array['alt'] = $file_name;
