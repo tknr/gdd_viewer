@@ -39,11 +39,7 @@
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
-								<?=$datum['original_width']?>
-								x
-								<?=$datum['original_height']?>
-								<br />
-								<?=$datum['size']?>
+								<?=$datum['original_width']?>&nbsp;x&nbsp;<?=$datum['original_height']?>&nbsp;<?=$datum['size']?>
 								<br />
 								<?=$datum['mdate']?>
 								<br />
