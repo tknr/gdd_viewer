@@ -34,9 +34,9 @@
 				<ul data-role="listview" id="Gallery"> 
 	<?php foreach($data as $index=>$datum){?>
 	<?php if(strcmp('img',$datum['type'])==0){?>
-	<li><a target="_blank" id="image" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" id="image" href="<?=$datum['href']?>"><img src="<?=$datum['src']?>" width="<?=$datum['width']?>" height="<?=$datum['height']?>" border="0" alt="<?=$datum['alt']?>" />
 							<h3>
-								<?=$datum['file']?>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
 								<?=$datum['original_width']?>
@@ -50,9 +50,9 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
-	<li><a target="_blank" href="?mode=embed&filename=<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" href="?mode=embed&filename=<?=$datum['href']?>">
 							<h3>
-								<?=$datum['file']?>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
 								<?=$datum['extension']?>
@@ -63,9 +63,9 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('text',$datum['type'])==0){?>
-	<li><a target="_blank" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" href="<?=$datum['href']?>">
 							<h3>
-								<?=$datum['file']?>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
 								<?=$datum['extension']?>
@@ -76,36 +76,36 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('ipa',$datum['type'])==0){?>
-	<li><a href="itms-services://?action=download-manifest&url=<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a href="itms-services://?action=download-manifest&url=<?=$datum['href']?>">
 							<h3>
-								<?=$datum['file']?>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
 								<?=$datum['mdate']?>
 							</p>
 					</a></li> 
 	<?php }else if(strcmp('apk',$datum['type'])==0){?>
-	<li><a target="_blank" href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" href="<?=$datum['href']?>">
 							<h3>
-								<?=$datum['file']?>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
 								<?=$datum['mdate']?>
 							</p>
 					</a></li> 
 	<?php }else if(strcmp('dir',$datum['type'])==0){?>
-	<li><a href="<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a href="<?=$datum['href']?>">
 							<h3>
-								<?=$datum['file']?>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
 								<?=$datum['mdate']?>
 							</p>
 					</a></li> 
 	<?php }else{?>
-	<li><a target="_blank" href="?mode=dl&f=<?=$datum['href']?>"> <img src="<?=$datum['src']?>" width="<?=MAX_DIST?>" height="<?=MAX_DIST?>" border="0" alt="<?=$datum['alt']?>" />
+	<li><a target="_blank" href="?mode=dl&f=<?=$datum['href']?>">
 							<h3>
-								<?=$datum['file']?>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
 								<?=$datum['extension']?>
@@ -126,5 +126,6 @@
 	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.2.min.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.animate-enhanced/1.07/jquery.animate-enhanced.min.js"></script>
+	<script type="text/javascript" src="//use.fontawesome.com/2b63a6d468.js"></script>
 </body>
 </html>

@@ -283,6 +283,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
         $array['href'] = SELF_PHP;
         $array['src'] = ICON_FOLDER . 'other.gif';
         $array['alt'] = $file_name;
+        $array['icon'] = '<i class="fa fa-home" aria-hidden="true"></i>';
     } else {
         switch ($img_ext) {
             case 1:
@@ -295,6 +296,8 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     $array['original_height'] = $oh;
                     $array['width'] = $tw;
                     $array['height'] = $th;
+                    $array['icon'] = '<i class="fa fa-picture-o" aria-hidden="true"></i>';
+                    
                     break;
                 }
             case 2:
@@ -308,37 +311,59 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     $array['original_height'] = $oh;
                     $array['width'] = $tw;
                     $array['height'] = $th;
+                    $array['icon'] = '<i class="fa fa-picture-o" aria-hidden="true"></i>';
+                    
                     break;
                 }
             default:
                 {
                     $icon = 'other';
+                    $array['icon'] = '<i class="fa fa-question" aria-hidden="true"></i>';
+                    
                     if (in_array($extension, $txt) || in_array($extension, $doc)) {
                         $icon = 'text';
+                        $array['icon'] = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $sound)) {
                         $icon = 'sound';
+                        $array['icon'] = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $video)) {
                         $icon = 'movie';
+                        $array['icon'] = '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $zip)) {
                         $icon = 'package';
+                        $array['icon'] = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $web)) {
                         $icon = 'web';
+                        $array['icon'] = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $swf)) {
                         $icon = 'swf';
+                        $array['icon'] = '<i class="fa fa-bolt" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $pdf)) {
                         $icon = 'pdf';
+                        $array['icon'] = '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $ipa)) {
                         $icon = 'ipa';
+                        $array['icon'] = '<i class="fa fa-mobile" aria-hidden="true"></i>';
+                        
                     }
                     if (in_array($extension, $apk)) {
                         $icon = 'apk';
+                        $array['icon'] = '<i class="fa fa-android" aria-hidden="true"></i>';
+                        
                     }
                     
                     if (in_array($extension, $sound) || in_array($extension, $video) || in_array($extension, $swf)) {
@@ -434,6 +459,7 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
         $_array['src'] = ICON_FOLDER . 'folder.gif';
         $_array['size'] = '-';
         $_array['mdate'] = date(DATE_FORMAT, $file_mtime);
+        $_array['icon'] = '<i class="fa fa-folder-o" aria-hidden="true"></i>';
         $array[] = $_array;
     }
     return $array;
