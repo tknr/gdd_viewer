@@ -46,7 +46,7 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('media',$datum['type'])==0){?>
-	<li><a target="_blank" href="?mode=embed&filename=<?=$datum['href']?>">
+	<li><a target="_blank" href="<?=$datum['href']?>">
 							<h3>
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
@@ -68,7 +68,7 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('ipa',$datum['type'])==0){?>
-	<li><a href="itms-services://?action=download-manifest&url=<?=$datum['href']?>">
+	<li><a target="_blank" href="itms-services://?action=download-manifest&url=<?=$datum['href']?>">
 							<h3>
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
@@ -95,7 +95,7 @@
 							</p>
 					</a></li> 
 	<?php }else{?>
-	<li><a target="_blank" href="?mode=dl&f=<?=$datum['href']?>">
+	<li><a target="_blank" href="<?=$datum['href']?>">
 							<h3>
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
