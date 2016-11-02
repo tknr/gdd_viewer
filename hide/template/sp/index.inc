@@ -51,9 +51,7 @@
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
-								<?=$datum['extension']?>
-								<br />
-								<?=$datum['size']?>
+								<?=$datum['extension']?>&nbsp;<?=$datum['size']?>
 								<br />
 								<?=$datum['mdate']?>
 							</p>
@@ -64,9 +62,7 @@
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
-								<?=$datum['extension']?>
-								<br />
-								<?=$datum['size']?>
+								<?=$datum['extension']?>&nbsp;<?=$datum['size']?>
 								<br />
 								<?=$datum['mdate']?>
 							</p>
@@ -104,9 +100,7 @@
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
 							<p>
-								<?=$datum['extension']?>
-								<br />
-								<?=$datum['size']?>
+								<?=$datum['extension']?>&nbsp;<?=$datum['size']?>
 								<br />
 								<?=$datum['mdate']?>
 							</p>
