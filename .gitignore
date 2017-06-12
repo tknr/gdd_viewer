@@ -3,3 +3,5 @@
 /.buildpath
 /nbproject/private/
 /nbproject/
+/temp/
+/temp/**
