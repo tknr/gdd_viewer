@@ -14,7 +14,7 @@ $define = array();
     $define['CHARSET'] = 'UTF-8'; // Shift_JIS
     $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
     $define['HIDE_FOLDER'] = 'hide';
-    $define['COMICBED_FOLDER'] = 'comicbed'
+    $define['COMICBED_FOLDER'] = 'comicbed';
     $define['USE_APC_CACHE'] = false;
     $define['APC_TTL'] = 60 * 60 * 0.5;
 }
