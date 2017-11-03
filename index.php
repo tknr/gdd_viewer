@@ -14,6 +14,7 @@ $define = array();
     $define['CHARSET'] = 'UTF-8'; // Shift_JIS
     $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
     $define['HIDE_FOLDER'] = 'hide';
+    $define['COMICBED_FOLDER'] = 'comicbed'
     $define['USE_APC_CACHE'] = false;
     $define['APC_TTL'] = 60 * 60 * 0.5;
 }
@@ -53,7 +54,7 @@ $mode = HttpUtil::get("mode");
  * @param int $apc_ttl            
  * @return multitype:
  */
-function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_key_head = SCRIPT_TITLE, $apc_ttl = APC_TTL)
+function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER,COMICBED_FOLDER), $apc_key_head = SCRIPT_TITLE, $apc_ttl = APC_TTL)
 {
     $file_list = null;
     
@@ -264,8 +265,9 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
     $txt = explode(',', 'txt,sh,ini,conf,properties,java,c,cpp,h,cs,sql');
     $doc = explode(',', 'doc,xls,rtf,docx,xslx');
     $pdf = explode(',', 'pdf');
-    $ipa = explode(',', 'ipa');
     $apk = explode(',', 'apk');
+
+    $book = explode(',','zip,rar,pdf');
     
     $mdate = date($date_format, $file_mtime);
     $show_size = FileUtil::getFileSizeString($filesize);
@@ -338,7 +340,6 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     if (in_array($extension, $zip)) {
                         $icon = 'package';
                         $array['icon'] = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>';
-                        
                     }
                     if (in_array($extension, $web)) {
                         $icon = 'web';
@@ -353,17 +354,6 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     if (in_array($extension, $pdf)) {
                         $icon = 'pdf';
                         $array['icon'] = '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
-                        
-                    }
-                    if (in_array($extension, $ipa)) {
-                        $icon = 'ipa';
-                        $array['icon'] = '<i class="fa fa-mobile" aria-hidden="true"></i>';
-                        
-                    }
-                    if (in_array($extension, $apk)) {
-                        $icon = 'apk';
-                        $array['icon'] = '<i class="fa fa-android" aria-hidden="true"></i>';
-                        
                     }
                     
                     if (in_array($extension, $sound) || in_array($extension, $video) || in_array($extension, $swf)) {
@@ -371,19 +361,10 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                         $array['href'] = $file;
                     } elseif (in_array($extension, $txt) || in_array($extension, $web)) {
                         $array['type'] = 'text';
-                        $array['href'] = rawurlencode("?mode=edit&f=//" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file );
-                    } elseif (in_array($extension, $ipa)) {
-                        $array['type'] = 'ipa';
-                        $package = 'anaplayer';
-                        if (strstr($file, 'anaplayer')) {
-                            $package = 'jp.mytheater.anaplayer';
-                        } elseif (strstr($file, 'highplayer')) {
-                            $package = 'jp.mytheater.highplayer';
-                        }
-                        $array['href'] = rawurlencode('https://' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=install_ipa&f=http://" . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file . '&package=' . $package);
-                    } elseif (in_array($extension, $apk)) {
-                        $array['type'] = 'apk';
-                        $array['href'] = $file;
+                        $array['href'] = "?mode=edit&f=".rawurlencode( SCRIPT_PATH . $file );
+		    } elseif ( (is_file($file)) && (preg_match('/book/',$dir)) && (in_array($extension, $book)) ) {
+			    $array['type'] = 'file';
+			    $array['href'] = "./comicbed/#?screen.viewMode=TwoPage&screen.pageDirection=R2L&url=".rawurlencode( SCRIPT_PATH . $file );
                     } else {
                         $array['type'] = 'file';
                         $array['href'] = $file;
@@ -533,17 +514,6 @@ switch ($mode) {
             $template->setValue('data', get_body_array($dir, 1, PHP_INT_MAX));
             $template->setReplace('%CHARSET%', CHARSET);
             $template->setReplace('%TITLE%', 'photoswipe');
-            return $template->render();
-        }
-    case 'install_ipa':
-        {
-            $template = new EZTemplate(HIDE_FOLDER . '/plugin/install_ipa.inc', array(
-                'Content-type: text/xml'
-            ));
-            $template->setValue('data', get_body_array($dir, 1, PHP_INT_MAX));
-            $template->setReplace('%CHARSET%', CHARSET);
-            $template->setReplace('%FILENAME%', HttpUtil::get('f'));
-            $template->setReplace('%PACKAGE%', HttpUtil::get('package'));
             return $template->render();
         }
     default:
