@@ -34,13 +34,14 @@ class APCUtil
     /**
      *
      * @param string $key            
-     * @param array $arr            
+     * @param array $arr
+     * @param boolean $cache_apc            
      * @param boolean $case_sensitive            
      * @return boolean
      */
-    public static function define_array($key, $arr, $case_sensitive = true)
+    public static function define_array($key, $arr, $cache_apc = true,$case_sensitive = true)
     {
-        if (function_exists('apc_load_constants')) {
+        if (function_exists('apc_load_constants') && $cache_apc) {
             
             if (! apc_load_constants($key, $case_sensitive)) {
                 return apc_define_constants($key, $arr, $case_sensitive);
