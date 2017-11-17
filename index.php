@@ -445,7 +445,7 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
         $_array['alt'] = $dir_list[$count];
         $_array['type'] = 'dir';
         $_array['href'] = SELF_PHP . '?dir=' . $encoded_url;
-        $_array['src'] = ICON_FOLDER . 'folder.gif';
+        $_array['src'] = '#';
         $_array['size'] = '-';
         $_array['mdate'] = date(DATE_FORMAT, $file_mtime);
         $_array['icon'] = '<i class="fa fa-folder-o" aria-hidden="true"></i>';
