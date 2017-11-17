@@ -4,8 +4,8 @@ date_default_timezone_set('Asia/Tokyo');
 require_once __DIR__ . '/hide/lib/ReflexiveLoader.inc';
 $loader = new ReflexiveLoader();
 $loader->registerDir(__DIR__ . '/hide/lib');
-$define = array();
 // ///////define//////////
+$define = array();
 {
     $define['SCRIPT_TITLE'] = 'gdd_viewer'; // Page title
     $self = array_reverse(explode("/", $_SERVER["SCRIPT_NAME"]));
@@ -14,7 +14,7 @@ $define = array();
     $define['CHARSET'] = 'UTF-8'; // Shift_JIS
     $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
     $define['HIDE_FOLDER'] = 'hide';
-    $define['COMICBED_FOLDER'] = 'comicbed';
+    $define['BOOKREADER_FOLDER'] = 'bookreader';
     $define['USE_APC_CACHE'] = false;
     $define['APC_TTL'] = 60 * 60 * 0.5;
 }
@@ -369,7 +369,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
 			    $array['type'] = 'file';
 			    switch (UA){
 			    	case 'pc':{
-					$array['href'] = "./".COMICBED_FOLDER."/#?screen.viewMode=TwoPage&screen.pageDirection=R2L&url=".rawurlencode( SCRIPT_PATH . $file );
+					$array['href'] = "./".BOOKREADER_FOLDER."/?p=0&f=".$file;
 					break;
 			    	}
 				/*
