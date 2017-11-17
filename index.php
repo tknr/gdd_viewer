@@ -21,13 +21,7 @@ $define = array();
 // ///////define size////////////////
 {
     $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
-    if ($user_agent->is_feature_phone()) {
-	$define['UA'] = 'fp';
-        $define['MAX_DIST'] = 32; // thumbnail size
-        $define['DATA_PER_PAGE'] = 10;
-        $define['PAGING_WIDTH'] = 10;
-        $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/fp/';
-    } elseif ($user_agent->is_smart_phone()) {
+    if ($user_agent->is_smart_phone()) {
 	$define['UA'] = 'sp';
         $define['MAX_DIST'] = 80; // thumbnail size
         $define['DATA_PER_PAGE'] = 100;
@@ -40,7 +34,6 @@ $define = array();
         $define['PAGING_WIDTH'] = 5;
         $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
     }
-    $define['ICON_FOLDER'] = $define['TEMPLATE_FOLDER'] . 'icon/';
 }
 APCUtil::define_array($define['SCRIPT_TITLE'], $define,false);
 // ///////request////////////////
@@ -286,7 +279,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
     if ($file_name == SELF_PHP) {
         $array['type'] = 'self';
         $array['href'] = SELF_PHP;
-        $array['src'] = ICON_FOLDER . 'other.gif';
+        $array['src'] = "#";
         $array['alt'] = $file_name;
         $array['icon'] = '<i class="fa fa-home" aria-hidden="true"></i>';
     } else {
@@ -368,7 +361,9 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
 		    } elseif ( (is_file($file)) && (preg_match('/book/',$dir)) && (in_array($extension, $book)) ) {
 			    $array['type'] = 'file';
 			    switch (UA){
-			    	case 'pc':{
+			    	case 'pc':
+			    	case 'sp':
+			    	{
 					$array['href'] = "./".BOOKREADER_FOLDER."/?p=0&f=".$file;
 					break;
 			    	}
@@ -388,7 +383,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                         $array['type'] = 'file';
                         $array['href'] = $file;
                     }
-                    $array['src'] = ICON_FOLDER . $icon . '.gif';
+                    $array['src'] = "#";
                     $array['alt'] = $file_name;
                     break;
                 }
