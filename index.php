@@ -367,12 +367,6 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
 					$array['href'] = "./".BOOKREADER_FOLDER."/?p=0&f=".$file;
 					break;
 			    	}
-				/*
-			    	case 'sp':{
-					$array['href'] = "cghttp://". $_SERVER['SERVER_NAME'] . SCRIPT_PATH . $file;
-					break;
-				}
-				 */
 				default:{
 					$array['href'] = $file;
 					break;
