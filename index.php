@@ -14,7 +14,6 @@ $define = array();
     $define['CHARSET'] = 'UTF-8'; // Shift_JIS
     $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
     $define['HIDE_FOLDER'] = 'hide';
-    $define['BOOKREADER_FOLDER'] = 'bookreader';
     $define['USE_APC_CACHE'] = false;
     $define['APC_TTL'] = 60 * 60 * 0.5;
 }
@@ -50,7 +49,7 @@ $mode = HttpUtil::get("mode");
  * @param int $apc_ttl            
  * @return multitype:
  */
-function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER,COMICBED_FOLDER), $apc_key_head = SCRIPT_TITLE, $apc_ttl = APC_TTL)
+function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_key_head = SCRIPT_TITLE, $apc_ttl = APC_TTL)
 {
     $file_list = null;
     
@@ -355,24 +354,12 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     if (in_array($extension, $sound) || in_array($extension, $video) || in_array($extension, $swf)) {
                         $array['type'] = 'media';
                         $array['href'] = $file;
+                    } elseif (in_array($extension,$zip)) {
+                        $array['type'] = 'zip';
+                        $array['href'] = $file;                    	
                     } elseif (in_array($extension, $txt) || in_array($extension, $web)) {
                         $array['type'] = 'text';
-                        $array['href'] = "?mode=edit&f=".rawurlencode( SCRIPT_PATH . $file );
-		    } elseif ( (is_file($file)) && (preg_match('/book/',$dir)) && (in_array($extension, $book)) ) {
-			    $array['type'] = 'file';
-			    switch (UA){
-			    	case 'pc':
-			    	case 'sp':
-			    	{
-					$array['href'] = "./".BOOKREADER_FOLDER."/?p=0&f=".$file;
-					break;
-			    	}
-				default:{
-					$array['href'] = $file;
-					break;
-			    	}
-			    }
-
+                        $array['href'] = $file;
                     } else {
                         $array['type'] = 'file';
                         $array['href'] = $file;

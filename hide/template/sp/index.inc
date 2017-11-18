@@ -5,19 +5,9 @@
 <title>%TITLE%</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" href="//code.jquery.com/mobile/latest/jquery.mobile.min.css" />
-<style>
-.ui-header .ui-title, /* header */
-.ui-footer .ui-title, /* footer */
-.ui-btn-inner, /* button */
-.ui-li-heading, /* listview heading */
-.ui-li .ui-btn-text a.ui-link-inherit, /* listview link */
-.ui-li-desc /* listview description */
-{
-    overflow: visible;
-    white-space: normal;
-}
-</style>
+<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<link rel="stylesheet" href="%HIDE_FOLDER%/css/jquery-confirm.min.css" />
+<link rel="stylesheet" href="%HIDE_FOLDER%/css/main.css" />
 </head>
 <body>
 	<div data-role="page" id="home">
@@ -59,8 +49,19 @@
 								<?=$datum['mdate']?>
 							</p>
 					</a></li>
+	<?php }else if(strcmp('zip',$datum['type'])==0){?>
+	<li><a id="zip_link_<?=$index?>" target="_blank" href="<?=$datum['href']?>">
+							<h3>
+								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
+							</h3>
+							<p>
+								<?=$datum['extension']?>&nbsp;<?=$datum['size']?>
+								<br />
+								<?=$datum['mdate']?>
+							</p>
+					</a></li>
 	<?php }else if(strcmp('text',$datum['type'])==0){?>
-	<li><a target="_blank" href="<?=$datum['href']?>">
+	<li><a id="text_link_<?=$index?>" target="_blank" href="<?=$datum['href']?>">
 							<h3>
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
@@ -98,9 +99,11 @@
 		</div>
 
 	</div>
-	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.2.min.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.animate-enhanced/1.07/jquery.animate-enhanced.min.js"></script>
 	<script type="text/javascript" src="//use.fontawesome.com/2b63a6d468.js"></script>
+	<script type="text/javascript" src="%HIDE_FOLDER%/js/jquery-confirm.min.js"></script>
+	<script type="text/javascript" src="%HIDE_FOLDER%/js/main.js"></script>
 </body>
 </html>
