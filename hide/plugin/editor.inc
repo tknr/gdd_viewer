@@ -12,7 +12,7 @@
 	<div data-role="page" id="home">
 		<div data-role="content">
 			<div class="content-primary main-content">
-				<form method="post" action="%SELF%">
+				<form method="post" action="%SELF%?mode=edit&f=%FILENAME%" data-ajax="false">
 					<table border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
 						<tr>
 							<td><a data-role="button" target="_blank" href="%SELF%?mode=dl&f=%FILENAME%">%FILENAME%</a></td>
@@ -35,6 +35,11 @@
 <script type="text/javascript" src="//code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
 <script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
 <script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js"></script>
+<script type="text/javascript">
+$(document).bind("mobileinit", function(){
+   $.mobile.ajaxFormsEnabled = false;
+});
+</script>
 <script type="text/javascript">
 function path()
 {

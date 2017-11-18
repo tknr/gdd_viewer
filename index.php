@@ -38,7 +38,7 @@ APCUtil::define_array($define['SCRIPT_TITLE'], $define,false);
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
-$mode = HttpUtil::get("mode");
+$mode = HttpUtil::request("mode");
 // ///////function////////////////
 /**
  * get_list

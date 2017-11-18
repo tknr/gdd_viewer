@@ -50,7 +50,7 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('zip',$datum['type'])==0){?>
-	<li><a id="zip_link_<?=$index?>" target="_blank" href="<?=$datum['href']?>">
+	<li><a id="zip_link_<?=$index?>" target="_blank" href="<?=$datum['href']?>" data-ajax="false">
 							<h3>
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
@@ -61,7 +61,7 @@
 							</p>
 					</a></li>
 	<?php }else if(strcmp('text',$datum['type'])==0){?>
-	<li><a id="text_link_<?=$index?>" target="_blank" href="<?=$datum['href']?>">
+	<li><a id="text_link_<?=$index?>" target="_blank" href="<?=$datum['href']?>" data-ajax="false">
 							<h3>
 								<?=$datum['icon']?>&nbsp;<?=$datum['file']?>
 							</h3>
