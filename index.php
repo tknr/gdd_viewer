@@ -500,6 +500,7 @@ switch ($mode) {
             $template->setReplace('%TEXT%', $text);
             $template->setReplace('%EXT%', strtolower($ext));
             $template->setReplace('%SELF%', SELF_PHP);
+            $template->setReplace('%HIDE_FOLDER%', HIDE_FOLDER);
             
             return $template->render();
         }

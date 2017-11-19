@@ -99,11 +99,10 @@
 		</div>
 
 	</div>
-	<script type="text/javascript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.animate-enhanced/1.07/jquery.animate-enhanced.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript" src="//use.fontawesome.com/2b63a6d468.js"></script>
 	<script type="text/javascript" src="%HIDE_FOLDER%/js/jquery-confirm.min.js"></script>
 	<script type="text/javascript" src="%HIDE_FOLDER%/js/main.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </body>
 </html>
