@@ -99,6 +99,8 @@
 		</div>
 
 	</div>
+	
+	<script type="text/javascript" src="%HIDE_FOLDER%/js/console.ie.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript" src="//use.fontawesome.com/2b63a6d468.js"></script>
 	<script type="text/javascript" src="%HIDE_FOLDER%/js/jquery-confirm.min.js"></script>

@@ -31,6 +31,7 @@
 			</div>
 		</div>
 	</div>
+<script type="text/javascript" src="%HIDE_FOLDER%/js/console.ie.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
 <script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js"></script>
