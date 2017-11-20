@@ -42,6 +42,9 @@ $(document).on("mobileinit", function(){
 
 
 	$("[id^=text_link_]").each(function() {
+		var target_url = $(this).attr("href");
+		console.log(target_url);
+
 		$(this).on('click',function(){
 			var target_url = $(this).attr("href");
 			console.log(target_url);
