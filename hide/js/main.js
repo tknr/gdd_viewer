@@ -12,6 +12,7 @@ $(document).on("mobileinit", function(){
 				window.open(target_url, '_blank');
 				return true;
 			}
+
 			$.confirm({
 			    title: 'confirm',
 			    content: 'download or read?',
@@ -48,6 +49,7 @@ $(document).on("mobileinit", function(){
 		$(this).on('click',function(){
 			var target_url = $(this).attr("href");
 			console.log(target_url);
+
 			$.confirm({
 			    title: 'confirm',
 			    content: 'download or edit?',
