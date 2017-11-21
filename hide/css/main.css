@@ -6,5 +6,7 @@
 .ui-li-desc /* listview description */
 {
     overflow: visible;
-    white-space: normal;
+    white-space: pre;
 }
+.ws-normal .ui-btn-text { white-space:normal; }
+.ws-pre .ui-btn-text { white-space:pre; }
