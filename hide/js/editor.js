@@ -1,17 +1,15 @@
-function path()
-{
+function path() {
 	var args = arguments,
-	result = []
-	;
-	
-	for(var i = 0; i < args.length; i++){
+		result = [];
+
+	for (var i = 0; i < args.length; i++) {
 		result.push(args[i].replace('@', '/pub/sh/current/scripts/'));
 	}
 	return result;
 }
 
-$(document).on("mobileinit", function(){
-   $.mobile.ajaxFormsEnabled = false;
+$(document).on("mobileinit", function() {
+	$.mobile.ajaxFormsEnabled = false;
 
 	SyntaxHighlighter.autoloader.apply(null, path(
 		'applescript	@shBrushAppleScript.js',
@@ -39,7 +37,7 @@ $(document).on("mobileinit", function(){
 		'vb vbnet	@shBrushVb.js',
 		'xml xhtml xslt html @shBrushXml.js'
 	));
-	SyntaxHighlighter.config.tagName="textarea";
+	SyntaxHighlighter.config.tagName = "textarea";
 	SyntaxHighlighter.defaults['toolbar'] = false;
 	SyntaxHighlighter.all('contents');
 });
