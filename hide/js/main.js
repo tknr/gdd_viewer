@@ -2,6 +2,18 @@ $(document).on("mobileinit", function() {
 	console.log("mobileinit");
 	$.mobile.ajaxFormsEnabled = false;
 
+	init();
+});
+
+$(document).on("pagecreate", function() {
+	console.log("pagecreate");
+
+	init();
+});
+
+function init() {
+	console.log("init");
+
 	$("[id^=zip_link_]").each(function() {
 		var target_url = $(this).attr("href");
 		console.log(target_url);
@@ -75,5 +87,4 @@ $(document).on("mobileinit", function() {
 			return false;
 		});
 	});
-
-});
+}

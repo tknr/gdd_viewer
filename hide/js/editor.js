@@ -38,6 +38,6 @@ $(document).on("mobileinit", function() {
 		'xml xhtml xslt html @shBrushXml.js'
 	));
 	SyntaxHighlighter.config.tagName = "textarea";
-	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.defaults.toolbar = false;
 	SyntaxHighlighter.all('contents');
 });
