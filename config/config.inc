@@ -1,5 +1,5 @@
 <?php
 {
-    $define['HOME_DIR'] = '/home/tknr';
+    $define['HOME_DIR'] = '/home/tknr/';
 }
 ?>

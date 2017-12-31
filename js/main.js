@@ -40,7 +40,7 @@ function init() {
 						text: 'bookreader',
 						btnClass: 'btn-blue',
 						action: function() {
-							window.open('bookreader/?f=' + target_url, '_blank');
+							window.open('/bookreader/?f=' + target_url, '_blank');
 						}
 					},
 					cancel: {

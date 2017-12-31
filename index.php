@@ -36,7 +36,7 @@ require_once __DIR__ . '/config/config.inc';
 }
 APCUtil::define_array($define['SCRIPT_TITLE'], $define, false);
 // ///////request////////////////
-$dir = HttpUtil::get("dir",HOME_DIR);
+$dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
 $mode = HttpUtil::request("mode");
 
@@ -142,7 +142,7 @@ function get_paging_array($dir, $page, $data_per_page = DATA_PER_PAGE, $paging_w
 {
     $array = array();
 
-    $file_list = get_list($dir);
+    $file_list = get_list(HOME_DIR.$dir);
     
     $maxsize = count($file_list);
     
@@ -261,7 +261,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
     $mdate = date($date_format, $file_mtime);
     $show_size = FileUtil::getFileSizeString($filesize);
     
-    $file = ".$dir/$file_name";
+    $file = HOME_DIR."$dir/$file_name";
     
     $array['file'] = $file_name;
     $array['size'] = $show_size;
@@ -382,7 +382,7 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
         return $array;
     }
     
-    $file_list = get_list($dir);
+    $file_list = get_list(HOME_DIR.$dir);
     
     $maxsize = count($file_list);
     
@@ -395,7 +395,7 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
     $dir_list = null;
     for ($count = $from; $count < $to; $count ++) {
         $file_name = $file_list[$count];
-        $file_path = "$dir/$file_name";
+        $file_path = HOME_DIR."$dir/$file_name";
         $file_size = filesize($file_path);
         $file_mtime = filemtime($file_path);
         
