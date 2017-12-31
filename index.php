@@ -1,9 +1,9 @@
 <?php
 // ///////init//////////
 date_default_timezone_set('Asia/Tokyo');
-require_once __DIR__ . '/hide/lib/ReflexiveLoader.inc';
+require_once __DIR__ . '/lib/ReflexiveLoader.inc';
 $loader = new ReflexiveLoader();
-$loader->registerDir(__DIR__ . '/hide/lib');
+$loader->registerDir(__DIR__ . '/lib');
 // ///////define//////////
 $define = array();
 {
@@ -16,6 +16,7 @@ $define = array();
     $define['USE_APC_CACHE'] = false;
     $define['APC_TTL'] = 60 * 60 * 0.5;
 }
+require_once __DIR__ . '/config/config.inc';
 // ///////define size////////////////
 {
     $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -24,18 +25,18 @@ $define = array();
         $define['MAX_DIST'] = 80; // thumbnail size
         $define['DATA_PER_PAGE'] = 100;
         $define['PAGING_WIDTH'] = 5;
-        $define['TEMPLATE_FOLDER'] = 'template/sp/';
+        $define['TEMPLATE_FOLDER'] = __DIR__ . '/template/sp/';
     } else {
         $define['UA'] = 'pc';
         $define['MAX_DIST'] = 80; // thumbnail size
         $define['DATA_PER_PAGE'] = 100;
         $define['PAGING_WIDTH'] = 5;
-        $define['TEMPLATE_FOLDER'] = 'template/sp/';
+        $define['TEMPLATE_FOLDER'] = __DIR__ . '/template/sp/';
     }
 }
 APCUtil::define_array($define['SCRIPT_TITLE'], $define, false);
 // ///////request////////////////
-$dir = HttpUtil::get("dir");
+$dir = HttpUtil::get("dir",HOME_DIR);
 $page = HttpUtil::getInt("page", 1);
 $mode = HttpUtil::request("mode");
 
@@ -140,13 +141,8 @@ function get_menu_array($dir, $home = '../')
 function get_paging_array($dir, $page, $data_per_page = DATA_PER_PAGE, $paging_width = PAGING_WIDTH)
 {
     $array = array();
-    
-    if ($dir) {
-        $dir_name = "./$dir";
-    } else {
-        $dir_name = ".";
-    }
-    $file_list = get_list($dir_name);
+
+    $file_list = get_list($dir);
     
     $maxsize = count($file_list);
     
@@ -385,12 +381,8 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
     if ($lock) {
         return $array;
     }
-    if ($dir) {
-        $dir_name = "./$dir";
-    } else {
-        $dir_name = ".";
-    }
-    $file_list = get_list($dir_name);
+    
+    $file_list = get_list($dir);
     
     $maxsize = count($file_list);
     
@@ -403,7 +395,7 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
     $dir_list = null;
     for ($count = $from; $count < $to; $count ++) {
         $file_name = $file_list[$count];
-        $file_path = "$dir_name/$file_name";
+        $file_path = "$dir/$file_name";
         $file_size = filesize($file_path);
         $file_mtime = filemtime($file_path);
         
@@ -438,31 +430,31 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
 switch ($mode) {
     case 'popup':
         {
-            $template = new EZTemplate('plugin/popup.inc');
+            $template = new EZTemplate(__DIR__ . '/plugin/popup.inc');
             $template->setReplace('%CHARSET%', CHARSET);
             $template->setReplace('%FILENAME%', HttpUtil::get('filename'));
             return $template->render();
         }
     case 'thumb':
         {
-            require_once 'plugin/thumb.inc';
+            require_once __DIR__ . '/plugin/thumb.inc';
             return;
         }
     case 'dl':
         {
-            require_once 'plugin/dl.inc';
+            require_once __DIR__ . '/plugin/dl.inc';
             return;
         }
     case 'embed':
         {
-            $template = new EZTemplate('plugin/embed.inc');
+            $template = new EZTemplate(__DIR__ . '/plugin/embed.inc');
             $template->setReplace('%CHARSET%', CHARSET);
             $template->setReplace('%FILENAME%', HttpUtil::get('filename'));
             return $template->render();
         }
     case 'stream':
         {
-            require_once 'plugin/stream.inc';
+            require_once __DIR__ . '/plugin/stream.inc';
             return;
         }
     case 'edit':
@@ -482,7 +474,7 @@ switch ($mode) {
                     $result = 'write succeded.';
                 }
             }
-            $template = new EZTemplate('plugin/editor.inc');
+            $template = new EZTemplate(__DIR__ . '/plugin/editor.inc');
             $template->setValue('filename', $filename);
             $template->setValue('text', $text);
             $template->setValue('ext', $ext);
@@ -498,7 +490,7 @@ switch ($mode) {
         }
     case 'photoswipe':
         {
-            $template = new EZTemplate(HIDE_FOLDER . '/plugin/photoswipe.inc');
+            $template = new EZTemplate(__DIR__ . '/plugin/photoswipe.inc');
             $template->setValue('data', get_body_array($dir, 1, PHP_INT_MAX));
             $template->setReplace('%CHARSET%', CHARSET);
             $template->setReplace('%TITLE%', 'photoswipe');

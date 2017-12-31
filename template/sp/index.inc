@@ -14,9 +14,9 @@
 	<div data-role="page" id="home">
 
 		<div data-role="header" data-position="fixed">
-<?php require (HIDE_FOLDER.'/template/sp/dir.inc');?>
-<?php require (HIDE_FOLDER.'/template/sp/menu.inc');?>
-<?php require (HIDE_FOLDER.'/template/sp/paging.inc');?>
+<?php require ('dir.inc');?>
+<?php require ('menu.inc');?>
+<?php require ('paging.inc');?>
 </div>
 
 		<div data-role="content">
