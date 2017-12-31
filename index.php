@@ -13,7 +13,6 @@ $define = array();
     $define['SCRIPT_PATH'] = rtrim($_SERVER["SCRIPT_NAME"], $define['SELF_PHP']);
     $define['CHARSET'] = 'UTF-8'; // Shift_JIS
     $define['DATE_FORMAT'] = 'Y/m/d H:i:s'; // Y/m/d H:i:s
-    $define['HIDE_FOLDER'] = 'hide';
     $define['USE_APC_CACHE'] = false;
     $define['APC_TTL'] = 60 * 60 * 0.5;
 }
@@ -21,35 +20,36 @@ $define = array();
 {
     $user_agent = new UserAgent($_SERVER['HTTP_USER_AGENT']);
     if ($user_agent->is_smart_phone()) {
-	$define['UA'] = 'sp';
+        $define['UA'] = 'sp';
         $define['MAX_DIST'] = 80; // thumbnail size
         $define['DATA_PER_PAGE'] = 100;
         $define['PAGING_WIDTH'] = 5;
-        $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
+        $define['TEMPLATE_FOLDER'] = 'template/sp/';
     } else {
-	$define['UA'] = 'pc';
+        $define['UA'] = 'pc';
         $define['MAX_DIST'] = 80; // thumbnail size
         $define['DATA_PER_PAGE'] = 100;
         $define['PAGING_WIDTH'] = 5;
-        $define['TEMPLATE_FOLDER'] = $define['HIDE_FOLDER'] . '/template/sp/';
+        $define['TEMPLATE_FOLDER'] = 'template/sp/';
     }
 }
-APCUtil::define_array($define['SCRIPT_TITLE'], $define,false);
+APCUtil::define_array($define['SCRIPT_TITLE'], $define, false);
 // ///////request////////////////
 $dir = HttpUtil::get("dir");
 $page = HttpUtil::getInt("page", 1);
 $mode = HttpUtil::request("mode");
+
 // ///////function////////////////
 /**
  * get_list
  *
- * @param unknown_type $dir_cnt            
- * @param array $exclude_array            
- * @param string $apc_key_head            
- * @param int $apc_ttl            
+ * @param string $dir_cnt
+ * @param array $exclude_array
+ * @param string $apc_key_head
+ * @param int $apc_ttl
  * @return multitype:
  */
-function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_key_head = SCRIPT_TITLE, $apc_ttl = APC_TTL)
+function get_list($dir_cnt, $exclude_array = array('.','..'), $apc_key_head = SCRIPT_TITLE, $apc_ttl = APC_TTL)
 {
     $file_list = null;
     
@@ -95,8 +95,8 @@ function get_list($dir_cnt, $exclude_array = array('.','..',HIDE_FOLDER), $apc_k
 /**
  * get_menu_array
  *
- * @param string $dir            
- * @param string $home            
+ * @param string $dir
+ * @param string $home
  * @return array <string,multitype:>
  */
 function get_menu_array($dir, $home = '../')
@@ -131,10 +131,10 @@ function get_menu_array($dir, $home = '../')
 /**
  * get_paging_array
  *
- * @param string $dir            
- * @param number $page            
- * @param number $data_per_page            
- * @param number $paging_width            
+ * @param string $dir
+ * @param number $page
+ * @param number $data_per_page
+ * @param number $paging_width
  * @return array <string,multitype:>
  */
 function get_paging_array($dir, $page, $data_per_page = DATA_PER_PAGE, $paging_width = PAGING_WIDTH)
@@ -163,18 +163,16 @@ function get_paging_array($dir, $page, $data_per_page = DATA_PER_PAGE, $paging_w
     if ($maxpage <= $paging_width) {
         $from = 1;
         $to = $maxpage;
-    } else 
-        if ($page <= $halfwidth) {
-            $from = 1;
-            $to = $paging_width;
-            if ($to > $maxpage) {
-                $to = $maxpage;
-            }
-        } else 
-            if (($page > ($maxpage - $halfwidth)) && ($maxpage - $paging_width > 0)) {
-                $from = $maxpage - $paging_width + 1;
-                $to = $maxpage;
-            }
+    } else if ($page <= $halfwidth) {
+        $from = 1;
+        $to = $paging_width;
+        if ($to > $maxpage) {
+            $to = $maxpage;
+        }
+    } else if (($page > ($maxpage - $halfwidth)) && ($maxpage - $paging_width > 0)) {
+        $from = $maxpage - $paging_width + 1;
+        $to = $maxpage;
+    }
     
     $array['dir'] = $dir;
     $array['maxpage'] = $maxpage;
@@ -198,9 +196,9 @@ function get_paging_array($dir, $page, $data_per_page = DATA_PER_PAGE, $paging_w
 /**
  * get image property
  *
- * @param string $file_path            
- * @param string $filename            
- * @param number $max_dist            
+ * @param string $file_path
+ * @param string $filename
+ * @param number $max_dist
  * @return string
  */
 function an_file($file_path, $file_name, $max_dist = MAX_DIST)
@@ -231,13 +229,13 @@ function an_file($file_path, $file_name, $max_dist = MAX_DIST)
 /**
  * show files in directory
  *
- * @param string $file_path            
- * @param string $file_name            
- * @param number $filesize            
- * @param number $file_mtime            
- * @param string $dir            
- * @param number $page            
- * @param string $date_format            
+ * @param string $file_path
+ * @param string $file_name
+ * @param number $filesize
+ * @param number $file_mtime
+ * @param string $dir
+ * @param number $page
+ * @param string $date_format
  * @return array <string,multitype:>
  */
 function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $page, $date_format = DATE_FORMAT)
@@ -261,8 +259,8 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
     $doc = explode(',', 'doc,xls,rtf,docx,xslx');
     $pdf = explode(',', 'pdf');
     $apk = explode(',', 'apk');
-
-    $book = explode(',','zip,rar');
+    
+    $book = explode(',', 'zip,rar');
     
     $mdate = date($date_format, $file_mtime);
     $show_size = FileUtil::getFileSizeString($filesize);
@@ -302,7 +300,7 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                 {
                     $array['type'] = 'img';
                     $array['href'] = $file;
-                    $array['src'] = '//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=thumb&ext=" . $img_ext . "&f=" . $file . "&ow=" . $ow . "&oh=" . $oh . "&tw=" . $tw . "&th=" . $th ;
+                    $array['src'] = '//' . $_SERVER['SERVER_NAME'] . SCRIPT_PATH . SELF_PHP . "?mode=thumb&ext=" . $img_ext . "&f=" . $file . "&ow=" . $ow . "&oh=" . $oh . "&tw=" . $tw . "&th=" . $th;
                     $array['alt'] = $file_name;
                     $array['original_width'] = $ow;
                     $array['original_height'] = $oh;
@@ -320,17 +318,14 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     if (in_array($extension, $txt) || in_array($extension, $doc)) {
                         $icon = 'text';
                         $array['icon'] = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
-                        
                     }
                     if (in_array($extension, $sound)) {
                         $icon = 'sound';
                         $array['icon'] = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
-                        
                     }
                     if (in_array($extension, $video)) {
                         $icon = 'movie';
                         $array['icon'] = '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
-                        
                     }
                     if (in_array($extension, $zip)) {
                         $icon = 'package';
@@ -339,12 +334,10 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     if (in_array($extension, $web)) {
                         $icon = 'web';
                         $array['icon'] = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
-                        
                     }
                     if (in_array($extension, $swf)) {
                         $icon = 'swf';
                         $array['icon'] = '<i class="fa fa-bolt" aria-hidden="true"></i>';
-                        
                     }
                     if (in_array($extension, $pdf)) {
                         $icon = 'pdf';
@@ -354,9 +347,9 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
                     if (in_array($extension, $sound) || in_array($extension, $video) || in_array($extension, $swf)) {
                         $array['type'] = 'media';
                         $array['href'] = $file;
-                    } elseif (in_array($extension,$zip)) {
+                    } elseif (in_array($extension, $zip)) {
                         $array['type'] = 'zip';
-                        $array['href'] = $file;                    	
+                        $array['href'] = $file;
                     } elseif (in_array($extension, $txt) || in_array($extension, $web)) {
                         $array['type'] = 'text';
                         $array['href'] = $file;
@@ -376,9 +369,9 @@ function get_dir_array($file_path, $file_name, $filesize, $file_mtime, $dir, $pa
 /**
  * get_body_array
  *
- * @param unknown_type $dir            
- * @param number $page            
- * @param number $data_per_page            
+ * @param string $dir
+ * @param number $page
+ * @param number $data_per_page
  * @return multitype:NULL multitype:string NULL unknown
  */
 function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
@@ -445,31 +438,31 @@ function get_body_array($dir, $page = 1, $data_per_page = DATA_PER_PAGE)
 switch ($mode) {
     case 'popup':
         {
-            $template = new EZTemplate(HIDE_FOLDER . '/plugin/popup.inc');
+            $template = new EZTemplate('plugin/popup.inc');
             $template->setReplace('%CHARSET%', CHARSET);
             $template->setReplace('%FILENAME%', HttpUtil::get('filename'));
             return $template->render();
         }
     case 'thumb':
         {
-            require_once HIDE_FOLDER . '/plugin/thumb.inc';
+            require_once 'plugin/thumb.inc';
             return;
         }
     case 'dl':
         {
-            require_once HIDE_FOLDER . '/plugin/dl.inc';
+            require_once 'plugin/dl.inc';
             return;
         }
     case 'embed':
         {
-            $template = new EZTemplate(HIDE_FOLDER . '/plugin/embed.inc');
+            $template = new EZTemplate('plugin/embed.inc');
             $template->setReplace('%CHARSET%', CHARSET);
             $template->setReplace('%FILENAME%', HttpUtil::get('filename'));
             return $template->render();
         }
     case 'stream':
         {
-            require_once HIDE_FOLDER . '/plugin/stream.inc';
+            require_once 'plugin/stream.inc';
             return;
         }
     case 'edit':
@@ -489,7 +482,7 @@ switch ($mode) {
                     $result = 'write succeded.';
                 }
             }
-            $template = new EZTemplate(HIDE_FOLDER . '/plugin/editor.inc');
+            $template = new EZTemplate('plugin/editor.inc');
             $template->setValue('filename', $filename);
             $template->setValue('text', $text);
             $template->setValue('ext', $ext);
@@ -500,7 +493,6 @@ switch ($mode) {
             $template->setReplace('%TEXT%', $text);
             $template->setReplace('%EXT%', strtolower($ext));
             $template->setReplace('%SELF%', SELF_PHP);
-            $template->setReplace('%HIDE_FOLDER%', HIDE_FOLDER);
             
             return $template->render();
         }
@@ -525,7 +517,6 @@ switch ($mode) {
             $template->setReplace('%CHARSET%', CHARSET);
             $template->setReplace('%TITLE%', SCRIPT_TITLE);
             $template->setReplace('%SELF%', SELF_PHP);
-            $template->setReplace('%HIDE_FOLDER%', HIDE_FOLDER);
             return $template->render();
         }
 }

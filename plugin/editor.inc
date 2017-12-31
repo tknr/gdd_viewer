@@ -5,7 +5,7 @@
 <title>%TITLE%</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" href="%HIDE_FOLDER%/css/minireset.css" />
+<link rel="stylesheet" href="css/minireset.css" />
 <link rel="stylesheet" href="//code.jquery.com/mobile/latest/jquery.mobile.min.css" />
 <link href="//alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
 </head>
@@ -32,11 +32,11 @@
 			</div>
 		</div>
 	</div>
-<script type="text/javascript" src="%HIDE_FOLDER%/js/console.ie.js"></script>
+<script type="text/javascript" src="js/console.ie.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
 <script type="text/javascript" src="//alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js"></script>
-<script type="text/javascript" src="%HIDE_FOLDER%/js/editor.js"></script>
+<script type="text/javascript" src="js/editor.js"></script>
 <script type="text/javascript" src="//code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
 </body>
 </html>
